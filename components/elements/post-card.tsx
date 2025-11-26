@@ -2,23 +2,23 @@
 
 import { icons } from 'lucide-react';
 import Link from 'next/link';
-import type { PostData } from '@/lib/posts';
-import { TagList } from './tag-list';
+import type { PostMetadata } from '@/lib/posts';
+import { TagList } from '../composites/tag-list';
 
 interface PostCardProps {
-  post: PostData;
-};
+  metadata: PostMetadata;
+}
 
-export function PostCard({ post }: PostCardProps) {
-  const formattedDate = new Date(post.metadata.date).toLocaleDateString('ja-JP', {
+export function PostCard({ metadata }: PostCardProps) {
+  const formattedDate = new Date(metadata.date).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
   // アイコンの取得（lucide-reactから）
-  const IconComponent = post.metadata.icon
-    ? (icons[post.metadata.icon as keyof typeof icons] as React.ComponentType<{
+  const IconComponent = metadata.icon
+    ? (icons[metadata.icon as keyof typeof icons] as React.ComponentType<{
         className?: string;
       }>)
     : null;
@@ -34,9 +34,9 @@ export function PostCard({ post }: PostCardProps) {
           </div>
         )}
         <div className="flex-1">
-          <Link href={`/blog/${post.metadata.slug}`}>
+          <Link href={`/blog/${metadata.slug}`}>
             <h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100">
-              {post.metadata.title}
+              {metadata.title}
             </h2>
           </Link>
 
@@ -44,13 +44,13 @@ export function PostCard({ post }: PostCardProps) {
             {formattedDate}
           </time>
 
-          {post.metadata.description && (
+          {metadata.description && (
             <p className="mt-3 text-gray-700 dark:text-gray-300 leading-relaxed">
-              {post.metadata.description}
+              {metadata.description}
             </p>
           )}
 
-          {post.metadata.tags && <TagList tags={post.metadata.tags} />}
+          {metadata.tags && <TagList tags={metadata.tags} />}
         </div>
       </div>
     </article>

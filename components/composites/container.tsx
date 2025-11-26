@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 interface BlogContainerProps {
   children: ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
-};
+}
 
 const maxWidthClasses = {
   sm: 'max-w-sm',
@@ -15,7 +15,7 @@ const maxWidthClasses = {
   '4xl': 'max-w-4xl',
 };
 
-export function BlogContainer({ children, maxWidth = '4xl' }: BlogContainerProps) {
+export function Container({ children, maxWidth = '4xl' }: BlogContainerProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className={`${maxWidthClasses[maxWidth]} mx-auto py-8 px-4`}>{children}</div>

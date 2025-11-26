@@ -7,7 +7,7 @@ import * as runtime from 'react/jsx-runtime';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-import { mdxComponents } from './mdx-components';
+import { mdxComponents } from './mdx/mdx-components';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 

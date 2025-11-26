@@ -1,9 +1,5 @@
-import { notFound } from 'next/navigation';
-import { BackLink } from '@/components/elements/back-link';
-import { BlogContainer } from '@/components/elements/blog-container';
-import { PostContent } from '@/components/elements/post-content';
-import { PostHeader } from '@/components/elements/post-header';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { BlogPostContainer } from './container';
 
 interface Props {
   params: Promise<{ slug: string[] }>;
@@ -38,23 +34,10 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  let post: Awaited<ReturnType<typeof getPostBySlug>>;
-  try {
-    post = await getPostBySlug(slug);
-  } catch {
-    notFound();
-  }
-
-  return (
-    <BlogContainer maxWidth="3xl">
-      <BackLink />
-      <PostHeader post={post} />
-      <PostContent post={post} />
-    </BlogContainer>
-  );
+  return <BlogPostContainer slug={slug} />;
 }
 
 // ISR設定

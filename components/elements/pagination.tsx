@@ -7,7 +7,7 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   basePath: string;
-};
+}
 
 export function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
   if (totalPages <= 1) {
