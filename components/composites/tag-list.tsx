@@ -1,3 +1,5 @@
+import { TagIcon } from "lucide-react";
+
 interface TagListProps {
   tags: string[];
 }
@@ -8,7 +10,8 @@ export function TagList({ tags }: TagListProps) {
   }
 
   return (
-    <div className="flex gap-2 mt-4 flex-wrap">
+    <div className="flex gap-2 mt-4 flex-wrap items-center">
+      <TagIcon className="w-3.5 h-3.5 mr-1 text-gray-600 dark:text-gray-400" />
       {tags.map((tag) => (
         <span
           key={tag}

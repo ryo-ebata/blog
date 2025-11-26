@@ -12,6 +12,8 @@ export function MdxLink({ href, className, ...props }: MdxLinkProps) {
   return (
     <Link
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(
         'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-200',
         className
