@@ -2,7 +2,7 @@
 
 import { Container } from '@/components/composites/container';
 import { BlogTitle, PostList } from '@/components/elements';
-import { Pagination } from '@/components/elements/pagination';
+import { Pagination } from '@/components/elements/pagination/pagination';
 import type { PostMetadata } from '@/lib/posts';
 
 interface BlogListPresenterProps {

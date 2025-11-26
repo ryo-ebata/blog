@@ -11,7 +11,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 export function EmptyState() {
   return (
