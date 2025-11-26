@@ -1,8 +1,9 @@
 ---
 title: 'Next.js 16ブログへようこそ'
-date: '2024-01-15'
+date: '2025-11-26'
 description: 'Next.js 16 App Routerで構築された個人ブログの紹介記事です。'
 tags: ['nextjs', 'blog', 'introduction']
+icon: 'FileText'
 ---
 
 # Next.js 16ブログへようこそ
@@ -13,7 +14,7 @@ tags: ['nextjs', 'blog', 'introduction']
 
 - **App Router**: Next.js 16の最新ルーティングシステム
 - **ISR**: Incremental Static Regenerationによる高速なページ生成
-- **Markdown対応**: Obsidianで執筆したMarkdownファイルをそのまま使用可能
+- **MDX対応**: MDXファイルを使用してReactコンポーネントを直接埋め込むことが可能
 - **シンタックスハイライト**: コードブロックの自動ハイライト
 
 ## コード例
@@ -23,7 +24,7 @@ tags: ['nextjs', 'blog', 'introduction']
 ```typescript
 export async function getPostBySlug(slug: string) {
   const fileContents = fs.readFileSync(
-    path.join(postsDirectory, `${slug}.md`),
+    path.join(postsDirectory, `${slug}.mdx`),
     'utf8'
   )
   
@@ -49,5 +50,5 @@ export async function getPostBySlug(slug: string) {
 
 ---
 
-記事を追加するには、`posts/` ディレクトリにMarkdownファイルを追加するだけです。
+記事を追加するには、`posts/` ディレクトリにMDXファイルを追加するだけです。
 

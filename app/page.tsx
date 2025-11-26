@@ -12,8 +12,10 @@ export default async function Home() {
   return (
     <BlogContainer maxWidth="4xl">
       <div className="mb-12 text-center">
-        <h1 className="text-5xl font-bold mb-4 text-gray-900">ブログへようこそ</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          ブログへようこそ
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           技術的な学びや日々の気づきを共有しています
         </p>
       </div>
@@ -21,10 +23,10 @@ export default async function Home() {
       {latestPosts.length > 0 ? (
         <>
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-3xl font-bold text-gray-900">最新記事</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">最新記事</h2>
             <Link
               href="/blog"
-              className="text-blue-600 hover:text-blue-800 underline transition-colors duration-200"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-200"
             >
               すべての記事を見る →
             </Link>
@@ -37,9 +39,9 @@ export default async function Home() {
         </>
       ) : (
         <div className="text-center py-12">
-          <p className="text-gray-600 text-lg mb-4">まだ記事がありません。</p>
-          <p className="text-gray-500 text-sm">
-            posts/ ディレクトリにMarkdownファイルを追加してください。
+          <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">まだ記事がありません。</p>
+          <p className="text-gray-500 dark:text-gray-500 text-sm">
+            posts/ ディレクトリにMDXファイルを追加してください。
           </p>
         </div>
       )}
