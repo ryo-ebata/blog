@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/composites/container';
-import { PostCard } from '@/components/elements/post-card';
+import { PostCard } from '@/components/elements/post-card/post-card';
 import type { PostMetadata } from '@/lib/posts';
 
 interface HomePresenterProps {

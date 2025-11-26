@@ -1,5 +1,5 @@
 import type { PostMetadata } from '@/lib/posts';
-import { TagList } from '../composites/tag-list';
+import { TagList } from '@/components/composites/tag-list';
 
 interface PostHeaderProps {
   metadata: PostMetadata;

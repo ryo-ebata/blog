@@ -1,5 +1,5 @@
-import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading';
-import { MdxLink, type MdxLinkProps } from '@/components/mdx/link';
+import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading/heading';
+import { MdxLink, type MdxLinkProps } from '@/components/mdx/link/link';
 
 export const mdxComponents = {
   h1: (props: MdxHeadingProps) => <MdxHeading as="h1" {...props} />,

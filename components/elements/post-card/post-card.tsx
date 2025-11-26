@@ -3,7 +3,7 @@
 import { icons } from 'lucide-react';
 import Link from 'next/link';
 import type { PostMetadata } from '@/lib/posts';
-import { TagList } from '../composites/tag-list';
+import { TagList } from '@/components/composites/tag-list';
 
 interface PostCardProps {
   metadata: PostMetadata;
