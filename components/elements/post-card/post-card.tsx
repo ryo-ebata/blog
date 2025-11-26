@@ -10,7 +10,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ metadata }: PostCardProps) {
-  const formattedDate = new Date(metadata.date).toLocaleDateString('ja-JP', {
+  const formattedDate = new Date(metadata.createdAt).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

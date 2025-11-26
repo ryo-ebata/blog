@@ -14,12 +14,12 @@ export function MdxHeading({
 }: MdxHeadingProps) {
   const baseClasses = 'font-bold text-gray-900 dark:text-gray-100';
   const sizeClasses = {
-    h1: 'text-4xl mt-8 mb-4',
-    h2: 'text-3xl mt-6 mb-3',
-    h3: 'text-2xl mt-5 mb-2',
-    h4: 'text-xl mt-4 mb-2',
-    h5: 'text-lg mt-3 mb-1',
-    h6: 'text-base mt-2 mb-1',
+    h1: 'scroll-m-20 text-3xl mb-4',
+    h2: 'scroll-m-20 border-b-2 pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-6',
+    h3: 'scroll-m-20 text-xl mt-5 mb-2',
+    h4: 'scroll-m-20 text-lg mt-4 mb-2',
+    h5: 'scroll-m-20 text-base mt-3 mb-1',
+    h6: 'scroll-m-20 text-md mt-2 mb-1',
   };
 
   return (

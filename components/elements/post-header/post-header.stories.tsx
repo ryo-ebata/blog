@@ -17,7 +17,8 @@ type Story = StoryObj<typeof meta>;
 const mockPost: PostMetadata = {
   slug: 'example-post',
   title: 'サンプル記事',
-  date: '2024-01-15',
+  createdAt: '2024-01-15',
+  updatedAt: '2024-01-15',
   description: 'これはサンプル記事の説明文です。',
   tags: ['nextjs', 'typescript', 'react'],
 };

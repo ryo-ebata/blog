@@ -8,16 +8,19 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { mdxComponents } from './mdx/mdx-components';
+import { rehypeBreaks } from './mdx/rehype-breaks';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export interface PostMetadata {
   slug: string;
   title: string;
-  date: string;
+  createdAt: string;
+  updatedAt: string;
   description?: string;
   tags?: string[];
   icon?: string;
+  author?: string;
 }
 
 export interface PostData {
@@ -49,6 +52,7 @@ export async function getAllPosts(): Promise<PostData[]> {
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
           rehypeSlug,
+          rehypeBreaks,
           [
             rehypePrettyCode,
             {
@@ -63,10 +67,12 @@ export async function getAllPosts(): Promise<PostData[]> {
         metadata: {
           slug,
           title: data.title || 'Untitled',
-          date: data.date || new Date().toISOString().split('T')[0],
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt || data.createdAt,
           description: data.description,
           tags: data.tags,
           icon: data.icon,
+          author: data.author,
         },
         Content,
       };
@@ -74,7 +80,7 @@ export async function getAllPosts(): Promise<PostData[]> {
   );
 
   // 日付でソート（新しい順）
-  return posts.sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1));
+  return posts.sort((a, b) => (a.metadata.createdAt > b.metadata.createdAt ? -1 : 1));
 }
 
 // スラッグから記事を取得

@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: Props) {
         title: post.metadata.title,
         description: post.metadata.description,
         type: 'article',
-        publishedTime: post.metadata.date,
+        publishedTime: post.metadata.createdAt,
+        updatedTime: post.metadata.updatedAt,
       },
     };
   } catch {
