@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
-import { BackLink } from '@/components/blog/back-link';
-import { BlogContainer } from '@/components/blog/blog-container';
-import { PostContent } from '@/components/blog/post-content';
-import { PostHeader } from '@/components/blog/post-header';
+import { BackLink } from '@/components/elements/back-link';
+import { BlogContainer } from '@/components/elements/blog-container';
+import { PostContent } from '@/components/elements/post-content';
+import { PostHeader } from '@/components/elements/post-header';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 
-type Props = {
+interface Props {
   params: Promise<{ slug: string[] }>;
 };
 
@@ -25,13 +25,13 @@ export async function generateMetadata({ params }: Props) {
   try {
     const post = await getPostBySlug(slug);
     return {
-      title: post.title,
-      description: post.description,
+      title: post.metadata.title,
+      description: post.metadata.description,
       openGraph: {
-        title: post.title,
-        description: post.description,
+        title: post.metadata.title,
+        description: post.metadata.description,
         type: 'article',
-        publishedTime: post.date,
+        publishedTime: post.metadata.date,
       },
     };
   } catch {
