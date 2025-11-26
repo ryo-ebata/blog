@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { PostCard } from './post-card';
 import type { PostMetadata } from '@/lib/posts';
+import { PostCard } from './post-card';
 
 const meta = {
   title: 'elements/PostCard',
@@ -61,7 +61,8 @@ export const LongTitle: Story = {
   args: {
     metadata: {
       ...mockPost,
-      title: '非常に長いタイトルの記事 - Next.js 16とTypeScriptで作るモダンなブログシステムの構築方法',
+      title:
+        '非常に長いタイトルの記事 - Next.js 16とTypeScriptで作るモダンなブログシステムの構築方法',
     },
   },
 };
@@ -74,4 +75,3 @@ export const ManyTags: Story = {
     },
   },
 };
-

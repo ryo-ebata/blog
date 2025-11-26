@@ -3,6 +3,7 @@
 import { IconFolderCode } from '@tabler/icons-react';
 import { ArrowUpRightIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   Empty,
   EmptyContent,
@@ -11,7 +12,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { Button } from '@/components/ui/button';
 
 export function EmptyState() {
   return (

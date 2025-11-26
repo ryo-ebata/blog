@@ -36,4 +36,3 @@ export const LongTitle: Story = {
     title: 'Next.js 16とTypeScriptで作るモダンなブログ',
   },
 };
-

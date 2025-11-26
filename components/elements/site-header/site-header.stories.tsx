@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SiteHeader } from './site-header';
 import { ThemeProvider } from '@/contexts/theme-provider';
+import { SiteHeader } from './site-header';
 
 const meta = {
   title: 'elements/SiteHeader',
@@ -22,4 +22,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-

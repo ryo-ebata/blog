@@ -2,8 +2,8 @@
 
 import { icons } from 'lucide-react';
 import Link from 'next/link';
-import type { PostMetadata } from '@/lib/posts';
 import { TagList } from '@/components/composites/tag-list';
+import type { PostMetadata } from '@/lib/posts';
 
 interface PostCardProps {
   metadata: PostMetadata;
