@@ -1,11 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-type PaginationProps = {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   basePath: string;
-};
+}
 
 export function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
   if (totalPages <= 1) {

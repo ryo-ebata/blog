@@ -1,9 +1,9 @@
+export { Container } from '../composites/container';
+export { PostContent } from '../composites/post-content';
+export { TagList } from '../composites/tag-list';
 export { BackLink } from './back-link';
-export { BlogContainer } from './blog-container';
 export { BlogTitle } from './blog-title';
 export { EmptyState } from './empty-state';
 export { PostCard } from './post-card';
-export { PostContent } from './post-content';
 export { PostHeader } from './post-header';
 export { PostList } from './post-list';
-export { TagList } from './tag-list';

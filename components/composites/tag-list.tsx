@@ -1,6 +1,6 @@
-type TagListProps = {
+interface TagListProps {
   tags: string[];
-};
+}
 
 export function TagList({ tags }: TagListProps) {
   if (!tags || tags.length === 0) {

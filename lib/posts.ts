@@ -1,17 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { evaluate } from '@mdx-js/mdx';
 import matter from 'gray-matter';
+import type { MDXModule } from 'mdx/types';
+import * as runtime from 'react/jsx-runtime';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
-import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import { unified } from 'unified';
+import { mdxComponents } from './mdx/mdx-components';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export interface PostMetadata {
+  slug: string;
   title: string;
   date: string;
   description?: string;
@@ -20,36 +21,8 @@ export interface PostMetadata {
 }
 
 export interface PostData {
-  slug: string;
   metadata: PostMetadata;
-  html: string;
-}
-
-// 再帰的にMDXファイルを探索
-function getAllMdxFiles(dir: string, baseDir: string = postsDirectory): string[] {
-  const files: string[] = [];
-
-  if (!fs.existsSync(dir)) {
-    return files;
-  }
-
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = path.relative(baseDir, fullPath);
-
-    if (entry.isDirectory()) {
-      // ディレクトリの場合は再帰的に探索
-      files.push(...getAllMdxFiles(fullPath, baseDir));
-    } else if (entry.isFile() && entry.name.endsWith('.mdx')) {
-      // ファイルの場合は相対パスを追加（拡張子を除く）
-      const slug = relativePath.replace(/\.mdx$/, '');
-      files.push(slug);
-    }
-  }
-
-  return files;
+  Content: React.ComponentType;
 }
 
 // すべての記事を取得
@@ -58,59 +31,61 @@ export async function getAllPosts(): Promise<PostData[]> {
     return [];
   }
 
-  const slugs = getAllMdxFiles(postsDirectory);
+  const files = fs.readdirSync(postsDirectory).filter((file) => file.endsWith('.mdx'));
+
   const posts = await Promise.all(
-    slugs.map(async (slug) => {
-      try {
-        return await getPostBySlug(slug);
-      } catch {
-        return null;
-      }
+    files.map(async (file) => {
+      const filePath = path.join(postsDirectory, file);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      const { data, content } = matter(fileContents);
+
+      // slugが指定されていなければファイル名から生成
+      const slug = data.slug || file.replace(/\.mdx$/, '');
+
+      // MDXを評価してReactコンポーネントを取得
+      const { default: Content } = (await evaluate(content, {
+        ...runtime,
+        useMDXComponents: () => mdxComponents,
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [
+          rehypeSlug,
+          [
+            rehypePrettyCode,
+            {
+              theme: 'github-dark',
+              keepBackground: false,
+            },
+          ],
+        ],
+      })) as MDXModule;
+
+      return {
+        metadata: {
+          slug,
+          title: data.title || 'Untitled',
+          date: data.date || new Date().toISOString().split('T')[0],
+          description: data.description,
+          tags: data.tags,
+          icon: data.icon,
+        },
+        Content,
+      };
     })
   );
 
-  // nullを除外して日付でソート（新しい順）
-  const validPosts = posts.filter((post): post is PostData => post !== null);
-  return validPosts.sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1));
+  // 日付でソート（新しい順）
+  return posts.sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1));
 }
 
-// スラッグから記事を取得（slugはディレクトリ構造を含む可能性がある）
+// スラッグから記事を取得
 export async function getPostBySlug(slug: string | string[]): Promise<PostData> {
-  // slugが配列の場合は結合（Next.jsの[...slug]から）
   const slugPath = Array.isArray(slug) ? slug.join('/') : slug;
-  const fullPath = path.join(postsDirectory, `${slugPath}.mdx`);
+  const posts = await getAllPosts();
+  const post = posts.find((p) => p.metadata.slug === slugPath);
 
-  if (!fs.existsSync(fullPath)) {
+  if (!post) {
     throw new Error(`Post not found: ${slugPath}`);
   }
 
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-  // Frontmatterを解析
-  const { data, content } = matter(fileContents);
-
-  // MDXをHTMLに変換
-  const result = await unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeSlug)
-    .use(rehypePrettyCode, {
-      theme: 'github-dark',
-      keepBackground: false,
-    })
-    .use(rehypeStringify)
-    .process(content);
-
-  return {
-    slug: slugPath,
-    metadata: {
-      title: data.title || 'Untitled',
-      date: data.date || new Date().toISOString().split('T')[0],
-      description: data.description,
-      tags: data.tags,
-      icon: data.icon,
-    },
-    html: String(result),
-  };
+  return post;
 }

@@ -1,20 +1,15 @@
-import { notFound } from 'next/navigation';
-import { BackLink } from '@/components/elements/back-link';
-import { BlogContainer } from '@/components/elements/blog-container';
-import { PostContent } from '@/components/elements/post-content';
-import { PostHeader } from '@/components/elements/post-header';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { BlogPostContainer } from './container';
 
 interface Props {
   params: Promise<{ slug: string[] }>;
-};
+}
 
 // 静的パラメータ生成
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  // 上位50記事のみビルド時生成、残りはオンデマンド
-  return posts.slice(0, 50).map((post) => ({
-    slug: post.slug.split('/'),
+  return posts.map((post) => ({
+    slug: post.metadata.slug.split('/'),
   }));
 }
 
@@ -39,23 +34,10 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  let post: Awaited<ReturnType<typeof getPostBySlug>>;
-  try {
-    post = await getPostBySlug(slug);
-  } catch {
-    notFound();
-  }
-
-  return (
-    <BlogContainer maxWidth="3xl">
-      <BackLink />
-      <PostHeader post={post} />
-      <PostContent html={post.html} />
-    </BlogContainer>
-  );
+  return <BlogPostContainer slug={slug} />;
 }
 
 // ISR設定

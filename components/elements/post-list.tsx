@@ -1,10 +1,12 @@
-import type { PostData } from '@/lib/posts';
+'use client';
+
+import type { PostMetadata } from '@/lib/posts';
 import { EmptyState } from './empty-state';
 import { PostCard } from './post-card';
 
-type PostListProps = {
-  posts: PostData[];
-};
+interface PostListProps {
+  posts: PostMetadata[];
+}
 
 export function PostList({ posts }: PostListProps) {
   if (posts.length === 0) {
@@ -14,7 +16,7 @@ export function PostList({ posts }: PostListProps) {
   return (
     <div className="space-y-6">
       {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
+        <PostCard key={post.slug} metadata={post} />
       ))}
     </div>
   );
