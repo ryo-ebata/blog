@@ -1,10 +1,17 @@
+'use client';
+
 import type { ComponentPropsWithoutRef } from 'react';
 
-type HeadingProps = ComponentPropsWithoutRef<'h1'> & {
+export interface MdxHeadingProps extends ComponentPropsWithoutRef<'h1'> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-};
+}
 
-export function Heading({ as: Component = 'h1', className = '', children, ...props }: HeadingProps) {
+export function MdxHeading({
+  as: Component = 'h1',
+  className = '',
+  children,
+  ...props
+}: MdxHeadingProps) {
   const baseClasses = 'font-bold text-gray-900 dark:text-gray-100';
   const sizeClasses = {
     h1: 'text-4xl mt-8 mb-4',
@@ -16,12 +23,8 @@ export function Heading({ as: Component = 'h1', className = '', children, ...pro
   };
 
   return (
-    <Component
-      className={`${baseClasses} ${sizeClasses[Component]} ${className}`}
-      {...props}
-    >
+    <Component className={`${baseClasses} ${sizeClasses[Component]} ${className}`} {...props}>
       {children}
     </Component>
   );
 }
-

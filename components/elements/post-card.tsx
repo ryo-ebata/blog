@@ -1,9 +1,11 @@
+'use client';
+
 import { icons } from 'lucide-react';
 import Link from 'next/link';
 import type { PostData } from '@/lib/posts';
 import { TagList } from './tag-list';
 
-type PostCardProps = {
+interface PostCardProps {
   post: PostData;
 };
 

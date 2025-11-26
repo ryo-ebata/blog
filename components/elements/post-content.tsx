@@ -1,6 +1,6 @@
 import type { PostData } from '@/lib/posts';
 
-type PostContentProps = {
+interface PostContentProps {
   post: PostData;
 };
 

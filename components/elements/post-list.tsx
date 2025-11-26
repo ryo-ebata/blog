@@ -1,8 +1,10 @@
+'use client';
+
 import type { PostData } from '@/lib/posts';
 import { EmptyState } from './empty-state';
 import { PostCard } from './post-card';
 
-type PostListProps = {
+interface PostListProps {
   posts: PostData[];
 };
 

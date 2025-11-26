@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-type BlogContainerProps = {
+interface BlogContainerProps {
   children: ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 };

@@ -1,4 +1,5 @@
-type BlogTitleProps = {
+'use client';
+interface BlogTitleProps {
   title?: string;
 };
 

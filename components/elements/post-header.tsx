@@ -1,7 +1,7 @@
 import type { PostData } from '@/lib/posts';
 import { TagList } from './tag-list';
 
-type PostHeaderProps = {
+interface PostHeaderProps {
   post: PostData;
 };
 

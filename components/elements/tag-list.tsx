@@ -1,4 +1,4 @@
-type TagListProps = {
+interface TagListProps {
   tags: string[];
 };
 
