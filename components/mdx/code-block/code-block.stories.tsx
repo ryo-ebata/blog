@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CodeBlock } from './code-block';
 import { ThemeProvider } from '@/contexts/theme-provider';
+import { CodeBlock } from './code-block';
 
 const meta = {
   title: 'mdx/CodeBlock',
@@ -22,4 +22,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-

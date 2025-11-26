@@ -1,4 +1,4 @@
-import { TagIcon } from "lucide-react";
+import { TagIcon } from 'lucide-react';
 
 interface TagListProps {
   tags: string[];

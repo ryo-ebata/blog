@@ -1,8 +1,8 @@
 'use client';
 
-import type { PostMetadata } from '@/lib/posts';
 import { EmptyState } from '@/components/elements/empty-state/empty-state';
 import { PostCard } from '@/components/elements/post-card/post-card';
+import type { PostMetadata } from '@/lib/posts';
 
 interface PostListProps {
   posts: PostMetadata[];

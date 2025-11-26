@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { Children } from 'react';
 
-export interface MdxParagraphProps extends ComponentPropsWithoutRef<'p'> {
-}
+export interface MdxParagraphProps extends ComponentPropsWithoutRef<'p'> {}
 
 /**
  * children内の文字列の改行を<br />に変換する
@@ -31,14 +30,10 @@ function processChildren(children: ReactNode): ReactNode {
   });
 }
 
-export function MdxParagraph({
-  className = '',
-  children,
-  ...props
-}: MdxParagraphProps) {
-    return (
-        <p className={`text-md text-gray-700 dark:text-gray-300 ${className}`} {...props}>
-            {processChildren(children)}
-        </p>
-    );
+export function MdxParagraph({ className = '', children, ...props }: MdxParagraphProps) {
+  return (
+    <p className={`text-md text-gray-700 dark:text-gray-300 ${className}`} {...props}>
+      {processChildren(children)}
+    </p>
+  );
 }

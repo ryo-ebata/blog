@@ -79,4 +79,3 @@ export const AllLevels: Story = {
     </div>
   ),
 };
-

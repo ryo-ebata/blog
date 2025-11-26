@@ -66,4 +66,3 @@ export const SinglePage: Story = {
     basePath: '/blog',
   },
 };
-

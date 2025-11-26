@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { PostList } from './post-list';
 import type { PostMetadata } from '@/lib/posts';
+import { PostList } from './post-list';
 
 const meta = {
   title: 'elements/PostList',
@@ -60,4 +60,3 @@ export const SinglePost: Story = {
     posts: [mockPosts[0]],
   },
 };
-

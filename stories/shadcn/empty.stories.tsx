@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from '@/components/ui/button';
 import {
   Empty,
   EmptyContent,
@@ -7,7 +8,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { Button } from '@/components/ui/button';
 
 const meta = {
   title: 'shadcn/Empty',
@@ -163,4 +163,3 @@ export const CustomMedia: Story = {
     </Empty>
   ),
 };
-

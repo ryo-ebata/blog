@@ -3,12 +3,7 @@ import path from 'node:path';
 import { evaluate } from '@mdx-js/mdx';
 import matter from 'gray-matter';
 import type { MDXModule } from 'mdx/types';
-import * as runtime from 'react/jsx-runtime';
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeSlug from 'rehype-slug';
-import remarkGfm from 'remark-gfm';
-import { mdxComponents } from './mdx/mdx-components';
-import { rehypeBreaks } from './mdx/rehype-breaks';
+import { mdxConfig } from '@/config/mdx';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -46,22 +41,7 @@ export async function getAllPosts(): Promise<PostData[]> {
       const slug = data.slug || file.replace(/\.mdx$/, '');
 
       // MDXを評価してReactコンポーネントを取得
-      const { default: Content } = (await evaluate(content, {
-        ...runtime,
-        useMDXComponents: () => mdxComponents,
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [
-          rehypeSlug,
-          rehypeBreaks,
-          [
-            rehypePrettyCode,
-            {
-              theme: 'github-dark',
-              keepBackground: false,
-            },
-          ],
-        ],
-      })) as MDXModule;
+      const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
 
       return {
         metadata: {
