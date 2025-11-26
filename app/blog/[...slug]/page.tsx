@@ -7,14 +7,13 @@ import { getAllPosts, getPostBySlug } from '@/lib/posts';
 
 interface Props {
   params: Promise<{ slug: string[] }>;
-};
+}
 
 // 静的パラメータ生成
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  // 上位50記事のみビルド時生成、残りはオンデマンド
-  return posts.slice(0, 50).map((post) => ({
-    slug: post.slug.split('/'),
+  return posts.map((post) => ({
+    slug: post.metadata.slug.split('/'),
   }));
 }
 
@@ -53,7 +52,7 @@ export default async function BlogPost({ params }: Props) {
     <BlogContainer maxWidth="3xl">
       <BackLink />
       <PostHeader post={post} />
-      <PostContent html={post.html} />
+      <PostContent post={post} />
     </BlogContainer>
   );
 }

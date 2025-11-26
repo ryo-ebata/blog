@@ -14,7 +14,7 @@ export function PostList({ posts }: PostListProps) {
   return (
     <div className="space-y-6">
       {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
+        <PostCard key={post.metadata.slug} post={post} />
       ))}
     </div>
   );

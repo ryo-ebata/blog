@@ -33,7 +33,7 @@ export default async function Home() {
           </div>
           <div className="space-y-6">
             {latestPosts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+              <PostCard key={post.metadata.slug} post={post} />
             ))}
           </div>
         </>
