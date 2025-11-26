@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
-import { getPostBySlug } from '@/lib/posts';
 import { Container } from '@/components/composites/container';
 import { PostContent } from '@/components/elements';
+import { getPostBySlug } from '@/lib/posts';
 import { BlogPostPresenter } from './presenter';
 
 interface BlogPostContainerProps {

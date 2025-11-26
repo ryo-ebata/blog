@@ -14,10 +14,6 @@ export async function BlogListContainer({ currentPage }: BlogListContainerProps)
   const postsMetadata = posts.map((post) => post.metadata);
 
   return (
-    <BlogListPresenter
-      posts={postsMetadata}
-      totalPages={totalPages}
-      currentPage={currentPage}
-    />
+    <BlogListPresenter posts={postsMetadata} totalPages={totalPages} currentPage={currentPage} />
   );
 }
