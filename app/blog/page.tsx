@@ -1,6 +1,6 @@
-import { BlogContainer } from '@/components/blog/blog-container';
-import { BlogTitle } from '@/components/blog/blog-title';
-import { PostList } from '@/components/blog/post-list';
+import { BlogContainer } from '@/components/elements/blog-container';
+import { BlogTitle } from '@/components/elements/blog-title';
+import { PostList } from '@/components/elements/post-list';
 import { getAllPosts } from '@/lib/posts';
 
 export const revalidate = 3600; // 1時間ごとに再検証

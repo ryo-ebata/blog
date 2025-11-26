@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
-import { BackLink } from '@/components/blog/back-link';
-import { BlogContainer } from '@/components/blog/blog-container';
-import { PostContent } from '@/components/blog/post-content';
-import { PostHeader } from '@/components/blog/post-header';
+import { BackLink } from '@/components/elements/back-link';
+import { BlogContainer } from '@/components/elements/blog-container';
+import { PostContent } from '@/components/elements/post-content';
+import { PostHeader } from '@/components/elements/post-header';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 
 type Props = {

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { BlogContainer } from '@/components/blog/blog-container';
-import { PostCard } from '@/components/blog/post-card';
+import { BlogContainer } from '@/components/elements/blog-container';
+import { PostCard } from '@/components/elements/post-card';
 import { getAllPosts } from '@/lib/posts';
 
 export const revalidate = 3600; // 1時間ごとに再検証
