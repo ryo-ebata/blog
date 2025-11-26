@@ -4,11 +4,20 @@ import { visit } from 'unist-util-visit';
 
 /**
  * NOTE: テキストノード内の改行を <br /> タグに変換するrehypeプラグイン
+ * リスト要素（ol, ul）内のテキストノードは除外する
  */
 export const rehypeBreaks: Plugin<[], Root> = () => {
   return (tree) => {
     visit(tree, 'text', (node, index, parent) => {
       if (typeof node.value === 'string' && node.value.includes('\n')) {
+        // 親要素がリスト要素（ol, ul）またはリスト項目（li）の場合はスキップ
+        if (parent && parent.type === 'element') {
+          const tagName = parent.tagName;
+          if (tagName === 'ol' || tagName === 'ul' || tagName === 'li') {
+            return;
+          }
+        }
+
         const parts = node.value.split('\n');
 
         if (parent && Array.isArray(parent.children) && typeof index === 'number') {

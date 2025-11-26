@@ -16,6 +16,7 @@ export interface PostMetadata {
   tags?: string[];
   icon?: string;
   author?: string;
+  draft?: boolean;
 }
 
 export interface PostData {
@@ -31,33 +32,41 @@ export async function getAllPosts(): Promise<PostData[]> {
 
   const files = fs.readdirSync(postsDirectory).filter((file) => file.endsWith('.mdx'));
 
-  const posts = await Promise.all(
-    files.map(async (file) => {
-      const filePath = path.join(postsDirectory, file);
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data, content } = matter(fileContents);
+  const posts = (
+    await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(postsDirectory, file);
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const { data, content } = matter(fileContents);
 
-      // slugが指定されていなければファイル名から生成
-      const slug = data.slug || file.replace(/\.mdx$/, '');
+        // data.draftがtrueの場合はスキップ
+        if (data.draft) {
+          return null;
+        }
 
-      // MDXを評価してReactコンポーネントを取得
-      const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+        // slugが指定されていなければファイル名から生成
+        const slug = data.slug || file.replace(/\.mdx$/, '');
 
-      return {
-        metadata: {
-          slug,
-          title: data.title || 'Untitled',
-          createdAt: data.createdAt,
-          updatedAt: data.updatedAt || data.createdAt,
-          description: data.description,
-          tags: data.tags,
-          icon: data.icon,
-          author: data.author,
-        },
-        Content,
-      };
-    })
-  );
+        // MDXを評価してReactコンポーネントを取得
+        const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+
+        return {
+          metadata: {
+            slug,
+            title: data.title || 'Untitled',
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt || data.createdAt,
+            description: data.description,
+            tags: data.tags,
+            icon: data.icon,
+            author: data.author,
+            draft: data.draft || false,
+          },
+          Content,
+        };
+      })
+    )
+  ).filter((post) => post !== null);
 
   // 日付でソート（新しい順）
   return posts.sort((a, b) => (a.metadata.createdAt > b.metadata.createdAt ? -1 : 1));

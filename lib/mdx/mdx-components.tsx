@@ -1,5 +1,11 @@
 import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading/heading';
 import { MdxLink, type MdxLinkProps } from '@/components/mdx/link/link';
+import {
+  MdxList,
+  MdxListOrdered,
+  type MdxListOrderedProps,
+  type MdxListProps,
+} from '@/components/mdx/list/list';
 import { MdxParagraph, type MdxParagraphProps } from '@/components/mdx/paragragh/paragragh';
 
 export const mdxComponents = {
@@ -11,4 +17,6 @@ export const mdxComponents = {
   h6: (props: MdxHeadingProps) => <MdxHeading as="h6" {...props} />,
   p: (props: MdxParagraphProps) => <MdxParagraph {...props} />,
   a: (props: MdxLinkProps) => <MdxLink {...props} />,
+  ul: (props: MdxListProps) => <MdxList {...props} />,
+  ol: (props: MdxListOrderedProps) => <MdxListOrdered {...props} />,
 };
