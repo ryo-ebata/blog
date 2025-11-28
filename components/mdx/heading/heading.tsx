@@ -14,7 +14,7 @@ export function MdxHeading({
 }: MdxHeadingProps) {
   const baseClasses = 'font-bold text-gray-900 dark:text-gray-100';
   const sizeClasses = {
-    h1: 'scroll-m-20 text-3xl mb-4',
+    h1: 'scroll-m-20 text-3xl',
     h2: 'scroll-m-20 border-b-2 pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-6',
     h3: 'scroll-m-20 text-xl mt-5 mb-2',
     h4: 'scroll-m-20 text-lg mt-4 mb-2',

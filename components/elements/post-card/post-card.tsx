@@ -3,19 +3,15 @@
 import { icons } from 'lucide-react';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
+import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { PostMetadata } from '@/lib/posts';
+import { Time } from '../time/time';
 
 interface PostCardProps {
   metadata: PostMetadata;
 }
 
 export function PostCard({ metadata }: PostCardProps) {
-  const formattedDate = new Date(metadata.createdAt).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
   // アイコンの取得（lucide-reactから）
   const IconComponent = metadata.icon
     ? (icons[metadata.icon as keyof typeof icons] as React.ComponentType<{
@@ -35,22 +31,18 @@ export function PostCard({ metadata }: PostCardProps) {
         )}
         <div className="flex-1">
           <Link href={`/blog/${metadata.slug}`}>
-            <h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100">
-              {metadata.title}
-            </h2>
+            <MdxHeading as="h2">{metadata.title}</MdxHeading>
           </Link>
-
-          <time className="text-gray-600 dark:text-gray-400 text-sm block mt-2">
-            {formattedDate}
-          </time>
+          <div className="flex items-center gap-4 mt-2">
+            {metadata.tags && <TagList tags={metadata.tags} />}
+            <Time date={metadata.createdAt} />
+          </div>
 
           {metadata.description && (
             <p className="mt-3 text-gray-700 dark:text-gray-300 leading-relaxed">
               {metadata.description}
             </p>
           )}
-
-          {metadata.tags && <TagList tags={metadata.tags} />}
         </div>
       </div>
     </article>

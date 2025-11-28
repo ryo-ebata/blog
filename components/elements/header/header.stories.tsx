@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeProvider } from '@/contexts/theme-provider';
-import { SiteHeader } from './site-header';
+import { Header } from './header';
 
 const meta = {
-  title: 'elements/SiteHeader',
-  component: SiteHeader,
+  title: 'elements/Header',
+  component: Header,
   parameters: {
     layout: 'fullscreen',
   },
@@ -16,7 +16,7 @@ const meta = {
       </ThemeProvider>
     ),
   ],
-} satisfies Meta<typeof SiteHeader>;
+} satisfies Meta<typeof Header>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
