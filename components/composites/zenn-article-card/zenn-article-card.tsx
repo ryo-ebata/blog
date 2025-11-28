@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Time } from '@/components/elements/time/time';
 import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { ZennArticle } from '@/utils/zenn';
+import { TagList } from '../tag-list';
 
 interface ZennArticleCardProps {
   article: ZennArticle;
@@ -32,6 +33,7 @@ export function ZennArticleCard({ article }: ZennArticleCardProps) {
             <MdxHeading as="h2">{article.title}</MdxHeading>
           </Link>
           <div className="flex items-center gap-4 mt-2">
+            <TagList tags={[article.post_type]} />
             <Time date={article.published_at} />
             <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
               <Heart className="w-4 h-4" />

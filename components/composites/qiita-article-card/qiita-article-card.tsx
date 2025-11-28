@@ -39,7 +39,7 @@ export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
             <MdxHeading as="h2">{article.title}</MdxHeading>
           </Link>
           <div className="flex items-center gap-4 mt-2">
-            <TagList tags={article.tags.map((tag) => tag.name)} />
+            <TagList tags={article.tags.length > 0 ? [article.tags[0].name] : []} />
             <Time date={article.created_at} />
             <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
               <Heart className="w-4 h-4" />
