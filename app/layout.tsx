@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { SiteHeader } from '@/components/elements/site-header/site-header';
+import { Header } from '@/components/elements/header/header';
 import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import './globals.css';
@@ -45,7 +45,7 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SiteHeader />
+          <Header />
           {children}
         </ThemeProvider>
       </body>

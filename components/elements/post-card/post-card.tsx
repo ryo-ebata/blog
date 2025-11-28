@@ -4,17 +4,14 @@ import { icons } from 'lucide-react';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
 import type { PostMetadata } from '@/lib/posts';
+import { formatDateJapanese } from '@/utils/date';
 
 interface PostCardProps {
   metadata: PostMetadata;
 }
 
 export function PostCard({ metadata }: PostCardProps) {
-  const formattedDate = new Date(metadata.createdAt).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const formattedDate = formatDateJapanese(metadata.createdAt);
 
   // アイコンの取得（lucide-reactから）
   const IconComponent = metadata.icon
