@@ -4,15 +4,13 @@ import { icons } from 'lucide-react';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
 import type { PostMetadata } from '@/lib/posts';
-import { formatDateJapanese } from '@/utils/date';
+import { Time } from '../time/time';
 
 interface PostCardProps {
   metadata: PostMetadata;
 }
 
 export function PostCard({ metadata }: PostCardProps) {
-  const formattedDate = formatDateJapanese(metadata.createdAt);
-
   // アイコンの取得（lucide-reactから）
   const IconComponent = metadata.icon
     ? (icons[metadata.icon as keyof typeof icons] as React.ComponentType<{
@@ -32,14 +30,12 @@ export function PostCard({ metadata }: PostCardProps) {
         )}
         <div className="flex-1">
           <Link href={`/blog/${metadata.slug}`}>
-            <h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100">
+            <h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100 mb-2">
               {metadata.title}
             </h2>
           </Link>
 
-          <time className="text-gray-600 dark:text-gray-400 text-sm block mt-2">
-            {formattedDate}
-          </time>
+          <Time date={metadata.createdAt} />
 
           {metadata.description && (
             <p className="mt-3 text-gray-700 dark:text-gray-300 leading-relaxed">
