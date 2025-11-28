@@ -1,5 +1,3 @@
-'use cache';
-
 import { getAllPosts } from '@/lib/posts';
 import type { QiitaArticle } from '@/utils/qiita';
 import { getQiitaArticles } from '@/utils/qiita';
@@ -20,7 +18,7 @@ export async function HomeContainer() {
 
   const zennArticles = zennArticlesResponse.articles;
 
-  // Zenn記事とQiita記事をマージしていいね数でソート
+  // Zenn記事とQiita記事をマージしていいね数でソート（最大5件）
   const allArticles: ArticleItem[] = [
     ...zennArticles.map((article): { type: 'zenn'; article: ZennArticle; likesCount: number } => ({
       type: 'zenn' as const,
@@ -36,7 +34,8 @@ export async function HomeContainer() {
     ),
   ]
     .sort((a, b) => b.likesCount - a.likesCount)
+    .slice(0, 5)
     .map(({ type, article }): ArticleItem => ({ type, article }) as ArticleItem);
 
-  return <HomePresenter latestPosts={posts.map((post) => post.metadata)} articles={allArticles} />;
+  return <HomePresenter posts={posts.map((post) => post.metadata)} articles={allArticles} />;
 }

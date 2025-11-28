@@ -3,6 +3,7 @@
 import { icons } from 'lucide-react';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
+import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { PostMetadata } from '@/lib/posts';
 import { Time } from '../time/time';
 
@@ -30,9 +31,7 @@ export function PostCard({ metadata }: PostCardProps) {
         )}
         <div className="flex-1">
           <Link href={`/blog/${metadata.slug}`}>
-            <h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100 mb-2">
-              {metadata.title}
-            </h2>
+            <MdxHeading as="h2">{metadata.title}</MdxHeading>
           </Link>
           <div className="flex items-center gap-4 mt-2">
             {metadata.tags && <TagList tags={metadata.tags} />}

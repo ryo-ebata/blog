@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { unstable_cache } from 'next/cache';
 import { evaluate } from '@mdx-js/mdx';
 import matter from 'gray-matter';
 import type { MDXModule } from 'mdx/types';
+import { unstable_cache } from 'next/cache';
 import { mdxConfig } from '@/config/mdx';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -25,8 +25,14 @@ export interface PostData {
   Content: React.ComponentType;
 }
 
-// すべての記事を取得（内部実装）
-async function getAllPostsInternal(): Promise<PostData[]> {
+// メタデータとファイル名のペア
+interface PostMetadataWithFile {
+  metadata: PostMetadata;
+  fileName: string;
+}
+
+// メタデータのみを取得（内部実装）
+async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
   if (!fs.existsSync(postsDirectory)) {
     return [];
   }
@@ -38,7 +44,7 @@ async function getAllPostsInternal(): Promise<PostData[]> {
       files.map(async (file) => {
         const filePath = path.join(postsDirectory, file);
         const fileContents = fs.readFileSync(filePath, 'utf8');
-        const { data, content } = matter(fileContents);
+        const { data } = matter(fileContents);
 
         // data.draftがtrueの場合はスキップ
         if (data.draft) {
@@ -47,9 +53,6 @@ async function getAllPostsInternal(): Promise<PostData[]> {
 
         // slugが指定されていなければファイル名から生成
         const slug = data.slug || file.replace(/\.mdx$/, '');
-
-        // MDXを評価してReactコンポーネントを取得
-        const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
 
         return {
           metadata: {
@@ -63,7 +66,7 @@ async function getAllPostsInternal(): Promise<PostData[]> {
             author: data.author,
             draft: data.draft || false,
           },
-          Content,
+          fileName: file,
         };
       })
     )
@@ -73,25 +76,69 @@ async function getAllPostsInternal(): Promise<PostData[]> {
   return posts.sort((a, b) => (a.metadata.createdAt > b.metadata.createdAt ? -1 : 1));
 }
 
-// すべての記事を取得（キャッシュ付き）
-export const getAllPosts = unstable_cache(
-  getAllPostsInternal,
-  ['all-posts'],
+// すべての記事のメタデータを取得（キャッシュ付き）
+export const getAllPostsMetadata = unstable_cache(
+  getAllPostsMetadataInternal,
+  ['all-posts-metadata'],
   {
     revalidate: 3600, // 1時間ごとに再検証
     tags: ['posts'],
   }
 );
 
+// すべての記事を取得（メタデータ + Content）
+export async function getAllPosts(): Promise<PostData[]> {
+  const postsWithFiles = await getAllPostsMetadata();
+
+  const posts = await Promise.all(
+    postsWithFiles.map(async ({ metadata, fileName }) => {
+      const filePath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      const { content } = matter(fileContents);
+
+      // MDXを評価してReactコンポーネントを取得
+      const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+
+      return {
+        metadata,
+        Content,
+      };
+    })
+  );
+
+  return posts;
+}
+
 // スラッグから記事を取得
 export async function getPostBySlug(slug: string | string[]): Promise<PostData> {
   const slugPath = Array.isArray(slug) ? slug.join('/') : slug;
-  const posts = await getAllPosts();
-  const post = posts.find((p) => p.metadata.slug === slugPath);
+  const filePath = path.join(postsDirectory, `${slugPath}.mdx`);
 
-  if (!post) {
+  if (!fs.existsSync(filePath)) {
     throw new Error(`Post not found: ${slugPath}`);
   }
 
-  return post;
+  const fileContents = fs.readFileSync(filePath, 'utf8');
+  const { data, content } = matter(fileContents);
+
+  // slugが指定されていなければファイル名から生成
+  const postSlug = data.slug || slugPath;
+
+  // MDXを評価してReactコンポーネントを取得
+  const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+
+  return {
+    metadata: {
+      slug: postSlug,
+      title: data.title || 'Untitled',
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt || data.createdAt,
+      description: data.description,
+      tags: data.tags,
+      icon: data.icon,
+      author: data.author,
+      draft: data.draft || false,
+    },
+    Content,
+  };
 }
