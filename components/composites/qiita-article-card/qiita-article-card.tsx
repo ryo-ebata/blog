@@ -1,6 +1,5 @@
 'use client';
 
-import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Time } from '@/components/elements/time/time';
@@ -41,10 +40,6 @@ export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
           <div className="flex items-center gap-4 mt-2">
             <TagList tags={article.tags.length > 0 ? [article.tags[0].name] : []} />
             <Time date={article.created_at} />
-            <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
-              <Heart className="w-4 h-4" />
-              {article.likes_count}
-            </span>
           </div>
         </div>
       </div>
