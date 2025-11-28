@@ -2,14 +2,23 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/composites/container';
+import { QiitaArticleCard } from '@/components/composites/qiita-article-card/qiita-article-card';
+import { ZennArticleCard } from '@/components/composites/zenn-article-card/zenn-article-card';
 import { PostCard } from '@/components/elements/post-card/post-card';
 import type { PostMetadata } from '@/lib/posts';
+import type { QiitaArticle } from '@/utils/qiita';
+import type { ZennArticle } from '@/utils/zenn';
+
+type ArticleItem =
+  | { type: 'zenn'; article: ZennArticle }
+  | { type: 'qiita'; article: QiitaArticle };
 
 interface HomePresenterProps {
   latestPosts: PostMetadata[];
+  articles: ArticleItem[];
 }
 
-export function HomePresenter({ latestPosts }: HomePresenterProps) {
+export function HomePresenter({ latestPosts, articles }: HomePresenterProps) {
   return (
     <Container maxWidth="4xl">
       <div className="mb-12 text-center">
@@ -21,7 +30,7 @@ export function HomePresenter({ latestPosts }: HomePresenterProps) {
         </p>
       </div>
 
-      {latestPosts.length > 0 ? (
+      {latestPosts.length > 0 && (
         <>
           <div className="mb-8 flex items-center justify-between">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">最新記事</h2>
@@ -38,13 +47,22 @@ export function HomePresenter({ latestPosts }: HomePresenterProps) {
             ))}
           </div>
         </>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">まだ記事がありません。</p>
-          <p className="text-gray-500 dark:text-gray-500 text-sm">
-            posts/ ディレクトリにMDXファイルを追加してください。
-          </p>
-        </div>
+      )}
+      {articles.length > 0 && (
+        <>
+          <div className="mb-8 flex items-center justify-between">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">外部記事</h2>
+          </div>
+          <div className="space-y-6">
+            {articles.map((item) =>
+              item.type === 'zenn' ? (
+                <ZennArticleCard key={`zenn-${item.article.id}`} article={item.article} />
+              ) : (
+                <QiitaArticleCard key={`qiita-${item.article.id}`} article={item.article} />
+              )
+            )}
+          </div>
+        </>
       )}
     </Container>
   );

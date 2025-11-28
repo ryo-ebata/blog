@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { unstable_cache } from 'next/cache';
 import { evaluate } from '@mdx-js/mdx';
 import matter from 'gray-matter';
 import type { MDXModule } from 'mdx/types';
@@ -24,8 +25,8 @@ export interface PostData {
   Content: React.ComponentType;
 }
 
-// すべての記事を取得
-export async function getAllPosts(): Promise<PostData[]> {
+// すべての記事を取得（内部実装）
+async function getAllPostsInternal(): Promise<PostData[]> {
   if (!fs.existsSync(postsDirectory)) {
     return [];
   }
@@ -71,6 +72,16 @@ export async function getAllPosts(): Promise<PostData[]> {
   // 日付でソート（新しい順）
   return posts.sort((a, b) => (a.metadata.createdAt > b.metadata.createdAt ? -1 : 1));
 }
+
+// すべての記事を取得（キャッシュ付き）
+export const getAllPosts = unstable_cache(
+  getAllPostsInternal,
+  ['all-posts'],
+  {
+    revalidate: 3600, // 1時間ごとに再検証
+    tags: ['posts'],
+  }
+);
 
 // スラッグから記事を取得
 export async function getPostBySlug(slug: string | string[]): Promise<PostData> {
