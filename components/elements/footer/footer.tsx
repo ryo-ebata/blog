@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { siteConfig } from "@/config/site";
+import { siteConfig } from '@/config/site';
 
 export function Footer() {
   return (
@@ -10,4 +10,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}   
+}

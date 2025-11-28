@@ -10,8 +10,8 @@ export function TagList({ tags }: TagListProps) {
   }
 
   return (
-    <div className="flex gap-2 mt-4 flex-wrap items-center">
-      <TagsIcon className="w-3.5 h-3.5 mr-1 text-gray-600 dark:text-gray-400" />
+    <div className="flex gap-2 flex-wrap items-center">
+      <TagsIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
       {tags.map((tag) => (
         <span
           key={tag}

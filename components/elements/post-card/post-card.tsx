@@ -34,16 +34,16 @@ export function PostCard({ metadata }: PostCardProps) {
               {metadata.title}
             </h2>
           </Link>
-
-          <Time date={metadata.createdAt} />
+          <div className="flex items-center gap-4 mt-2">
+            {metadata.tags && <TagList tags={metadata.tags} />}
+            <Time date={metadata.createdAt} />
+          </div>
 
           {metadata.description && (
             <p className="mt-3 text-gray-700 dark:text-gray-300 leading-relaxed">
               {metadata.description}
             </p>
           )}
-
-          {metadata.tags && <TagList tags={metadata.tags} />}
         </div>
       </div>
     </article>
