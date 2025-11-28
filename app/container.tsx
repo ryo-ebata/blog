@@ -1,3 +1,5 @@
+'use cache';
+
 import { getAllPosts } from '@/lib/posts';
 import type { QiitaArticle } from '@/utils/qiita';
 import { getQiitaArticles } from '@/utils/qiita';
