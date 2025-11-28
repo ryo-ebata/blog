@@ -1,6 +1,5 @@
 'use client';
 
-import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { Time } from '@/components/elements/time/time';
 import { MdxHeading } from '@/components/mdx/heading/heading';
@@ -35,10 +34,6 @@ export function ZennArticleCard({ article }: ZennArticleCardProps) {
           <div className="flex items-center gap-4 mt-2">
             <TagList tags={[article.post_type]} />
             <Time date={article.published_at} />
-            <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
-              <Heart className="w-4 h-4" />
-              {article.liked_count}
-            </span>
           </div>
         </div>
       </div>
