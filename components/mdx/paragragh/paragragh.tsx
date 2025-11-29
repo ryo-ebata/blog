@@ -32,7 +32,10 @@ function processChildren(children: ReactNode): ReactNode {
 
 export function MdxParagraph({ className = '', children, ...props }: MdxParagraphProps) {
   return (
-    <p className={`text-md text-gray-700 dark:text-gray-300 ${className}`} {...props}>
+    <p
+      className={`text-md text-gray-700 dark:text-gray-500 font-mono leading-relaxed ${className}`}
+      {...props}
+    >
       {processChildren(children)}
     </p>
   );

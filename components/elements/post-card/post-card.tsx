@@ -20,18 +20,23 @@ export function PostCard({ metadata }: PostCardProps) {
     : null;
 
   return (
-    <article className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+    <article className="terminal-card rounded-none p-6 transition-all duration-300 font-mono">
       <div className="flex items-start gap-4">
         {IconComponent && (
           <div className="shrink-0 mt-1">
-            <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-              <IconComponent className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            <div className="w-12 h-12 rounded-none bg-terminal-border dark:bg-terminal-border border border-terminal-green flex items-center justify-center terminal-glow">
+              <IconComponent className="w-6 h-6 text-terminal-green dark:text-terminal-green" />
             </div>
           </div>
         )}
         <div className="flex-1">
-          <Link href={`/blog/${metadata.slug}`}>
-            <MdxHeading as="h2">{metadata.title}</MdxHeading>
+          <Link href={`/blog/${metadata.slug}`} className="group">
+            <MdxHeading
+              as="h2"
+              className="text-terminal-cyan dark:text-terminal-cyan group-hover:text-terminal-green transition-colors duration-200"
+            >
+              {metadata.title}
+            </MdxHeading>
           </Link>
           <div className="flex items-center gap-4 mt-2">
             {metadata.tags && <TagList tags={metadata.tags} />}
@@ -39,7 +44,7 @@ export function PostCard({ metadata }: PostCardProps) {
           </div>
 
           {metadata.description && (
-            <p className="mt-3 text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="mt-3 text-gray-600 dark:text-gray-500 leading-relaxed">
               {metadata.description}
             </p>
           )}

@@ -24,21 +24,30 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <MdxHeading as="h1">記事一覧</MdxHeading>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。
+          <MdxHeading
+            as="h1"
+            className="text-terminal-green dark:text-terminal-green terminal-glow font-mono"
+          >
+            $ ls -la articles/
+          </MdxHeading>
+          <p className="text-xl text-gray-600 dark:text-gray-500 max-w-2xl mx-auto font-mono">
+            {
+              '// 情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。'
+            }
           </p>
         </div>
 
         {posts.length > 0 && (
           <>
             <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">最新記事</h2>
+              <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
+                [最新記事]
+              </h2>
               <Link
                 href="/blog"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-200"
+                className="text-terminal-blue dark:text-terminal-blue hover:text-terminal-cyan dark:hover:text-terminal-cyan underline transition-colors duration-200 font-mono"
               >
-                すべての記事を見る →
+                $ cat all_posts.txt →
               </Link>
             </div>
             <div className="space-y-6">
@@ -51,7 +60,9 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
         {articles.length > 0 && (
           <div className="space-y-4">
             <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">外部記事</h2>
+              <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
+                [外部記事]
+              </h2>
             </div>
             <div className="space-y-6">
               {articles.map((item) =>
@@ -62,8 +73,8 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                 )
               )}
             </div>
-            <div className="text-center text-gray-600 dark:text-gray-400">
-              その他ソーシャル記事はAboutページから
+            <div className="text-center text-gray-600 dark:text-gray-500 font-mono">
+              {'// その他ソーシャル記事はAboutページから'}
             </div>
           </div>
         )}

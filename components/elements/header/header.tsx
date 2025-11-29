@@ -10,28 +10,36 @@ const navigationItems = [
 ] as const;
 
 function getLinkClassName(isActive: boolean): string {
-  const baseClasses = 'text-base transition-colors duration-200';
+  const baseClasses = 'text-base transition-all duration-200 font-mono';
   if (isActive) {
-    return `${baseClasses} text-gray-900 dark:text-gray-100 font-bold underline`;
+    return `${baseClasses} text-terminal-green dark:text-terminal-green font-bold flex items-center terminal-glow`;
   }
-  return `${baseClasses} text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100`;
+  return `${baseClasses} text-gray-600 dark:text-gray-500 hover:text-terminal-cyan dark:hover:text-terminal-cyan`;
 }
 
 export function Header() {
   const pathname = usePathname();
   return (
-    <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+    <header className="border-b border-terminal-border dark:border-terminal-border terminal-border bg-terminal-bg">
       <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-gray-900 dark:text-gray-100">
-          ブログ
+        <Link
+          href="/"
+          className="text-xl font-bold font-mono text-terminal-green dark:text-terminal-green terminal-glow hover:text-terminal-cyan transition-colors duration-200"
+        >
+          $ blog
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-6">
           {navigationItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={getLinkClassName(pathname === item.href)}
             >
+              {item.href === pathname && (
+                <span className="text-terminal-green dark:text-terminal-green mr-1 text-base font-bold animate-blink terminal-glow">
+                  {'>'}
+                </span>
+              )}
               {item.label}
             </Link>
           ))}

@@ -5,17 +5,18 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-none text-sm font-mono transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terminal-green disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-        destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
+        default:
+          'bg-terminal-green text-terminal-bg shadow hover:bg-terminal-cyan hover:text-terminal-bg terminal-glow',
+        destructive: 'bg-terminal-orange text-terminal-bg shadow-sm hover:bg-terminal-orange/90',
         outline:
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'border border-terminal-border bg-terminal-bg shadow-sm hover:bg-terminal-border hover:text-terminal-green hover:border-terminal-green',
+        secondary: 'bg-terminal-border text-terminal-fg shadow-sm hover:bg-terminal-border/80',
+        ghost: 'hover:bg-terminal-border hover:text-terminal-green',
+        link: 'text-terminal-cyan underline-offset-4 hover:underline hover:text-terminal-green',
       },
       size: {
         default: 'h-9 px-4 py-2',

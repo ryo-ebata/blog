@@ -17,7 +17,7 @@ const maxWidthClasses = {
 
 export function Container({ children, maxWidth = '4xl' }: BlogContainerProps) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-terminal-bg">
       <div className={`${maxWidthClasses[maxWidth]} mx-auto py-8 px-4`}>{children}</div>
     </div>
   );

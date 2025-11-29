@@ -77,40 +77,62 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Vim風ターミナルカラー - ライトテーマ */
+  --terminal-bg: #ffffff;
+  --terminal-fg: #24292f;
+  --terminal-green: #1a7f37;
+  --terminal-cyan: #0969da;
+  --terminal-blue: #0969da;
+  --terminal-yellow: #9a6700;
+  --terminal-orange: #cf222e;
+  --terminal-purple: #8250df;
+  --terminal-border: #d0d7de;
+  --terminal-accent: #0969da;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #0d1117;
+  --foreground: #c9d1d9;
+  --card: #161b22;
+  --card-foreground: #c9d1d9;
+  --popover: #161b22;
+  --popover-foreground: #c9d1d9;
+  --primary: #58a6ff;
+  --primary-foreground: #0d1117;
+  --secondary: #21262d;
+  --secondary-foreground: #c9d1d9;
+  --muted: #21262d;
+  --muted-foreground: #8b949e;
+  --accent: #1f6feb;
+  --accent-foreground: #c9d1d9;
+  --destructive: #f85149;
+  --border: #30363d;
+  --input: #21262d;
+  --ring: #58a6ff;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #161b22;
+  --sidebar-foreground: #c9d1d9;
+  --sidebar-primary: #58a6ff;
+  --sidebar-primary-foreground: #0d1117;
+  --sidebar-accent: #21262d;
+  --sidebar-accent-foreground: #c9d1d9;
+  --sidebar-border: #30363d;
+  --sidebar-ring: #58a6ff;
+  /* Vim風ターミナルカラー - ダークテーマ */
+  --terminal-bg: #0d1117;
+  --terminal-fg: #c9d1d9;
+  --terminal-green: #3fb950;
+  --terminal-cyan: #58d6ff;
+  --terminal-blue: #58a6ff;
+  --terminal-yellow: #d29922;
+  --terminal-orange: #ff7b72;
+  --terminal-purple: #bc8cff;
+  --terminal-border: #30363d;
+  --terminal-accent: #1f6feb;
 }
 
 @layer base {
@@ -118,6 +140,92 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
   }
+  html {
+    @apply bg-white dark:bg-[#0d1117];
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px var(--terminal-green),
+      0 0 10px var(--terminal-green),
+      0 0 15px var(--terminal-green);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--terminal-green),
+      0 0 20px var(--terminal-green),
+      0 0 30px var(--terminal-green);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.animate-blink {
+  animation: blink 1s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.terminal-glow {
+  text-shadow:
+    0 0 5px var(--terminal-green),
+    0 0 10px var(--terminal-green);
+}
+
+.dark .terminal-glow {
+  text-shadow:
+    0 0 5px var(--terminal-green),
+    0 0 10px var(--terminal-green);
+}
+
+.terminal-border {
+  border: 1px solid var(--terminal-border);
+}
+
+.dark .terminal-border {
+  box-shadow: 0 0 10px rgba(63, 185, 80, 0.1);
+}
+
+.terminal-card {
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+}
+
+.dark .terminal-card {
+  background: var(--terminal-bg);
+  box-shadow: 0 0 20px rgba(63, 185, 80, 0.05);
+}
+
+.terminal-card:hover {
+  border-color: var(--terminal-green);
+  transition: all 0.3s ease;
+}
+
+.dark .terminal-card:hover {
+  box-shadow: 0 0 20px rgba(63, 185, 80, 0.2);
 }

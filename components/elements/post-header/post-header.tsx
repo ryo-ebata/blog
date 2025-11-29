@@ -12,13 +12,17 @@ interface PostHeaderProps {
 
 export function PostHeader({ metadata }: PostHeaderProps) {
   return (
-    <div className="mb-8 space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-      <MdxHeading as="h1">{metadata.title}</MdxHeading>
+    <div className="mb-8 space-y-4 terminal-card rounded-none p-6 font-mono">
+      <MdxHeading as="h1" className="text-terminal-green dark:text-terminal-green terminal-glow">
+        {metadata.title}
+      </MdxHeading>
       <div className="flex items-center gap-4">
         {metadata.tags && <TagList tags={metadata.tags} />}
         <Time date={metadata.createdAt} />
       </div>
-      <MdxParagraph>{metadata.description}</MdxParagraph>
+      <MdxParagraph className="text-gray-600 dark:text-gray-500">
+        {metadata.description}
+      </MdxParagraph>
     </div>
   );
 }

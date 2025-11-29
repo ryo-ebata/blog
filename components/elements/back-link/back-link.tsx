@@ -12,9 +12,9 @@ export function BackLink({ href = '/blog', label = '← ブログ一覧に戻る
     <div className="mb-6">
       <Link
         href={href}
-        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-200"
+        className="text-terminal-cyan dark:text-terminal-cyan hover:text-terminal-green dark:hover:text-terminal-green underline transition-colors duration-200 font-mono"
       >
-        {label}
+        $ cd {label}
       </Link>
     </div>
   );

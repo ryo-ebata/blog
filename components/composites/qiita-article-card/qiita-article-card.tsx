@@ -15,11 +15,11 @@ export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
   return (
     <article
       key={article.id}
-      className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow duration-200"
+      className="terminal-card rounded-none p-6 transition-all duration-300 font-mono"
     >
       <div className="flex items-start gap-4">
         <div className="shrink-0 mt-1">
-          <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-2xl">
+          <div className="w-12 h-12 rounded-none bg-terminal-border dark:bg-terminal-border border border-terminal-orange flex items-center justify-center text-2xl terminal-glow">
             <Image
               src={'/image/qiita-icon/qiita-icon.png'}
               alt={article.user.name}
@@ -33,9 +33,14 @@ export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
             href={article.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-gray-900 dark:text-gray-100 mb-2 block"
+            className="group mb-2 block"
           >
-            <MdxHeading as="h2">{article.title}</MdxHeading>
+            <MdxHeading
+              as="h2"
+              className="text-terminal-cyan dark:text-terminal-cyan group-hover:text-terminal-orange transition-colors duration-200"
+            >
+              {article.title}
+            </MdxHeading>
           </Link>
           <div className="flex items-center gap-4 mt-2">
             <TagList tags={article.tags.length > 0 ? [article.tags[0].name] : []} />

@@ -11,7 +11,7 @@ export function TagList({ tags }: TagListProps) {
 
   return (
     <div className="flex gap-2 flex-wrap items-center">
-      <TagsIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+      <TagsIcon className="w-4 h-4 text-terminal-cyan dark:text-terminal-cyan" />
       {tags.map((tag) => (
         <Tag key={tag} tag={tag} />
       ))}
@@ -21,8 +21,8 @@ export function TagList({ tags }: TagListProps) {
 
 function Tag({ tag }: { tag: string }) {
   return (
-    <span className="text-xs bg-gray-200 dark:bg-gray-700 px-1.5 py-1 rounded text-gray-700 dark:text-gray-300 font-medium">
-      {tag}
+    <span className="text-xs bg-terminal-border dark:bg-terminal-border border border-terminal-green px-1.5 py-1 rounded-none text-terminal-green dark:text-terminal-green font-mono font-medium">
+      #{tag}
     </span>
   );
 }
