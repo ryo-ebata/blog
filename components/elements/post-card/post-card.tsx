@@ -1,6 +1,6 @@
 'use client';
 
-import { icons } from 'lucide-react';
+import { icons, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
 import { MdxHeading } from '@/components/mdx/heading/heading';
@@ -11,13 +11,14 @@ interface PostCardProps {
   metadata: PostMetadata;
 }
 
+function getIconComponent(iconName?: string): LucideIcon | null {
+  if (!iconName) return null;
+  const Icon = icons[iconName as keyof typeof icons];
+  return Icon || null;
+}
+
 export function PostCard({ metadata }: PostCardProps) {
-  // アイコンの取得（lucide-reactから）
-  const IconComponent = metadata.icon
-    ? (icons[metadata.icon as keyof typeof icons] as React.ComponentType<{
-        className?: string;
-      }>)
-    : null;
+  const IconComponent = getIconComponent(metadata.icon);
 
   return (
     <article className="terminal-card rounded-none p-6 transition-all duration-300 font-mono">

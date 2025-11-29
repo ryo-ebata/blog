@@ -19,7 +19,44 @@ interface HomePresenterProps {
   articles: ArticleItem[];
 }
 
+const HEADING_TEXT = '$ ls -la articles/';
+const DESCRIPTION_TEXT =
+  '// 情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。';
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
+      {children}
+    </h2>
+  );
+}
+
+function BlogLink() {
+  return (
+    <div className="text-center flex justify-end">
+      <Link
+        href="/blog"
+        className="terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200 font-mono"
+      >
+        $ cd ./blog {'# すべての記事'}
+      </Link>
+    </div>
+  );
+}
+
+function ExternalArticlesLink() {
+  return (
+    <div className="text-center text-gray-600 dark:text-gray-300 font-mono terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200">
+      $ cd ./about {'# その他ソーシャル記事を見る'}
+    </div>
+  );
+}
+
 export function HomePresenter({ posts, articles }: HomePresenterProps) {
+  const hasPosts = posts.length > 0;
+  const hasArticles = articles.length > 0;
+  const shouldPrioritizeFirstArticle = !hasPosts && hasArticles;
+
   return (
     <Container maxWidth="4xl">
       <div className="space-y-12">
@@ -28,46 +65,31 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
             as="h1"
             className="text-terminal-green dark:text-terminal-green terminal-glow font-mono"
           >
-            $ ls -la articles/
+            {HEADING_TEXT}
           </MdxHeading>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
-            {
-              '// 情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。'
-            }
+            {DESCRIPTION_TEXT}
           </p>
         </div>
 
-        <div className="space-y-4">
-          {posts.length > 0 && (
-            <>
-              <div className="mb-8 flex items-center justify-between">
-                <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
-                  [最新記事]
-                </h2>
-              </div>
-              <div className="space-y-6">
-                {posts.map((post) => (
-                  <PostCard key={post.slug} metadata={post} />
-                ))}
-              </div>
-            </>
-          )}
-          <div className="text-center flex justify-end">
-            <Link
-              href="/blog"
-              className="terminal-glow underline text-terminal-blue hover:text-terminal-cyan hover:text-terminal-cyan transition-colors duration-200 font-mono"
-            >
-              $ cd ./blog {'# すべての記事'}
-            </Link>
-          </div>
-        </div>
-
-        {articles.length > 0 && (
+        {hasPosts && (
           <div className="space-y-4">
             <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
-                [外部記事]
-              </h2>
+              <SectionHeading>[最新記事]</SectionHeading>
+            </div>
+            <div className="space-y-6">
+              {posts.map((post) => (
+                <PostCard key={post.slug} metadata={post} />
+              ))}
+            </div>
+            <BlogLink />
+          </div>
+        )}
+
+        {hasArticles && (
+          <div className="space-y-4">
+            <div className="mb-8 flex items-center justify-between">
+              <SectionHeading>[外部記事]</SectionHeading>
             </div>
             <div className="space-y-6">
               {articles.map((item, index) =>
@@ -75,22 +97,22 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                   <ZennArticleCard
                     key={`zenn-${item.article.id}`}
                     article={item.article}
-                    priority={index === 0 && posts.length === 0}
+                    priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 ) : (
                   <QiitaArticleCard
                     key={`qiita-${item.article.id}`}
                     article={item.article}
-                    priority={index === 0 && posts.length === 0}
+                    priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 )
               )}
             </div>
-            <div className="text-center text-gray-600 dark:text-gray-300 font-mono terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200">
-              $ cd ./about {'# その他ソーシャル記事を見る'}
-            </div>
+            <ExternalArticlesLink />
           </div>
         )}
+
+        {!hasPosts && <BlogLink />}
       </div>
     </Container>
   );

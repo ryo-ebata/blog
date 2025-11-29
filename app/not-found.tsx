@@ -1,18 +1,22 @@
 import Link from 'next/link';
+import { Container } from '@/components/composites/container';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-gray-600 mb-8">ページが見つかりませんでした。</p>
+    <Container maxWidth="2xl">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
+        <h1 className="text-6xl font-bold font-mono text-terminal-green dark:text-terminal-green terminal-glow">
+          404
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-300 font-mono">$ cat: page not found</p>
+        <p className="text-gray-600 dark:text-gray-300 font-mono">ページが見つかりませんでした。</p>
         <Link
           href="/"
-          className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-block px-6 py-3 font-mono text-terminal-cyan dark:text-terminal-cyan border border-terminal-border hover:bg-terminal-border transition-colors duration-200 terminal-glow"
         >
-          ホームに戻る
+          $ cd ~ {'# ホームに戻る'}
         </Link>
       </div>
-    </div>
+    </Container>
   );
 }

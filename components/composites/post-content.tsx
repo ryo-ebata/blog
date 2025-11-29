@@ -1,5 +1,7 @@
+import type { ComponentType } from 'react';
+
 interface PostContentProps {
-  Content: React.ComponentType;
+  Content: ComponentType;
 }
 
 export function PostContent({ Content }: PostContentProps) {

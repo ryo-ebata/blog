@@ -9,39 +9,43 @@ interface PaginationProps {
   basePath: string;
 }
 
+function getPageUrl(basePath: string, page: number): string {
+  return page === 1 ? basePath : `${basePath}?page=${page}`;
+}
+
+function shouldShowPage(page: number, currentPage: number, totalPages: number): boolean {
+  return page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1);
+}
+
+function shouldShowEllipsis(page: number, currentPage: number): boolean {
+  return page === currentPage - 2 || page === currentPage + 2;
+}
+
 export function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
   if (totalPages <= 1) {
     return null;
   }
 
-  const getPageUrl = (page: number) => {
-    if (page === 1) {
-      return basePath;
-    }
-    return `${basePath}/page/${page}`;
-  };
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <nav className="flex items-center justify-center gap-2 mt-8">
+    <nav className="flex items-center justify-center gap-2 mt-8" aria-label="ページネーション">
       {currentPage > 1 && (
         <Button variant="outline" asChild>
-          <Link href={getPageUrl(currentPage - 1)}>前へ</Link>
+          <Link href={getPageUrl(basePath, currentPage - 1)}>前へ</Link>
         </Button>
       )}
 
       <div className="flex items-center gap-1">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-          if (
-            page === 1 ||
-            page === totalPages ||
-            (page >= currentPage - 1 && page <= currentPage + 1)
-          ) {
+        {pages.map((page) => {
+          if (shouldShowPage(page, currentPage, totalPages)) {
             return (
               <Button key={page} variant={currentPage === page ? 'default' : 'outline'} asChild>
-                <Link href={getPageUrl(page)}>{page}</Link>
+                <Link href={getPageUrl(basePath, page)}>{page}</Link>
               </Button>
             );
-          } else if (page === currentPage - 2 || page === currentPage + 2) {
+          }
+          if (shouldShowEllipsis(page, currentPage)) {
             return <span key={page}>...</span>;
           }
           return null;
@@ -50,7 +54,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
 
       {currentPage < totalPages && (
         <Button variant="outline" asChild>
-          <Link href={getPageUrl(currentPage + 1)}>次へ</Link>
+          <Link href={getPageUrl(basePath, currentPage + 1)}>次へ</Link>
         </Button>
       )}
     </nav>

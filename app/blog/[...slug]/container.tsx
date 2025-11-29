@@ -9,16 +9,21 @@ interface BlogPostContainerProps {
 }
 
 export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
-  const post = await getPostBySlug(slug);
+  try {
+    const post = await getPostBySlug(slug);
 
-  if (!post) {
+    if (!post) {
+      notFound();
+    }
+
+    return (
+      <Container maxWidth="3xl">
+        <BlogPostPresenter metadata={post.metadata} />
+        <PostContent Content={post.Content} />
+      </Container>
+    );
+  } catch (error) {
+    console.error(`Failed to load post with slug "${slug.join('/')}":`, error);
     notFound();
   }
-
-  return (
-    <Container maxWidth="3xl">
-      <BlogPostPresenter metadata={post.metadata} />
-      <PostContent Content={post.Content} />
-    </Container>
-  );
 }

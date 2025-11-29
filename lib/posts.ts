@@ -4,6 +4,7 @@ import { evaluate } from '@mdx-js/mdx';
 import matter from 'gray-matter';
 import type { MDXModule } from 'mdx/types';
 import { unstable_cache } from 'next/cache';
+import type { ComponentType } from 'react';
 import { mdxConfig } from '@/config/mdx';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -22,7 +23,7 @@ export interface PostMetadata {
 
 export interface PostData {
   metadata: PostMetadata;
-  Content: React.ComponentType;
+  Content: ComponentType;
 }
 
 // メタデータとファイル名のペア
@@ -90,23 +91,33 @@ export const getAllPostsMetadata = unstable_cache(
 export async function getAllPosts(): Promise<PostData[]> {
   const postsWithFiles = await getAllPostsMetadata();
 
-  const posts = await Promise.all(
-    postsWithFiles.map(async ({ metadata, fileName }) => {
-      const filePath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { content } = matter(fileContents);
+  const posts: (PostData | null)[] = await Promise.all(
+    postsWithFiles.map(async ({ metadata, fileName }): Promise<PostData | null> => {
+      try {
+        const filePath = path.join(postsDirectory, fileName);
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const { content } = matter(fileContents);
 
-      // MDXを評価してReactコンポーネントを取得
-      const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+        // MDXを評価してReactコンポーネントを取得
+        const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
 
-      return {
-        metadata,
-        Content,
-      };
+        if (!Content) {
+          console.warn(`Failed to evaluate MDX content for: ${fileName}`);
+          return null;
+        }
+
+        return {
+          metadata,
+          Content,
+        };
+      } catch (error) {
+        console.error(`Failed to load post "${fileName}":`, error);
+        return null;
+      }
     })
   );
 
-  return posts;
+  return posts.filter((post): post is PostData => post !== null);
 }
 
 // スラッグから記事を取得
@@ -118,27 +129,38 @@ export async function getPostBySlug(slug: string | string[]): Promise<PostData> 
     throw new Error(`Post not found: ${slugPath}`);
   }
 
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const { data, content } = matter(fileContents);
+  try {
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const { data, content } = matter(fileContents);
 
-  // slugが指定されていなければファイル名から生成
-  const postSlug = data.slug || slugPath;
+    // slugが指定されていなければファイル名から生成
+    const postSlug = data.slug || slugPath;
 
-  // MDXを評価してReactコンポーネントを取得
-  const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
+    // MDXを評価してReactコンポーネントを取得
+    const { default: Content } = (await evaluate(content, mdxConfig)) as MDXModule;
 
-  return {
-    metadata: {
-      slug: postSlug,
-      title: data.title || 'Untitled',
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt || data.createdAt,
-      description: data.description,
-      tags: data.tags,
-      icon: data.icon,
-      author: data.author,
-      draft: data.draft || false,
-    },
-    Content,
-  };
+    if (!Content) {
+      throw new Error(`Failed to evaluate MDX content for: ${slugPath}`);
+    }
+
+    return {
+      metadata: {
+        slug: postSlug,
+        title: data.title || 'Untitled',
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt || data.createdAt,
+        description: data.description,
+        tags: data.tags,
+        icon: data.icon,
+        author: data.author,
+        draft: data.draft || false,
+      },
+      Content,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to load post "${slugPath}": ${error.message}`);
+    }
+    throw new Error(`Failed to load post "${slugPath}"`);
+  }
 }

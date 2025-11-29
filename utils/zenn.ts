@@ -55,12 +55,26 @@ export type ZennArticle = z.infer<typeof zennArticleSchema>;
 export type ZennArticlesResponse = z.infer<typeof zennArticlesResponseSchema>;
 
 export async function getZennArticles(): Promise<ZennArticlesResponse> {
-  const response = await fetch('https://zenn.dev/api/articles?username=ebarinyo', {
-    next: {
-      revalidate: 3600, // 1時間ごとに再検証
-      tags: ['zenn-articles'],
-    },
-  });
-  const data = await response.json();
-  return zennArticlesResponseSchema.parse(data);
+  try {
+    const response = await fetch('https://zenn.dev/api/articles?username=ebarinyo', {
+      next: {
+        revalidate: 3600, // 1時間ごとに再検証
+        tags: ['zenn-articles'],
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Zenn API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return zennArticlesResponseSchema.parse(data);
+  } catch (error) {
+    console.error('Failed to fetch Zenn articles:', error);
+    return {
+      articles: [],
+      next_page: null,
+      total_count: null,
+    };
+  }
 }

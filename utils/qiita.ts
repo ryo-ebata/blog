@@ -62,16 +62,30 @@ export type QiitaArticlesResponse = z.infer<typeof qiitaArticlesResponseSchema>;
  * Qiitaの記事を取得
  */
 export async function getQiitaArticles(): Promise<QiitaArticlesResponse> {
-  const response = await fetch(`${envConfig.qiita.QIITA_API_URL}/authenticated_user/items`, {
-    headers: {
-      Authorization: `Bearer ${envConfig.qiita.QIITA_API_ACCESS_TOKEN}`,
-    },
-    next: {
-      revalidate: 3600, // 1時間ごとに再検証
-      tags: ['qiita-articles'],
-    },
-  });
+  if (!envConfig.qiita.QIITA_API_ACCESS_TOKEN) {
+    console.warn('QIITA_API_ACCESS_TOKEN is not set. Returning empty array.');
+    return [];
+  }
 
-  const data = await response.json();
-  return qiitaArticlesResponseSchema.parse(data);
+  try {
+    const response = await fetch(`${envConfig.qiita.QIITA_API_URL}/authenticated_user/items`, {
+      headers: {
+        Authorization: `Bearer ${envConfig.qiita.QIITA_API_ACCESS_TOKEN}`,
+      },
+      next: {
+        revalidate: 3600, // 1時間ごとに再検証
+        tags: ['qiita-articles'],
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Qiita API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return qiitaArticlesResponseSchema.parse(data);
+  } catch (error) {
+    console.error('Failed to fetch Qiita articles:', error);
+    return [];
+  }
 }
