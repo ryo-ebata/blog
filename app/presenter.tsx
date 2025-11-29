@@ -1,10 +1,8 @@
 'use client';
 
+import { ArticleCard } from '@/components/composites/article-card/article-card';
 import { Container } from '@/components/composites/container';
-import { QiitaArticleCard } from '@/components/composites/qiita-article-card/qiita-article-card';
-import { ZennArticleCard } from '@/components/composites/zenn-article-card/zenn-article-card';
 import { BackLink } from '@/components/elements';
-import { PostCard } from '@/components/elements/post-card/post-card';
 import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { PostMetadata } from '@/lib/posts';
 import type { QiitaArticle } from '@/utils/qiita';
@@ -58,7 +56,17 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
             </div>
             <div className="space-y-6">
               {posts.map((post) => (
-                <PostCard key={post.slug} metadata={post} />
+                <ArticleCard
+                  key={post.slug}
+                  title={post.title}
+                  href={`/blog/${post.slug}`}
+                  date={post.createdAt}
+                  tags={post.tags}
+                  description={post.description}
+                  icon={post.icon ? { type: 'icon', name: post.icon, color: 'green' } : undefined}
+                  hoverColor="green"
+                  isExternal={false}
+                />
               ))}
             </div>
             <div className="text-center flex justify-end">
@@ -75,15 +83,32 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
             <div className="space-y-6">
               {articles.map((item, index) =>
                 item.type === 'zenn' ? (
-                  <ZennArticleCard
+                  <ArticleCard
                     key={`zenn-${item.article.id}`}
-                    article={item.article}
+                    title={item.article.title}
+                    href={`https://zenn.dev${item.article.path}`}
+                    date={item.article.published_at}
+                    tags={[item.article.post_type]}
+                    icon={{ type: 'emoji', emoji: item.article.emoji, color: 'purple' }}
+                    hoverColor="purple"
+                    isExternal={true}
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 ) : (
-                  <QiitaArticleCard
+                  <ArticleCard
                     key={`qiita-${item.article.id}`}
-                    article={item.article}
+                    title={item.article.title}
+                    href={item.article.url}
+                    date={item.article.created_at}
+                    tags={item.article.tags.length > 0 ? [item.article.tags[0].name] : []}
+                    icon={{
+                      type: 'image',
+                      src: '/image/qiita-icon/qiita-icon.png',
+                      alt: item.article.user.name,
+                      color: 'orange',
+                    }}
+                    hoverColor="orange"
+                    isExternal={true}
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 )
