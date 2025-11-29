@@ -111,7 +111,9 @@ export function ArticleCard({
           </div>
 
           {description && (
-            <p className="mt-3 text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
+            <p className="mt-3 text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2">
+              {description}
+            </p>
           )}
         </div>
       </div>
