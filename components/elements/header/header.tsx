@@ -36,7 +36,7 @@ export function Header() {
               className={getLinkClassName(pathname === item.href)}
             >
               {item.href === pathname && (
-                 <span className="text-terminal-green dark:text-terminal-green mr-1 text-base font-bold animate-blink terminal-glow">
+                <span className="text-terminal-green dark:text-terminal-green mr-1 text-base font-bold animate-blink terminal-glow">
                   {'>'}
                 </span>
               )}

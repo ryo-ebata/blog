@@ -15,7 +15,7 @@ export function MdxHeading({
   const baseClasses = 'font-bold font-mono text-terminal-green dark:text-terminal-green';
   const sizeClasses = {
     h1: 'scroll-m-20 text-3xl terminal-glow',
-    h2: 'scroll-m-20 border-b-2 border-terminal-border pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-6',
+    h2: 'terminal-glow scroll-m-20 border-b-2 border-dashed border-terminal-border pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-6',
     h3: 'scroll-m-20 text-xl mt-5 mb-2 text-terminal-cyan',
     h4: 'scroll-m-20 text-lg mt-4 mb-2 text-terminal-cyan',
     h5: 'scroll-m-20 text-base mt-3 mb-1 text-terminal-cyan',
