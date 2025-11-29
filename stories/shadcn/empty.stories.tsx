@@ -49,6 +49,8 @@ export const WithIcon: Story = {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            role="img"
+            aria-label="Arrow icon"
           >
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
@@ -78,6 +80,8 @@ export const WithAction: Story = {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            role="img"
+            aria-label="Arrow icon"
           >
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
@@ -110,6 +114,8 @@ export const WithMultipleActions: Story = {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            role="img"
+            aria-label="Arrow icon"
           >
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
@@ -146,6 +152,8 @@ export const CustomMedia: Story = {
             strokeLinecap="round"
             strokeLinejoin="round"
             className="text-muted-foreground"
+            role="img"
+            aria-label="Alert icon"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v6" />

@@ -4,7 +4,9 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://example.com',
   ogImage: '/og-image.jpg',
   links: {
-    twitter: 'https://twitter.com',
-    github: 'https://github.com',
+    twitter: 'https://x.com/ebaryo43',
+    github: 'https://github.com/ryo-ebata',
+    zenn: 'https://zenn.dev/ebarinyo',
+    qiita: 'https://qiita.com/ryo0403',
   },
 };

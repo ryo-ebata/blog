@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/elements/theme-toggle/theme-toggle';
 const navigationItems = [
   { href: '/', label: 'home' },
   { href: '/blog', label: 'blog' },
+  { href: '/about', label: 'about' },
 ] as const;
 
 function getLinkClassName(isActive: boolean): string {

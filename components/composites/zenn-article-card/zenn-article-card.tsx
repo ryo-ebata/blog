@@ -11,7 +11,7 @@ interface ZennArticleCardProps {
   priority?: boolean;
 }
 
-export function ZennArticleCard({ article, priority = false }: ZennArticleCardProps) {
+export function ZennArticleCard({ article, priority: _priority = false }: ZennArticleCardProps) {
   return (
     <article
       key={article.id}
