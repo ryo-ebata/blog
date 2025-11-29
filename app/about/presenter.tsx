@@ -6,14 +6,11 @@ import Link from 'next/link';
 import { Container } from '@/components/composites/container';
 import { BackLink } from '@/components/elements';
 import { MdxHeading } from '@/components/mdx/heading/heading';
+import { MdxParagraph } from '@/components/mdx/paragragh/paragragh';
 import { siteConfig } from '@/config/site';
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
-      {children}
-    </h2>
-  );
+  return <MdxHeading as="h2">{children}</MdxHeading>;
 }
 
 function SocialLink({ href, label }: { href: string; label: string }) {
@@ -47,17 +44,35 @@ export function AboutPresenter() {
 
         <div className="space-y-6">
           <div className="terminal-card rounded-none p-6 font-mono">
-            <SectionHeading>[About]</SectionHeading>
+            <SectionHeading>[About Blog]</SectionHeading>
             <div className="mt-4 space-y-4 text-gray-700 dark:text-gray-300">
-              <p>
-                このブログでは、技術的な学びや日々の気づきを共有しています。
-                情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。
-              </p>
+              <MdxParagraph>
+                単なる情報（Information）ではなく、
+                <br />
+                知識（Knowledge）・意見（Opinion）・気付き（Insight）を書きます。
+                <br />
+                技術的な内容も含め、思考のメモなどを残していきます。
+              </MdxParagraph>
             </div>
           </div>
 
           <div className="terminal-card rounded-none p-6 font-mono">
-            <SectionHeading>[Links]</SectionHeading>
+            <SectionHeading>[About Me]</SectionHeading>
+            <div className="mt-4 space-y-4 text-gray-700 dark:text-gray-300">
+              <MdxParagraph>
+                whoami: Software Engineer.
+                <br />
+                interests: Generative AI, Rust, etc.
+                <br />
+                works: Frontend Engineer, Data Engineering.
+                <br />
+                hobbies: Anime, Basketball, Mahjong, Travel, etc.
+              </MdxParagraph>
+            </div>
+          </div>
+
+          <div className="terminal-card rounded-none p-6 font-mono">
+            <SectionHeading>[Social Links]</SectionHeading>
             <div className="mt-4 space-y-2">
               {siteConfig.links.twitter && (
                 <div className="flex items-center gap-2">
