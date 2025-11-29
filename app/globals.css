@@ -213,17 +213,12 @@
 
 .terminal-card {
   background: var(--terminal-bg);
-  border: 1px solid var(--terminal-border);
 }
 
 .dark .terminal-card {
   background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
   box-shadow: 0 0 20px rgba(63, 185, 80, 0.05);
-}
-
-.terminal-card:hover {
-  border-color: var(--terminal-green);
-  transition: all 0.3s ease;
 }
 
 .dark .terminal-card:hover {

@@ -21,7 +21,7 @@ export function PostCard({ metadata }: PostCardProps) {
   const IconComponent = getIconComponent(metadata.icon);
 
   return (
-    <article className="terminal-card rounded-none p-6 transition-all duration-300 font-mono">
+    <article className="terminal-card p-6 transition-all duration-300 font-mono">
       <div className="flex items-start gap-4">
         {IconComponent && (
           <div className="shrink-0 mt-1">
