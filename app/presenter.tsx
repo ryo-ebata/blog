@@ -26,7 +26,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
         <div className="mb-12 text-center space-y-4">
           <MdxHeading as="h1">記事一覧</MdxHeading>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            技術的な学びや日々の気づきを共有しています
+            情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。
           </p>
         </div>
 
