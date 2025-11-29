@@ -191,10 +191,9 @@
   animation: glow 2s ease-in-out infinite;
 }
 
+/* terminal-glowはダークモードのみ適用 */
 .terminal-glow {
-  text-shadow:
-    0 0 5px var(--terminal-green),
-    0 0 10px var(--terminal-green);
+  /* ライトモードでは何も適用しない - ダークモードでは下記の.dark .terminal-glowが適用される */
 }
 
 .dark .terminal-glow {

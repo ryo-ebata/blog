@@ -45,9 +45,9 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
               </h2>
               <Link
                 href="/blog"
-                className="text-terminal-blue dark:text-terminal-blue hover:text-terminal-cyan dark:hover:text-terminal-cyan underline transition-colors duration-200 font-mono"
+                className=" terminal-glow underline text-terminal-blue hover:text-terminal-cyan hover:text-terminal-cyan transition-colors duration-200 font-mono"
               >
-                $ cat all_posts.txt →
+                $ cd ./blog {'# すべての記事を見る'}
               </Link>
             </div>
             <div className="space-y-6">
@@ -73,8 +73,8 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                 )
               )}
             </div>
-            <div className="text-center text-gray-600 dark:text-gray-500 font-mono">
-              {'// その他ソーシャル記事はAboutページから'}
+            <div className="text-center text-gray-600 dark:text-gray-300 font-mono terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200">
+              $ cd ./about {'# その他ソーシャル記事を見る'}
             </div>
           </div>
         )}
