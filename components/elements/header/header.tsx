@@ -21,7 +21,7 @@ function getLinkClassName(isActive: boolean): string {
 export function Header() {
   const pathname = usePathname();
   return (
-    <header className="border-b border-terminal-border dark:border-terminal-border terminal-border bg-terminal-bg">
+    <header className="border-b bg-terminal-bg">
       <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
         <Link
           href="/"
