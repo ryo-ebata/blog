@@ -8,9 +8,10 @@ import { TagList } from '../tag-list';
 
 interface ZennArticleCardProps {
   article: ZennArticle;
+  priority?: boolean;
 }
 
-export function ZennArticleCard({ article }: ZennArticleCardProps) {
+export function ZennArticleCard({ article, priority = false }: ZennArticleCardProps) {
   return (
     <article
       key={article.id}

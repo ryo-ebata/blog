@@ -9,9 +9,10 @@ import { TagList } from '../tag-list';
 
 interface QiitaArticleCardProps {
   article: QiitaArticle;
+  priority?: boolean;
 }
 
-export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
+export function QiitaArticleCard({ article, priority = false }: QiitaArticleCardProps) {
   return (
     <article
       key={article.id}
@@ -25,6 +26,7 @@ export function QiitaArticleCard({ article }: QiitaArticleCardProps) {
               alt={article.user.name}
               width={36}
               height={36}
+              priority={priority}
             />
           </div>
         </div>

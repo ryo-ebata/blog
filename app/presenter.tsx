@@ -30,33 +30,38 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
           >
             $ ls -la articles/
           </MdxHeading>
-          <p className="text-xl text-gray-600 dark:text-gray-500 max-w-2xl mx-auto font-mono">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
             {
               '// 情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。'
             }
           </p>
         </div>
 
-        {posts.length > 0 && (
-          <>
-            <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
-                [最新記事]
-              </h2>
-              <Link
-                href="/blog"
-                className=" terminal-glow underline text-terminal-blue hover:text-terminal-cyan hover:text-terminal-cyan transition-colors duration-200 font-mono"
-              >
-                $ cd ./blog {'# すべての記事を見る'}
-              </Link>
-            </div>
-            <div className="space-y-6">
-              {posts.map((post) => (
-                <PostCard key={post.slug} metadata={post} />
-              ))}
-            </div>
-          </>
-        )}
+        <div className="space-y-4">
+          {posts.length > 0 && (
+            <>
+              <div className="mb-8 flex items-center justify-between">
+                <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
+                  [最新記事]
+                </h2>
+              </div>
+              <div className="space-y-6">
+                {posts.map((post) => (
+                  <PostCard key={post.slug} metadata={post} />
+                ))}
+              </div>
+            </>
+          )}
+          <div className="text-center flex justify-end">
+            <Link
+              href="/blog"
+              className="terminal-glow underline text-terminal-blue hover:text-terminal-cyan hover:text-terminal-cyan transition-colors duration-200 font-mono"
+            >
+              $ cd ./blog {'# すべての記事'}
+            </Link>
+          </div>
+        </div>
+
         {articles.length > 0 && (
           <div className="space-y-4">
             <div className="mb-8 flex items-center justify-between">
@@ -65,11 +70,19 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
               </h2>
             </div>
             <div className="space-y-6">
-              {articles.map((item) =>
+              {articles.map((item, index) =>
                 item.type === 'zenn' ? (
-                  <ZennArticleCard key={`zenn-${item.article.id}`} article={item.article} />
+                  <ZennArticleCard
+                    key={`zenn-${item.article.id}`}
+                    article={item.article}
+                    priority={index === 0 && posts.length === 0}
+                  />
                 ) : (
-                  <QiitaArticleCard key={`qiita-${item.article.id}`} article={item.article} />
+                  <QiitaArticleCard
+                    key={`qiita-${item.article.id}`}
+                    article={item.article}
+                    priority={index === 0 && posts.length === 0}
+                  />
                 )
               )}
             </div>

@@ -20,7 +20,7 @@ export function PostHeader({ metadata }: PostHeaderProps) {
         {metadata.tags && <TagList tags={metadata.tags} />}
         <Time date={metadata.createdAt} />
       </div>
-      <MdxParagraph className="text-gray-600 dark:text-gray-500">
+      <MdxParagraph className="text-gray-600 dark:text-gray-300">
         {metadata.description}
       </MdxParagraph>
     </div>

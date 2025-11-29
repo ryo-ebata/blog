@@ -44,7 +44,7 @@ export function PostCard({ metadata }: PostCardProps) {
           </div>
 
           {metadata.description && (
-            <p className="mt-3 text-gray-600 dark:text-gray-500 leading-relaxed">
+            <p className="mt-3 text-gray-600 dark:text-gray-300 leading-relaxed">
               {metadata.description}
             </p>
           )}

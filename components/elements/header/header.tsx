@@ -14,7 +14,7 @@ function getLinkClassName(isActive: boolean): string {
   if (isActive) {
     return `${baseClasses} text-terminal-green dark:text-terminal-green font-bold flex items-center terminal-glow`;
   }
-  return `${baseClasses} text-gray-600 dark:text-gray-500 hover:text-terminal-cyan dark:hover:text-terminal-cyan`;
+  return `${baseClasses} text-gray-600 dark:text-gray-300 hover:text-terminal-cyan dark:hover:text-terminal-cyan`;
 }
 
 export function Header() {
