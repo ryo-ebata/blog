@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { Container } from '@/components/composites/container';
 import { QiitaArticleCard } from '@/components/composites/qiita-article-card/qiita-article-card';
 import { ZennArticleCard } from '@/components/composites/zenn-article-card/zenn-article-card';
+import { BackLink } from '@/components/elements';
 import { PostCard } from '@/components/elements/post-card/post-card';
 import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { PostMetadata } from '@/lib/posts';
@@ -28,27 +28,6 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
     <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
       {children}
     </h2>
-  );
-}
-
-function BlogLink() {
-  return (
-    <div className="text-center flex justify-end">
-      <Link
-        href="/blog"
-        className="terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200 font-mono"
-      >
-        $ cd ./blog {'# すべての記事'}
-      </Link>
-    </div>
-  );
-}
-
-function ExternalArticlesLink() {
-  return (
-    <div className="text-center text-gray-600 dark:text-gray-300 font-mono terminal-glow underline text-terminal-blue hover:text-terminal-cyan transition-colors duration-200">
-      $ cd ./about {'# その他ソーシャル記事を見る'}
-    </div>
   );
 }
 
@@ -82,7 +61,9 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                 <PostCard key={post.slug} metadata={post} />
               ))}
             </div>
-            <BlogLink />
+            <div className="text-center flex justify-end">
+              <BackLink href="/blog" label="$ cd ./blog # すべての記事" />
+            </div>
           </div>
         )}
 
@@ -108,11 +89,11 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                 )
               )}
             </div>
-            <ExternalArticlesLink />
+            <div className="text-end">
+              <BackLink href="/about" label="$ cd ./about # その他ソーシャル記事を見る" />
+            </div>
           </div>
         )}
-
-        {!hasPosts && <BlogLink />}
       </div>
     </Container>
   );
