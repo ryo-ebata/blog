@@ -7,6 +7,24 @@ import {
   type MdxListProps,
 } from '@/components/mdx/list/list';
 import { MdxParagraph, type MdxParagraphProps } from '@/components/mdx/paragragh/paragragh';
+import {
+  MdxTable,
+  MdxTableBody,
+  type MdxTableBodyProps,
+  MdxTableCaption,
+  type MdxTableCaptionProps,
+  MdxTableCell,
+  type MdxTableCellProps,
+  MdxTableFooter,
+  type MdxTableFooterProps,
+  MdxTableHead,
+  MdxTableHeader,
+  type MdxTableHeaderProps,
+  type MdxTableHeadProps,
+  type MdxTableProps,
+  MdxTableRow,
+  type MdxTableRowProps,
+} from '@/components/mdx/table/table';
 
 export const mdxComponents = {
   h1: (props: MdxHeadingProps) => <MdxHeading as="h1" {...props} />,
@@ -19,4 +37,12 @@ export const mdxComponents = {
   a: (props: MdxLinkProps) => <MdxLink {...props} />,
   ul: (props: MdxListProps) => <MdxList {...props} />,
   ol: (props: MdxListOrderedProps) => <MdxListOrdered {...props} />,
+  table: (props: MdxTableProps) => <MdxTable {...props} />,
+  thead: (props: MdxTableHeaderProps) => <MdxTableHeader {...props} />,
+  tbody: (props: MdxTableBodyProps) => <MdxTableBody {...props} />,
+  tfoot: (props: MdxTableFooterProps) => <MdxTableFooter {...props} />,
+  tr: (props: MdxTableRowProps) => <MdxTableRow {...props} />,
+  th: (props: MdxTableHeadProps) => <MdxTableHead {...props} />,
+  td: (props: MdxTableCellProps) => <MdxTableCell {...props} />,
+  caption: (props: MdxTableCaptionProps) => <MdxTableCaption {...props} />,
 };
