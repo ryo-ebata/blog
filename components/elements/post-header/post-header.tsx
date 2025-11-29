@@ -12,7 +12,7 @@ interface PostHeaderProps {
 
 export function PostHeader({ metadata }: PostHeaderProps) {
   return (
-    <div className="mb-8 space-y-4 terminal-card rounded-none p-6 font-mono">
+    <div className="mb-8 space-y-4 p-6 font-mono border-b border-terminal-border">
       <MdxHeading as="h1" className="text-terminal-green dark:text-terminal-green terminal-glow">
         {metadata.title}
       </MdxHeading>

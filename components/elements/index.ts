@@ -1,5 +1,4 @@
 export { Container } from '../composites/container';
-export { PostContent } from '../composites/post-content';
 export { TagList } from '../composites/tag-list';
 export { BackLink } from './back-link/back-link';
 export { BlogTitle } from './blog-title/blog-title';

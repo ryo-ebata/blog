@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/composites/container';
-import { PostContent } from '@/components/elements';
 import { getPostBySlug } from '@/lib/posts';
 import { BlogPostPresenter } from './presenter';
 
@@ -19,7 +18,7 @@ export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
     return (
       <Container maxWidth="3xl">
         <BlogPostPresenter metadata={post.metadata} />
-        <PostContent Content={post.Content} />
+        <post.Content />
       </Container>
     );
   } catch (error) {
