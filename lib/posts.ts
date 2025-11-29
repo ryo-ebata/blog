@@ -19,6 +19,7 @@ export interface PostMetadata {
   icon?: string;
   author?: string;
   draft?: boolean;
+  characterCount?: number;
 }
 
 export interface PostData {
@@ -30,6 +31,58 @@ export interface PostData {
 interface PostMetadataWithFile {
   metadata: PostMetadata;
   fileName: string;
+}
+
+/**
+ * MDXコンテンツから文字数をカウント
+ * Markdownの記法（見出し、リンク、画像、コードブロックなど）を除去してテキストのみをカウント
+ */
+function countCharacters(content: string): number {
+  // コードブロックを除去（```で囲まれた部分）
+  let text = content.replace(/```[\s\S]*?```/g, '');
+
+  // インラインコードを除去（`で囲まれた部分）
+  text = text.replace(/`[^`]+`/g, '');
+
+  // 画像記法を除去（![alt](url)）
+  text = text.replace(/!\[([^\]]*)\]\([^)]+\)/g, '');
+
+  // リンク記法を除去（[text](url)）
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+
+  // 見出し記法を除去（#）
+  text = text.replace(/^#{1,6}\s+/gm, '');
+
+  // リスト記法を除去（-、*、+、数字.）
+  text = text.replace(/^[\s]*[-*+]\s+/gm, '');
+  text = text.replace(/^[\s]*\d+\.\s+/gm, '');
+
+  // 引用記法を除去（>）
+  text = text.replace(/^>\s+/gm, '');
+
+  // 水平線を除去（---、***）
+  text = text.replace(/^[-*]{3,}$/gm, '');
+
+  // 太字・斜体記法を除去（**、*、__、_）
+  text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+  text = text.replace(/\*([^*]+)\*/g, '$1');
+  text = text.replace(/__([^_]+)__/g, '$1');
+  text = text.replace(/_([^_]+)_/g, '$1');
+
+  // 打ち消し線を除去（~~）
+  text = text.replace(/~~([^~]+)~~/g, '$1');
+
+  // HTMLタグを除去
+  text = text.replace(/<[^>]+>/g, '');
+
+  // 改行、タブ、連続する空白を単一の空白に変換
+  text = text.replace(/\s+/g, ' ');
+
+  // 前後の空白を除去
+  text = text.trim();
+
+  // 文字数をカウント（空白を含む）
+  return text.length;
 }
 
 // メタデータのみを取得（内部実装）
@@ -45,7 +98,7 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
       files.map(async (file) => {
         const filePath = path.join(postsDirectory, file);
         const fileContents = fs.readFileSync(filePath, 'utf8');
-        const { data } = matter(fileContents);
+        const { data, content } = matter(fileContents);
 
         // data.draftがtrueの場合はスキップ
         if (data.draft) {
@@ -54,6 +107,9 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
 
         // slugが指定されていなければファイル名から生成
         const slug = data.slug || file.replace(/\.mdx$/, '');
+
+        // 文字数をカウント
+        const characterCount = countCharacters(content);
 
         return {
           metadata: {
@@ -66,6 +122,7 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
             icon: data.icon,
             author: data.author,
             draft: data.draft || false,
+            characterCount,
           },
           fileName: file,
         };
@@ -143,6 +200,9 @@ export async function getPostBySlug(slug: string | string[]): Promise<PostData> 
       throw new Error(`Failed to evaluate MDX content for: ${slugPath}`);
     }
 
+    // 文字数をカウント
+    const characterCount = countCharacters(content);
+
     return {
       metadata: {
         slug: postSlug,
@@ -154,6 +214,7 @@ export async function getPostBySlug(slug: string | string[]): Promise<PostData> 
         icon: data.icon,
         author: data.author,
         draft: data.draft || false,
+        characterCount,
       },
       Content,
     };

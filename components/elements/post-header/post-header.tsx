@@ -1,5 +1,6 @@
 'use client';
 
+import { Pen } from 'lucide-react';
 import { TagList } from '@/components/composites/tag-list';
 import { MdxHeading } from '@/components/mdx/heading/heading';
 import { MdxParagraph } from '@/components/mdx/paragragh/paragragh';
@@ -19,6 +20,9 @@ export function PostHeader({ metadata }: PostHeaderProps) {
       <div className="flex items-center gap-4">
         {metadata.tags && <TagList tags={metadata.tags} />}
         <Time date={metadata.createdAt} />
+        <span className="text-gray-600 dark:text-gray-300 flex items-center">
+          <Pen className="w-4 h-4 mr-1" />{metadata.characterCount} characters
+        </span>
       </div>
       <MdxHeading as="h2" className="text-terminal-green dark:text-terminal-green terminal-glow">
         TL;DR:
