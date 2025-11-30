@@ -100,7 +100,7 @@ jobs:
                   fi
 
             - name: 📊 Comment PR with Lighthouse results
-              if: github.event_name == 'pull_request'
+              if: github.event.pull_request.number != null
               uses: actions/github-script@v7
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -166,20 +166,38 @@ jobs:
                           comment += '\n⚠️ Report URL not found. Check the workflow logs for details.\n';
                       }
 
-                      // PRにコメントを投稿（既存のコメントを更新）
-                      const prNumber = context.issue.number;
-                      const comments = await github.rest.issues.listComments({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: prNumber,
-                      });
+                      // PR番号を取得（workflow_callの場合も対応）
+                      const prNumber = context.payload.pull_request?.number || context.issue?.number || github.event.pull_request?.number;
 
-                      const existingComment = comments.data.find(
-                          comment => comment.user.type === 'Bot' && comment.body.includes('## 🔍 Lighthouse Results')
+                      if (!prNumber) {
+                          console.log('PR number not found, skipping comment');
+                          return;
+                      }
+
+                      console.log(`Posting comment to PR #${prNumber}`);
+
+                      // PRのコメントを取得（PRコメントとIssueコメントの両方を確認）
+                      const [issueComments, prComments] = await Promise.all([
+                          github.rest.issues.listComments({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              issue_number: prNumber,
+                          }),
+                          github.rest.pulls.listReviewComments({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              pull_number: prNumber,
+                          }).catch(() => ({ data: [] })) // エラー時は空配列を返す
+                      ]);
+
+                      // Issueコメントから既存のLighthouseコメントを探す
+                      const existingComment = issueComments.data.find(
+                          c => c.user.type === 'Bot' && c.body.includes('## 🔍 Lighthouse Results')
                       );
 
                       if (existingComment) {
                           // 既存のコメントを更新
+                          console.log(`Updating existing comment #${existingComment.id}`);
                           await github.rest.issues.updateComment({
                               owner: context.repo.owner,
                               repo: context.repo.repo,
@@ -188,6 +206,7 @@ jobs:
                           });
                       } else {
                           // 新しいコメントを投稿
+                          console.log(`Creating new comment on PR #${prNumber}`);
                           await github.rest.issues.createComment({
                               issue_number: prNumber,
                               owner: context.repo.owner,
