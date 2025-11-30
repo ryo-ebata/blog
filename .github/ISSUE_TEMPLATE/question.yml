@@ -8,6 +8,15 @@ body:
       value: |
         質問ありがとうございます！回答しやすくするために、以下の情報を提供してください。
 
+  - type: input
+    id: title-summary
+    attributes:
+      label: タイトル（簡潔な要約）
+      description: この内容がIssueのタイトルに使用されます。例: 「Next.jsのビルドエラーについて」
+      placeholder: "例: Next.jsのビルドエラーについて"
+    validations:
+      required: true
+
   - type: textarea
     id: question
     attributes:

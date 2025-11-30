@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/composites/container';
+import { JsonLd } from '@/components/jsonld/jsonld';
+import { siteConfig } from '@/config/site';
+import { generateArticleJsonLd } from '@/lib/jsonld';
 import { getPostBySlug } from '@/lib/posts';
 import { BlogPostPresenter } from './presenter';
 
@@ -15,11 +18,17 @@ export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
       notFound();
     }
 
+    const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
+    const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl);
+
     return (
-      <Container maxWidth="3xl">
-        <BlogPostPresenter metadata={post.metadata} />
-        <post.Content />
-      </Container>
+      <>
+        <JsonLd data={articleJsonLd} />
+        <Container maxWidth="3xl">
+          <BlogPostPresenter metadata={post.metadata} />
+          <post.Content />
+        </Container>
+      </>
     );
   } catch (error) {
     console.error(`Failed to load post with slug "${slug.join('/')}":`, error);

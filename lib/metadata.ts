@@ -31,14 +31,7 @@ function getOgImageUrl(image?: string): string {
  * 共通のメタデータを生成
  */
 export function generateMetadata(params: MetadataParams): Metadata {
-  const {
-    title,
-    description,
-    url,
-    type = 'website',
-    image,
-    imageAlt,
-  } = params;
+  const { title, description, url, type = 'website', image, imageAlt } = params;
 
   const ogImageUrl = getOgImageUrl(image);
   const pageUrl = url || siteConfig.url;
@@ -87,4 +80,3 @@ export function generateMetadata(params: MetadataParams): Metadata {
 
   return baseMetadata;
 }
-

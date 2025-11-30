@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Header } from '@/components/elements/header/header';
+import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/contexts/theme-provider';
+import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import './globals.css';
 import { Footer } from '@/components/elements/footer/footer';
 
@@ -57,9 +59,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = generateOrganizationJsonLd();
+
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-mono`}>
+        <JsonLd data={organizationJsonLd} />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Header />
           <main>{children}</main>

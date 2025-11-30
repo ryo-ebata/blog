@@ -8,6 +8,15 @@ body:
       value: |
         バグ報告ありがとうございます！問題を解決するために、以下の情報を提供してください。
 
+  - type: input
+    id: title-summary
+    attributes:
+      label: タイトル（簡潔な要約）
+      description: この内容がIssueのタイトルに使用されます。例: 「ホームページでボタンがクリックできない」
+      placeholder: "例: ホームページでボタンがクリックできない"
+    validations:
+      required: true
+
   - type: textarea
     id: description
     attributes:
