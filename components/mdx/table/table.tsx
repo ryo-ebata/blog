@@ -58,6 +58,9 @@ export function MdxTableRow({ className, ...props }: MdxTableRowProps) {
 
 export interface MdxTableHeadProps extends ComponentPropsWithoutRef<'th'> {}
 
+/**
+ * ヘッダー行のセルを太字にする
+ */
 export function MdxTableHead({ className, ...props }: MdxTableHeadProps) {
   return (
     <TableHead
