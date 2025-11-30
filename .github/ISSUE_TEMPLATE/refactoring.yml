@@ -8,15 +8,6 @@ body:
       value: |
         リファクタリングの提案ありがとうございます！
 
-  - type: input
-    id: title-summary
-    attributes:
-      label: タイトル（簡潔な要約）
-      description: "この内容がIssueのタイトルに使用されます。例: 「XXXコンポーネントのリファクタリング」"
-      placeholder: "例: XXXコンポーネントのリファクタリング"
-    validations:
-      required: true
-
   - type: textarea
     id: target
     attributes:

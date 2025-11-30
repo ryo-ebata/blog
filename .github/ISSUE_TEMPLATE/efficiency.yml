@@ -8,15 +8,6 @@ body:
       value: |
         効率化の提案ありがとうございます！
 
-  - type: input
-    id: title-summary
-    attributes:
-      label: タイトル（簡潔な要約）
-      description: "この内容がIssueのタイトルに使用されます。例: 「ビルド時間を短縮するためにキャッシュを導入」"
-      placeholder: "例: ビルド時間を短縮するためにキャッシュを導入"
-    validations:
-      required: true
-
   - type: textarea
     id: target
     attributes:
