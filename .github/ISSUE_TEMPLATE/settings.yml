@@ -1,0 +1,55 @@
+name: ⚙️ Settings
+description: 設定まわりのIssue（Githubなど）
+title: "[Settings] "
+labels: ["⚙️ Settings"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        設定関連のIssueありがとうございます！
+
+  - type: textarea
+    id: target
+    attributes:
+      label: 設定対象
+      description: どの設定を変更・追加したいか説明してください
+      placeholder: "例: GitHub Actions、Next.js設定、環境変数など"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 変更の理由
+      description: なぜこの設定変更が必要か説明してください
+      placeholder: "例: ビルド時間の短縮、セキュリティ向上、開発体験の改善など"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案内容
+      description: どのように設定を変更したいか説明してください
+      placeholder: 具体的な設定変更案を記入してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: 影響範囲
+      description: この設定変更が影響する範囲を説明してください
+      placeholder: "例: ビルドプロセス、デプロイ、開発環境など"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項
+      options:
+        - label: 既存のIssueを確認しました
+          required: true
+        - label: この設定変更を実装する意思があります（PRを提出する予定）
+          required: false
