@@ -19,7 +19,7 @@ const config: StorybookConfig = {
     // Storybookのテスト用エントリーポイント（vite-inject-mocker-entry.js）が大きいため、閾値を上げる
     config.build.chunkSizeWarningLimit = 2500; // 2.5MBに引き上げ
     config.build.rollupOptions = config.build.rollupOptions || {};
-    
+
     // "use client" ディレクティブとチャンクサイズの警告を抑制
     const originalOnwarn = config.build.rollupOptions.onwarn;
     config.build.rollupOptions.onwarn = (warning, warn) => {
