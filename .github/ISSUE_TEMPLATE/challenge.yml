@@ -8,15 +8,6 @@ body:
       value: |
         チャレンジングなIssueありがとうございます！このIssueは新しい技術や知見が必要な内容です。
 
-  - type: input
-    id: title-summary
-    attributes:
-      label: タイトル（簡潔な要約）
-      description: "この内容がIssueのタイトルに使用されます。例: 「リアルタイム通信機能の実装」"
-      placeholder: "例: リアルタイム通信機能の実装"
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
