@@ -8,15 +8,6 @@ body:
       value: |
         ライブラリ関連のIssueありがとうございます！
 
-  - type: input
-    id: title-summary
-    attributes:
-      label: タイトル（簡潔な要約）
-      description: "この内容がIssueのタイトルに使用されます。例: 「Next.jsを16.0.3から16.1.0にアップデート」"
-      placeholder: "例: Next.jsを16.0.3から16.1.0にアップデート"
-    validations:
-      required: true
-
   - type: dropdown
     id: type
     attributes:

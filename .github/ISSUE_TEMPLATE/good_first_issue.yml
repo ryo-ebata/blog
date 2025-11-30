@@ -8,15 +8,6 @@ body:
       value: |
         初めてのコントリビュート、ありがとうございます！このIssueは初心者向けに設計されています。
 
-  - type: input
-    id: title-summary
-    attributes:
-      label: タイトル（簡潔な要約）
-      description: "この内容がIssueのタイトルに使用されます。例: 「READMEにセットアップ手順を追加」"
-      placeholder: "例: READMEにセットアップ手順を追加"
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
