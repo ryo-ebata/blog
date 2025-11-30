@@ -68,3 +68,21 @@ export const MultipleLinks: Story = {
     </div>
   ),
 };
+
+export const BlockLink: Story = {
+  args: {
+    href: '/blog',
+  },
+  render: () => (
+    <div className="space-y-4">
+      <MdxLink href="/blog">
+        <span className="font-semibold">ブログ一覧</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">記事一覧を見る</span>
+      </MdxLink>
+      <MdxLink href="https://nextjs.org">
+        <span className="font-semibold">Next.js公式サイト</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">Next.jsの公式ドキュメント</span>
+      </MdxLink>
+    </div>
+  ),
+};

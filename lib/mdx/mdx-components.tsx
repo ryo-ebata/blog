@@ -1,5 +1,6 @@
 import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading/heading';
 import { MdxLink, type MdxLinkProps } from '@/components/mdx/link/link';
+import { LinkCard, type LinkCardProps } from '@/components/mdx/link/link-card';
 import {
   MdxList,
   MdxListOrdered,
@@ -35,6 +36,7 @@ export const mdxComponents = {
   h6: (props: MdxHeadingProps) => <MdxHeading as="h6" {...props} />,
   p: (props: MdxParagraphProps) => <MdxParagraph {...props} />,
   a: (props: MdxLinkProps) => <MdxLink {...props} />,
+  LinkCard: (props: LinkCardProps) => <LinkCard {...props} />,
   ul: (props: MdxListProps) => <MdxList {...props} />,
   ol: (props: MdxListOrderedProps) => <MdxListOrdered {...props} />,
   table: (props: MdxTableProps) => <MdxTable {...props} />,
