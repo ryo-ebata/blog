@@ -1,4 +1,6 @@
+import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
+import { generateWebSiteJsonLd } from '@/lib/jsonld';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { HomeContainer } from './container';
 
@@ -11,5 +13,12 @@ export const metadata = generatePageMetadata({
 });
 
 export default async function Home() {
-  return <HomeContainer />;
+  const webSiteJsonLd = generateWebSiteJsonLd();
+
+  return (
+    <>
+      <JsonLd data={webSiteJsonLd} />
+      <HomeContainer />
+    </>
+  );
 }

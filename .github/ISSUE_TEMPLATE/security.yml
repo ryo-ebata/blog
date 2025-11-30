@@ -10,6 +10,15 @@ body:
 
         セキュリティ上の脆弱性を発見した場合は、公開Issueではなく、メンテナーに直接連絡してください。
 
+  - type: input
+    id: title-summary
+    attributes:
+      label: タイトル（簡潔な要約）
+      description: "この内容がIssueのタイトルに使用されます。例: 「XSS脆弱性の修正」"
+      placeholder: "例: XSS脆弱性の修正"
+    validations:
+      required: true
+
   - type: dropdown
     id: severity
     attributes:
