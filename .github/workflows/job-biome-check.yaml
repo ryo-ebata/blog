@@ -10,19 +10,26 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: 📦 Setup pnpm
-              uses: pnpm/action-setup@v2
-              with: { version: latest }
+            - name: 📦 Setup bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
 
             - name: 🔧 Setup Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: "24"
-                  cache: "pnpm"
-                  cache-dependency-path: "pnpm-lock.yaml"
+
+            - name: 💾 Cache Bun dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.bun/install/cache
+                  key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+                  restore-keys: |
+                      ${{ runner.os }}-bun-
 
             - name: 📋 Install dependencies
-              run: pnpm install --frozen-lockfile --ignore-scripts
+              run: bun install --frozen-lockfile --ignore-scripts
 
             - name: 🔍 Run Biome check
-              run: pnpm biome check .
+              run: bun run check
