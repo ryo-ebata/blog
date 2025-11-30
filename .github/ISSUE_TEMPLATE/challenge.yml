@@ -12,7 +12,7 @@ body:
     id: title-summary
     attributes:
       label: タイトル（簡潔な要約）
-      description: この内容がIssueのタイトルに使用されます。例: 「リアルタイム通信機能の実装」
+      description: "この内容がIssueのタイトルに使用されます。例: 「リアルタイム通信機能の実装」"
       placeholder: "例: リアルタイム通信機能の実装"
     validations:
       required: true
@@ -71,4 +71,3 @@ body:
           required: true
         - label: このチャレンジに取り組む意思があります
           required: false
-

@@ -12,7 +12,7 @@ body:
     id: title-summary
     attributes:
       label: タイトル（簡潔な要約）
-      description: この内容がIssueのタイトルに使用されます。例: 「GitHub Actionsのワークフローを最適化」
+      description: "この内容がIssueのタイトルに使用されます。例: 「GitHub Actionsのワークフローを最適化」"
       placeholder: "例: GitHub Actionsのワークフローを最適化"
     validations:
       required: true

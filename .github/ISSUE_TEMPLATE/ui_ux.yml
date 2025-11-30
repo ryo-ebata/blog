@@ -12,7 +12,7 @@ body:
     id: title-summary
     attributes:
       label: タイトル（簡潔な要約）
-      description: この内容がIssueのタイトルに使用されます。例: 「モバイルでのナビゲーションを改善」
+      description: "この内容がIssueのタイトルに使用されます。例: 「モバイルでのナビゲーションを改善」"
       placeholder: "例: モバイルでのナビゲーションを改善"
     validations:
       required: true
