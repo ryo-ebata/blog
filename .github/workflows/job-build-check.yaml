@@ -19,8 +19,14 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "24"
-                  cache: "bun"
-                  cache-dependency-path: "./pnpm-lock.yaml"
+
+            - name: 💾 Cache Bun dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.bun/install/cache
+                  key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+                  restore-keys: |
+                      ${{ runner.os }}-bun-
 
             - name: 🔍 デバッグ情報（ファイル確認）
               run: |
