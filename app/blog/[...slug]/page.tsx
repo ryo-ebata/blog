@@ -1,3 +1,5 @@
+import { siteConfig } from '@/config/site';
+import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import { BlogPostContainer } from './container';
 
@@ -19,17 +21,19 @@ export async function generateMetadata({ params }: Props) {
 
   try {
     const post = await getPostBySlug(slug);
-    return {
+    const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
+
+    return generatePageMetadata({
       title: post.metadata.title,
-      description: post.metadata.description,
-      openGraph: {
-        title: post.metadata.title,
-        description: post.metadata.description,
-        type: 'article',
-        publishedTime: post.metadata.createdAt,
-        updatedTime: post.metadata.updatedAt,
-      },
-    };
+      description: post.metadata.description || siteConfig.description,
+      url: postUrl,
+      type: 'article',
+      imageAlt: post.metadata.title,
+      publishedTime: post.metadata.createdAt,
+      modifiedTime: post.metadata.updatedAt,
+      authors: post.metadata.author ? [post.metadata.author] : undefined,
+      tags: post.metadata.tags,
+    });
   } catch {
     return {};
   }

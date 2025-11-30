@@ -1,0 +1,65 @@
+name: 🎨 UI/UX
+description: UI/UXに関するIssue
+title: "[UI/UX] "
+labels: ["🎨 UI/UX"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        UI/UX改善の提案ありがとうございます！
+
+  - type: textarea
+    id: target
+    attributes:
+      label: 対象となるUI/UX
+      description: どの部分のUI/UXを改善したいか説明してください
+      placeholder: "例: ホームページのレイアウト、ブログ記事の読みやすさ、ナビゲーションなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 現在の問題点
+      description: 現在のUI/UXでどのような問題があるか説明してください
+      placeholder: "例: ボタンの位置が分かりにくい、色のコントラストが低い、モバイルでの操作性が悪いなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 改善提案
+      description: どのように改善したいか説明してください
+      placeholder: 具体的な改善案を記入してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: スクリーンショット・モックアップ
+      description: 可能であれば、現在の状態や改善案のスクリーンショット・モックアップを追加してください
+      placeholder: 画像をここにドラッグ&ドロップ
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      description: この改善の優先度を選択してください
+      options:
+        - 低
+        - 中
+        - 高
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項
+      options:
+        - label: 既存のIssueを確認しました
+          required: true
+        - label: この改善を実装する意思があります（PRを提出する予定）
+          required: false
