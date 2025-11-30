@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/ryo-ebata/blog/discussions
+    about: 質問や議論はこちらでお願いします
+  - name: 📧 その他の問い合わせ
+    url: https://github.com/ryo-ebata/blog/issues/new/choose
+    about: その他の問い合わせはこちらから
+

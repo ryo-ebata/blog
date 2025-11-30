@@ -1,0 +1,64 @@
+name: ⭐️ Accessibility
+description: アクセシビリティ改善の提案
+title: "[A11y] "
+labels: ["⭐️ アクセシビリティ"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        アクセシビリティ改善の提案ありがとうございます！
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: アクセシビリティの問題
+      description: どのようなアクセシビリティの問題があるか説明してください
+      placeholder: "例: キーボードナビゲーションができない、スクリーンリーダーで読み上げられないなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: 問題の箇所
+      description: 問題が発生している場所を特定してください
+      placeholder: "例: /about ページのXXXコンポーネント"
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 改善提案
+      description: どのように改善したいか説明してください
+      placeholder: 具体的な改善案を記入してください
+    validations:
+      required: true
+
+  - type: dropdown
+    id: wcag
+    attributes:
+      label: WCAG準拠レベル
+      description: どのWCAGレベルを目指すか選択してください
+      options:
+        - A（最低レベル）
+        - AA（推奨レベル）
+        - AAA（最高レベル）
+      default: 1
+    validations:
+      required: false
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: テスト方法
+      description: どのようにテストするか説明してください
+      placeholder: "例: キーボードのみで操作できるか、スクリーンリーダーで確認するなど"
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項
+      options:
+        - label: 既存のIssueを確認しました
+          required: true
+        - label: この改善を実装する意思があります（PRを提出する予定）
+          required: false

@@ -1,0 +1,62 @@
+name: 🕐 Performance
+description: パフォーマンス改善の提案
+title: "[Performance] "
+labels: ["🕐 パフォーマンス"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        パフォーマンス改善の提案ありがとうございます！
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: パフォーマンスの問題
+      description: どのようなパフォーマンスの問題があるか説明してください
+      placeholder: "例: ページの読み込みが遅い、XXXの処理に時間がかかるなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: 現在のメトリクス
+      description: 可能であれば、現在のパフォーマンス指標を記入してください
+      placeholder: |
+        例:
+        - Lighthouse Performance Score: 65
+        - First Contentful Paint: 2.5s
+        - Largest Contentful Paint: 4.2s
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 改善提案
+      description: どのように改善したいか説明してください
+      placeholder: 具体的な改善案を記入してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される改善
+      description: 改善後に期待されるパフォーマンス指標を記入してください
+      placeholder: "例: Lighthouse Performance Score を 90 以上にする"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 追加情報
+      description: その他、関連する情報があれば記入してください
+      placeholder: その他の情報
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項
+      options:
+        - label: 既存のIssueを確認しました
+          required: true
+        - label: この改善を実装する意思があります（PRを提出する予定）
+          required: false
