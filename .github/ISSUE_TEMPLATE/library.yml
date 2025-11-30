@@ -12,7 +12,7 @@ body:
     id: title-summary
     attributes:
       label: タイトル（簡潔な要約）
-      description: この内容がIssueのタイトルに使用されます。例: 「Next.jsを16.0.3から16.1.0にアップデート」
+      description: "この内容がIssueのタイトルに使用されます。例: 「Next.jsを16.0.3から16.1.0にアップデート」"
       placeholder: "例: Next.jsを16.0.3から16.1.0にアップデート"
     validations:
       required: true
@@ -94,4 +94,3 @@ body:
           required: true
         - label: この変更を実装する意思があります（PRを提出する予定）
           required: false
-
