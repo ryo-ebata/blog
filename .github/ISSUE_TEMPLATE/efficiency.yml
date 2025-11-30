@@ -1,0 +1,65 @@
+name: 📈 Efficiency
+description: 効率化のためのIssue
+title: "[Efficiency] "
+labels: ["📈 効率化"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        効率化の提案ありがとうございます！
+
+  - type: textarea
+    id: target
+    attributes:
+      label: 効率化の対象
+      description: どの部分を効率化したいか説明してください
+      placeholder: "例: ビルドプロセス、開発ワークフロー、CI/CD、デプロイなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 現在の状況
+      description: 現在のプロセスや状況を説明してください
+      placeholder: "例: ビルドに5分かかる、手動でデプロイしているなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 問題点
+      description: 現在のプロセスでどのような問題があるか説明してください
+      placeholder: "例: 時間がかかりすぎる、手作業が多くミスが発生しやすいなど"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 効率化の提案
+      description: どのように効率化したいか説明してください
+      placeholder: 具体的な効率化案を記入してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される効果
+      description: 効率化によってどのような効果が期待されるか説明してください
+      placeholder: "例: ビルド時間を2分に短縮、自動デプロイでミスを削減など"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項
+      options:
+        - label: 既存のIssueを確認しました
+          required: true
+        - label: この効率化を実装する意思があります（PRを提出する予定）
+          required: false
+
