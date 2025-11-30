@@ -1,0 +1,16 @@
+name: Entry Pull Request Workflow
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, ready_for_review]
+        branches: [develop, main]
+
+jobs:
+    code-quality:
+        uses: ./.github/workflows/job-biome-check.yaml
+
+    build-check:
+        uses: ./.github/workflows/job-build-check.yaml
+
+    build-storybook:
+        uses: ./.github/workflows/job-build-storybook.yaml

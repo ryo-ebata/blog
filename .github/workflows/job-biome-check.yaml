@@ -1,0 +1,28 @@
+name: Job Code Quality Check
+
+on:
+    workflow_call:
+
+jobs:
+    biome-check:
+        timeout-minutes: 5
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: 📦 Setup pnpm
+              uses: pnpm/action-setup@v2
+              with: { version: latest }
+
+            - name: 🔧 Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+                  cache: "pnpm"
+                  cache-dependency-path: "pnpm-lock.yaml"
+
+            - name: 📋 Install dependencies
+              run: pnpm install --frozen-lockfile --ignore-scripts
+
+            - name: 🔍 Run Biome check
+              run: pnpm biome check .
