@@ -1,5 +1,6 @@
+import type { Text } from 'mdast';
 import getMetadata from 'metadata-scraper';
-import type { Parent, Position } from 'unist';
+import type { Parent } from 'unist';
 import { visit } from 'unist-util-visit';
 import { siteConfig } from '@/config/site';
 
@@ -8,7 +9,7 @@ const URL_REGEXP =
 const MY_HOST = new URL(siteConfig.url).hostname;
 
 type LinkNode = Parent & {
-  children: { type: string; value: string; position?: Position }[];
+  children: (Text | Parent)[];
   url: string;
   title: string | null;
 };
@@ -83,7 +84,12 @@ function isLinkOnlyParagraph(node: Parent): boolean {
   }
 
   const linkText = linkNode.children
-    .map((c) => (c.type === 'text' ? c.value : ''))
+    .map((c) => {
+      if (c.type === 'text') {
+        return (c as Text).value;
+      }
+      return '';
+    })
     .join('')
     .trim();
 
