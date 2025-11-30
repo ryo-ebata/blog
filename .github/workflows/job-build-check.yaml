@@ -1,0 +1,49 @@
+name: Reusable Build Frontend
+
+on:
+    workflow_call:
+
+jobs:
+    build-check:
+        timeout-minutes: 5
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: 📦 Setup bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+
+            - name: 🔧 Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+
+            - name: 💾 Cache Bun dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.bun/install/cache
+                  key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+                  restore-keys: |
+                      ${{ runner.os }}-bun-
+
+            - name: 🔍 デバッグ情報（ファイル確認）
+              run: |
+                  echo "カレントディレクトリの内容："
+                  pwd
+                  ls -la
+                  echo "bun.lockbの検索："
+                  find . -name "bun.lockb"
+                  echo "Node.jsとpnpmのバージョン："
+                  node -v
+                  bun -v
+                  echo "キャッシュパスの確認："
+                  echo "BUN_HOME=$BUN_HOME"
+                  echo "PATH=$PATH"
+
+            - name: 📋 Install dependencies
+              run: bun install --frozen-lockfile --ignore-scripts
+
+            - name: 🏗️ Build
+              run: bun run build
