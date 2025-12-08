@@ -1,3 +1,9 @@
+import {
+  MdxCode,
+  type MdxCodeProps,
+  MdxPre,
+  type MdxPreProps,
+} from '@/components/mdx/code-block/code-block';
 import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading/heading';
 import { MdxLink, type MdxLinkProps } from '@/components/mdx/link/link';
 import { LinkCard, type LinkCardProps } from '@/components/mdx/link/link-card';
@@ -47,4 +53,6 @@ export const mdxComponents = {
   th: (props: MdxTableHeadProps) => <MdxTableHead {...props} />,
   td: (props: MdxTableCellProps) => <MdxTableCell {...props} />,
   caption: (props: MdxTableCaptionProps) => <MdxTableCaption {...props} />,
+  pre: (props: MdxPreProps) => <MdxPre {...props} />,
+  code: (props: MdxCodeProps) => <MdxCode {...props} />,
 };
