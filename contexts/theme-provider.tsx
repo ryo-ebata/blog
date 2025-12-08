@@ -1,8 +1,7 @@
 'use client';
 
-import { useQueryState } from 'nuqs';
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { parseAsString } from 'nuqs';
+import { parseAsString, useQueryState } from 'nuqs';
+import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -51,9 +50,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [actualTheme]);
 
-  const value: ThemeContextValue = useMemo(
-    () => ({
-      theme: queryTheme ?? 'dark',
+  const value: ThemeContextValue = useMemo(() => {
+    const theme: Theme =
+      queryTheme === 'light' || queryTheme === 'dark' || queryTheme === 'system'
+        ? queryTheme
+        : 'dark';
+    return {
+      theme,
       setTheme: (newTheme) => {
         if (newTheme === 'system') {
           setQueryTheme('system');
@@ -64,9 +67,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         }
       },
       actualTheme,
-    }),
-    [queryTheme, setQueryTheme, actualTheme],
-  );
+    };
+  }, [queryTheme, setQueryTheme, actualTheme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

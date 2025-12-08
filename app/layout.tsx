@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { Suspense } from 'react';
 import { Header } from '@/components/elements/header/header';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
@@ -91,7 +92,9 @@ export default function RootLayout({
         document.documentElement.classList.add('dark');
       }
     })();
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   return (
     <html lang="ja" className="dark" suppressHydrationWarning>
@@ -105,11 +108,13 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-mono`}>
         <JsonLd data={organizationJsonLd} />
         <NuqsAdapter>
-          <ThemeProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </ThemeProvider>
+          <Suspense fallback={null}>
+            <ThemeProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </Suspense>
         </NuqsAdapter>
       </body>
     </html>
