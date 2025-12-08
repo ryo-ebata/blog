@@ -1,3 +1,4 @@
+import { MdxBlockquote, type MdxBlockquoteProps } from '@/components/mdx/blockquote/blockquote';
 import {
   MdxCode,
   type MdxCodeProps,
@@ -41,6 +42,7 @@ export const mdxComponents = {
   h5: (props: MdxHeadingProps) => <MdxHeading as="h5" {...props} />,
   h6: (props: MdxHeadingProps) => <MdxHeading as="h6" {...props} />,
   p: (props: MdxParagraphProps) => <MdxParagraph {...props} />,
+  blockquote: (props: MdxBlockquoteProps) => <MdxBlockquote {...props} />,
   a: (props: MdxLinkProps) => <MdxLink {...props} />,
   LinkCard: (props: LinkCardProps) => <LinkCard {...props} />,
   ul: (props: MdxListProps) => <MdxList {...props} />,
