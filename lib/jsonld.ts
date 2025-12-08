@@ -88,3 +88,5 @@ export function generateOrganizationJsonLd(): Record<string, unknown> {
 
   return organization;
 }
+
+
