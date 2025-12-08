@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { Suspense } from 'react';
 import { Header } from '@/components/elements/header/header';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
@@ -61,15 +63,59 @@ export default function RootLayout({
 }>) {
   const organizationJsonLd = generateOrganizationJsonLd();
 
+  // ちらつきを防ぐためのインラインスクリプト
+  // URLクエリパラメータからテーマを読み取り、html要素にクラスを追加
+  // デフォルトはダークモード
+  // 参考: https://blog.stin.ink/articles/how-to-implement-a-perfect-dark-mode
+  const themeScript = `
+    (function() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const themeFromUrl = urlParams.get('theme');
+        const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let colorMode;
+        if (themeFromUrl === 'light') {
+          colorMode = 'light';
+        } else if (themeFromUrl === 'system') {
+          colorMode = prefers;
+        } else {
+          // テーマが指定されていない場合はダークモードをデフォルトとする
+          colorMode = 'dark';
+        }
+        if (colorMode === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+        // エラーが発生した場合はダークモードをデフォルトとする
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
+
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeScript,
+          }}
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-mono`}>
         <JsonLd data={organizationJsonLd} />
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <NuqsAdapter>
+          <Suspense fallback={null}>
+            <ThemeProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </Suspense>
+        </NuqsAdapter>
       </body>
     </html>
   );
