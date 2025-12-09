@@ -1,7 +1,7 @@
 'use client';
 
 import { parseAsString, useQueryState } from 'nuqs';
-import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -28,11 +28,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPreferColorSchemeIsDark(e.matches);
+      // イベントハンドラ内でのDOM操作は許容される
+      // systemテーマの場合、OS設定の変更に応じてDOMを更新
+      if (queryTheme === 'system' || queryTheme === null) {
+        if (e.matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [queryTheme]);
 
   const actualTheme = useMemo(() => {
     const currentTheme = queryTheme ?? 'dark';
@@ -42,13 +51,39 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return preferColorSchemeIsDark ? 'dark' : 'light';
   }, [queryTheme, preferColorSchemeIsDark]);
 
-  useEffect(() => {
-    if (actualTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [actualTheme]);
+  // テーマを更新する関数
+  // イベントハンドラ内でのDOM操作は許容される
+  const updateTheme = useCallback(
+    (newTheme: Theme) => {
+      if (newTheme === 'system') {
+        setQueryTheme('system');
+      } else if (newTheme === 'dark') {
+        setQueryTheme(null); // デフォルト値なのでクエリパラメータをクリア
+      } else {
+        setQueryTheme(newTheme);
+      }
+
+      // イベントハンドラ内でのDOM操作は許容される
+      // 新しいテーマに基づいてDOMを更新
+      const newActualTheme =
+        newTheme === 'system'
+          ? preferColorSchemeIsDark
+            ? 'dark'
+            : 'light'
+          : newTheme === 'light'
+            ? 'light'
+            : 'dark';
+
+      if (typeof document !== 'undefined') {
+        if (newActualTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    },
+    [preferColorSchemeIsDark, setQueryTheme]
+  );
 
   const value: ThemeContextValue = useMemo(() => {
     const theme: Theme =
@@ -57,18 +92,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         : 'dark';
     return {
       theme,
-      setTheme: (newTheme) => {
-        if (newTheme === 'system') {
-          setQueryTheme('system');
-        } else if (newTheme === 'dark') {
-          setQueryTheme(null); // デフォルト値なのでクエリパラメータをクリア
-        } else {
-          setQueryTheme(newTheme);
-        }
-      },
+      setTheme: updateTheme,
       actualTheme,
     };
-  }, [queryTheme, setQueryTheme, actualTheme]);
+  }, [queryTheme, actualTheme, updateTheme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

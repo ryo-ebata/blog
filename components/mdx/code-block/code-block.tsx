@@ -144,22 +144,15 @@ export function MdxPre({ className = '', children, ...props }: MdxPreProps) {
   const [mounted, setMounted] = useState(false);
   const codeInfo = useMemo(() => extractCodeInfo(children), [children]);
 
+  // クライアントサイドでのみマウント状態を管理
+  // これはコンポーネントのマウント時の初期化なので許容される
   useEffect(() => {
     setMounted(true);
+    // クリーンアップ関数は不要だが、原則に従って空の関数を返す
+    return () => {
+      // マウント状態のクリーンアップは不要
+    };
   }, []);
-
-  // デバッグ用: コード情報を確認
-  useEffect(() => {
-    if (mounted && codeInfo) {
-      console.log('Code info extracted:', {
-        code: `${codeInfo.code.substring(0, 50)}...`,
-        language: codeInfo.language,
-        codeLength: codeInfo.code.length,
-      });
-    } else if (mounted && !codeInfo) {
-      console.log('Code info not extracted, children:', children);
-    }
-  }, [mounted, codeInfo, children]);
 
   // コード情報が取得できない場合は従来の表示
   if (!codeInfo || !mounted) {
