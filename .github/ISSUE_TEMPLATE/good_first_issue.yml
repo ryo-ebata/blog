@@ -3,57 +3,16 @@ description: 初めてコントリビュートするのに向いているIssue
 title: "[Good First Issue] "
 labels: ["👍 Good First Issue"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        初めてのコントリビュート、ありがとうございます！このIssueは初心者向けに設計されています。
-
   - type: textarea
     id: description
     attributes:
-      label: Issueの説明
-      description: このIssueで何を実装・修正するか説明してください
-      placeholder: 具体的な内容を記入してください
+      label: 内容
+      description: 何を実装・修正するか教えてください
     validations:
       required: true
 
   - type: textarea
-    id: steps
+    id: hints
     attributes:
-      label: 実装手順（参考）
-      description: 実装の手順があれば記入してください（必須ではありません）
-      placeholder: |
-        例:
-        1. XXXファイルを確認
-        2. YYY関数を追加
-        3. テストを実行
-    validations:
-      required: false
-
-  - type: textarea
-    id: resources
-    attributes:
-      label: 参考資料
-      description: 実装に役立つ参考資料があれば記入してください
-      placeholder: "例: ドキュメントのURL、関連するIssueなど"
-    validations:
-      required: false
-
-  - type: textarea
-    id: questions
-    attributes:
-      label: 質問・相談
-      description: 実装中に質問があれば、このIssueで質問してください
-      placeholder: 質問内容を記入してください
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: 既存のIssueを確認しました
-          required: true
-        - label: コントリビューションガイドラインを確認しました
-          required: false
+      label: ヒント（任意）
+      description: 参考になる情報があれば

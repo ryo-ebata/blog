@@ -3,62 +3,22 @@ description: 主がやったことなくて知見がないIssue
 title: "[Challenge] "
 labels: ["🚢 チャレンジ"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        チャレンジングなIssueありがとうございます！このIssueは新しい技術や知見が必要な内容です。
-
   - type: textarea
     id: description
     attributes:
-      label: Issueの説明
-      description: 何を実装・解決したいか説明してください
-      placeholder: 具体的な内容を記入してください
+      label: 内容
+      description: 何にチャレンジしたいか教えてください
+      placeholder: |
+        【やりたいこと】
+
+
+        【なぜチャレンジングか】
+
     validations:
       required: true
-
-  - type: textarea
-    id: challenge
-    attributes:
-      label: チャレンジの内容
-      description: なぜこれがチャレンジングなのか、どのような技術や知識が必要か説明してください
-      placeholder: "例: 新しいライブラリの導入、複雑なアルゴリズムの実装、未知の技術領域など"
-    validations:
-      required: true
-
-  - type: textarea
-    id: research
-    attributes:
-      label: 調査・研究が必要な内容
-      description: 実装前に調査や研究が必要な内容があれば記入してください
-      placeholder: "例: 最適なライブラリの選定、実装方法の調査、ベストプラクティスの確認など"
-    validations:
-      required: false
 
   - type: textarea
     id: resources
     attributes:
-      label: 参考資料・リソース
-      description: 参考になりそうな資料やリソースがあれば記入してください
-      placeholder: "例: ドキュメントのURL、関連する記事、サンプルコードなど"
-    validations:
-      required: false
-
-  - type: textarea
-    id: approach
-    attributes:
-      label: アプローチの提案
-      description: 実装のアプローチがあれば提案してください（必須ではありません）
-      placeholder: 実装のアプローチを記入してください
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: 既存のIssueを確認しました
-          required: true
-        - label: このチャレンジに取り組む意思があります
-          required: false
+      label: 参考資料（任意）
+      description: 参考になりそうなURLがあれば

@@ -3,60 +3,10 @@ description: 質問やサポートを求める
 title: "[Question] "
 labels: ["💭 質問"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        質問ありがとうございます！回答しやすくするために、以下の情報を提供してください。
-
   - type: textarea
-    id: question
+    id: description
     attributes:
       label: 質問内容
-      description: 質問の内容を詳しく記入してください
-      placeholder: 知りたいこと、困っていることを説明してください
+      description: 知りたいこと、困っていることを教えてください
     validations:
       required: true
-
-  - type: textarea
-    id: context
-    attributes:
-      label: 背景・コンテキスト
-      description: 質問の背景や、何をしようとしているかを説明してください
-      placeholder: "例: XXXを実装しようとしていて、YYYの方法がわからない"
-
-  - type: textarea
-    id: tried
-    attributes:
-      label: 試したこと
-      description: 既に試したことや調べたことを記入してください
-      placeholder: |
-        - [ドキュメント](https://example.com) を確認した
-        - XXXを試したが、YYYというエラーが出た
-
-  - type: textarea
-    id: environment
-    attributes:
-      label: 環境情報
-      description: 関連する環境情報があれば記入してください
-      placeholder: |
-        - Node.js バージョン: 
-        - パッケージマネージャー: (npm/yarn/pnpm/bun)
-        - OS: 
-        - その他関連情報
-
-  - type: textarea
-    id: additional
-    attributes:
-      label: 追加情報
-      description: その他、質問に関連する情報があれば記入してください
-      placeholder: その他の情報
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: ドキュメントを確認しました
-          required: false
-        - label: 既存のIssueを確認しました
-          required: true
