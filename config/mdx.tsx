@@ -1,0 +1,49 @@
+import type { EvaluateOptions } from '@mdx-js/mdx';
+import { Suspense } from 'react';
+import * as runtime from 'react/jsx-runtime';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+import { ContentLinkCard as ContentLinkCardAsync } from '@/components/composites/content-link-card/content-link-card';
+import { remarkLinkCard } from '@/lib/mdx/remark-link-card';
+
+function ContentLinkCardLoading({ url }: { url: string }) {
+  const shortUrl = new URL(url).hostname;
+  return (
+    <div className="not-prose flex w-full items-center gap-3 rounded-lg border border-terminal-border bg-terminal-bg p-4 animate-pulse">
+      <span className="text-terminal-cyan">🔗</span>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-mono text-terminal-cyan">{shortUrl}</p>
+        <p className="text-xs text-muted-foreground">読み込み中...</p>
+      </div>
+    </div>
+  );
+}
+
+function ContentLinkCard({ url }: { url: string }) {
+  return (
+    <Suspense fallback={<ContentLinkCardLoading url={url} />}>
+      <ContentLinkCardAsync url={url} />
+    </Suspense>
+  );
+}
+
+const mdxComponents = {
+  ContentLinkCard,
+};
+
+export const mdxConfig: Readonly<EvaluateOptions> = {
+  ...runtime,
+  useMDXComponents: () => mdxComponents,
+  remarkPlugins: [remarkGfm, remarkLinkCard],
+  rehypePlugins: [
+    rehypeSlug,
+    [
+      rehypePrettyCode,
+      {
+        theme: 'github-dark',
+        keepBackground: true,
+      },
+    ],
+  ],
+};
