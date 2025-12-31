@@ -1,231 +1,77 @@
-import type { Text } from 'mdast';
-import ogs from 'open-graph-scraper';
-import type { Parent } from 'unist';
+import type { Link, Paragraph, Root, Text } from 'mdast';
+import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
-import { siteConfig } from '@/config/site';
-
-const URL_REGEXP =
-  /^https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+$/g;
-const MY_HOST = new URL(siteConfig.url).hostname;
-
-type LinkNode = Parent & {
-  children: (Text | Parent)[];
-  url: string;
-  title: string | null;
-};
-
-type Meta = {
-  url: string;
-  title: string;
-  description: string;
-  image: string;
-  icon: string;
-};
-
-type JsxElement = {
-  type: 'mdxJsxFlowElement' | 'mdxJsxTextElement';
-  name: string;
-  attributes: JsxAttribute[];
-  children: (JsxElement | TextElement)[];
-};
-
-type TextElement = {
-  type: 'text';
-  value: string;
-};
-
-type JsxAttribute = {
-  type: 'mdxJsxAttribute';
-  name: string;
-  value: string | boolean;
-};
-
-const fetchMeta = async (url: string, retries = 3): Promise<Meta | null> => {
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      // タイムアウトを設定（30秒）
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout')), 30000);
-      });
-
-      const metadataPromise = ogs({ url, timeout: 30000 });
-      const result = await Promise.race([metadataPromise, timeoutPromise]);
-
-      if (result.error) {
-        throw new Error(String(result.error));
-      }
-
-      const metadata = result.result;
-
-      // ファビコンを取得（ドメインから推測）
-      let icon = '';
-      try {
-        const domain = new URL(url);
-        icon = `${domain.protocol}//${domain.hostname}/favicon.ico`;
-      } catch {
-        // URL解析に失敗した場合は空文字列
-      }
-
-      return {
-        url: metadata.ogUrl || metadata.requestUrl || url,
-        title: metadata.ogTitle || metadata.twitterTitle || metadata.dcTitle || url,
-        description:
-          metadata.ogDescription || metadata.twitterDescription || metadata.dcDescription || '',
-        image: metadata.ogImage?.[0]?.url || metadata.twitterImage?.[0]?.url || '',
-        icon: metadata.favicon || icon,
-      };
-    } catch (error) {
-      const isLastAttempt = attempt === retries;
-      if (isLastAttempt) {
-        console.error(`Failed to fetch metadata for ${url} after ${retries} attempts:`, error);
-        return null;
-      }
-      // リトライ前に少し待機（指数バックオフ）
-      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
-    }
-  }
-  return null;
-};
 
 /**
- * パラグラフがURLのみのリンクかどうかを判定する
+ * 段落内に単独のリンクのみが含まれている場合、
+ * ContentLinkCardコンポーネントに変換するremarkプラグイン
+ *
+ * 例:
+ * - `https://example.com` → ContentLinkCardに変換
+ * - `[リンク](https://example.com)` (単独行) → ContentLinkCardに変換
+ * - `これは[リンク](https://example.com)です` → そのまま（インライン）
  */
-function isLinkOnlyParagraph(node: Parent): boolean {
-  if (node.type !== 'paragraph') {
-    return false;
-  }
+export const remarkLinkCard: Plugin<[], Root> = () => {
+  return (tree: Root) => {
+    visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
+      if (index === undefined || !parent) return;
 
-  const children = node.children;
-  if (children.length !== 1) {
-    return false;
-  }
+      // 段落の子要素を確認
+      const children = node.children;
 
-  const child = children[0];
-  if (child.type !== 'link') {
-    return false;
-  }
+      // 単一のリンクのみ、または空白+リンク+空白のパターンを検出
+      const nonWhitespaceChildren = children.filter((child) => {
+        if (child.type === 'text') {
+          return (child as Text).value.trim() !== '';
+        }
+        return true;
+      });
 
-  const linkNode = child as LinkNode;
-  const url = linkNode.url;
+      // 単一のリンク要素のみの場合
+      if (nonWhitespaceChildren.length === 1 && nonWhitespaceChildren[0].type === 'link') {
+        const link = nonWhitespaceChildren[0] as Link;
+        const url = link.url;
 
-  // URLのみの行かどうかを判定（URLの正規表現に一致し、childrenがURLと同じ値）
-  URL_REGEXP.lastIndex = 0; // 正規表現の状態をリセット
-  if (!URL_REGEXP.test(url)) {
-    return false;
-  }
+        // 外部リンクのみ対象（httpまたはhttpsで始まる）
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          return;
+        }
 
-  const linkText = linkNode.children
-    .map((c) => {
-      if (c.type === 'text') {
-        return (c as Text).value;
-      }
-      return '';
-    })
-    .join('')
-    .trim();
-
-  return linkText === url || linkText === '';
-}
-
-type Replacement = {
-  node: Parent;
-  index: number;
-  parent: Parent;
-  newElement?: JsxElement;
-};
-
-export const remarkLinkCard = () => {
-  return async (tree: Parent) => {
-    const promises: Array<() => Promise<void>> = [];
-    const replacements: Replacement[] = [];
-
-    const visitor = (node: Parent, index: number | undefined, parent: Parent | undefined) => {
-      if (!isLinkOnlyParagraph(node) || typeof index !== 'number' || !parent) {
-        return;
-      }
-
-      const linkNode = node.children.find((n) => n.type === 'link') as LinkNode;
-      const url = linkNode.url;
-
-      const replacement: Replacement = { node, index, parent };
-      replacements.push(replacement);
-
-      promises.push(async () => {
-        const meta = await fetchMeta(url);
-
-        const domain = new URL(url);
-        const isExternal = domain.hostname !== MY_HOST;
-
-        // メタデータが取得できない場合でも、最低限の情報でリンクカードを表示
-        const title = meta?.title || url;
-        const description = meta?.description || '';
-        const image = meta?.image || '';
-        const icon = meta?.icon || '';
-
-        const main: JsxElement = {
+        // MDX JSXノードに変換
+        (parent.children as unknown[])[index] = {
           type: 'mdxJsxFlowElement',
-          name: 'div',
+          name: 'ContentLinkCard',
           attributes: [
-            { type: 'mdxJsxAttribute', name: 'className', value: 'remark-link-card-main' },
-          ],
-          children: [
             {
-              type: 'mdxJsxTextElement',
-              name: 'div',
-              attributes: [
-                { type: 'mdxJsxAttribute', name: 'className', value: 'remark-link-card-title' },
-              ],
-              children: [{ type: 'text', value: title }],
+              type: 'mdxJsxAttribute',
+              name: 'url',
+              value: url,
             },
           ],
+          children: [],
         };
+      }
 
-        if (description) {
-          main.children.push({
-            type: 'mdxJsxTextElement',
-            name: 'div',
+      // autolink（URLがそのまま書かれている）の場合も対応
+      if (nonWhitespaceChildren.length === 1 && nonWhitespaceChildren[0].type === 'text') {
+        const text = (nonWhitespaceChildren[0] as Text).value.trim();
+
+        // URLパターンにマッチするか確認
+        if (/^https?:\/\/[^\s]+$/.test(text)) {
+          (parent.children as unknown[])[index] = {
+            type: 'mdxJsxFlowElement',
+            name: 'ContentLinkCard',
             attributes: [
               {
                 type: 'mdxJsxAttribute',
-                name: 'className',
-                value: 'remark-link-card-description',
+                name: 'url',
+                value: text,
               },
             ],
-            children: [{ type: 'text', value: description }],
-          });
+            children: [],
+          };
         }
-
-        const cardElement: JsxElement = {
-          type: 'mdxJsxFlowElement',
-          name: 'LinkCard',
-          attributes: [
-            { type: 'mdxJsxAttribute', name: 'href', value: url },
-            { type: 'mdxJsxAttribute', name: 'isExternal', value: isExternal },
-            { type: 'mdxJsxAttribute', name: 'title', value: title },
-            { type: 'mdxJsxAttribute', name: 'description', value: description },
-            { type: 'mdxJsxAttribute', name: 'image', value: image },
-            { type: 'mdxJsxAttribute', name: 'icon', value: icon },
-          ],
-          children: [main],
-        };
-
-        replacement.newElement = cardElement;
-      });
-    };
-
-    visit(tree, 'paragraph', visitor);
-
-    // すべてのメタデータ取得を並列実行
-    await Promise.all(promises.map((p) => p()));
-
-    // ノードを置き換え（後ろから前へ置き換えることで、インデックスのずれを防ぐ）
-    replacements
-      .sort((a, b) => b.index - a.index)
-      .forEach((replacement) => {
-        if (replacement.newElement && Array.isArray(replacement.parent.children)) {
-          replacement.parent.children[replacement.index] =
-            replacement.newElement as unknown as Parent;
-        }
-      });
+      }
+    });
   };
 };

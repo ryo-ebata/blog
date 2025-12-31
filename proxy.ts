@@ -14,7 +14,6 @@ import { type NextRequest, NextResponse } from 'next/server';
  *
  * @reference https://nextjs.org/docs/app/getting-started/proxy
  */
-export function proxy(request: NextRequest): NextResponse {
-  console.info({ request });
+export function proxy(_request: NextRequest): NextResponse {
   return NextResponse.next();
 }

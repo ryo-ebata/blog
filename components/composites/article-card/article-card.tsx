@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TagList } from '@/components/composites/tag-list';
 import { Time } from '@/components/elements/time/time';
-import { MdxHeading } from '@/components/mdx/heading/heading';
 
 export type ArticleCardIconType =
   | { type: 'icon'; name: string; color?: 'green' | 'purple' | 'orange' }
@@ -98,12 +97,11 @@ export function ArticleCard({
         {icon && <ArticleIcon icon={icon} priority={priority} />}
         <div className="flex-1">
           <Link href={href} className="group mb-2 block" {...linkProps}>
-            <MdxHeading
-              as="h2"
-              className={`text-terminal-cyan dark:text-terminal-cyan ${hoverColorClass.hover} transition-colors duration-200`}
+            <h2
+              className={`font-bold font-mono text-terminal-cyan scroll-m-20 text-xl ${hoverColorClass.hover} transition-colors duration-200`}
             >
               {title}
-            </MdxHeading>
+            </h2>
           </Link>
           <div className="flex items-center gap-4 mt-2">
             {tags && tags.length > 0 && <TagList tags={tags} />}

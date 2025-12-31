@@ -5,12 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from '@/components/composites/container';
 import { BackLink } from '@/components/elements';
-import { MdxHeading } from '@/components/mdx/heading/heading';
-import { MdxParagraph } from '@/components/mdx/paragragh/paragragh';
 import { siteConfig } from '@/config/site';
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <MdxHeading as="h2">{children}</MdxHeading>;
+  return (
+    <h2 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 border-b-2 border-dashed border-terminal-border pb-2 text-2xl tracking-tight">
+      {children}
+    </h2>
+  );
 }
 
 function SocialLink({ href, label }: { href: string; label: string }) {
@@ -31,12 +33,9 @@ export function AboutPresenter() {
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <MdxHeading
-            as="h1"
-            className="text-terminal-green dark:text-terminal-green terminal-glow font-mono"
-          >
+          <h1 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-3xl">
             $ cat about.txt
-          </MdxHeading>
+          </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
             {'// 自己紹介とソーシャルリンク'}
           </p>
@@ -46,20 +45,20 @@ export function AboutPresenter() {
           <div className="terminal-card rounded-none p-6 font-mono">
             <SectionHeading>[About Blog]</SectionHeading>
             <div className="mt-4 space-y-4 text-gray-700 dark:text-gray-300">
-              <MdxParagraph>
+              <p className="leading-7">
                 単なる情報（Information）ではなく、
                 <br />
                 知識（Knowledge）・意見（Opinion）・気付き（Insight）を書きます。
                 <br />
                 技術的な内容も含め、思考のメモなどを残していきます。
-              </MdxParagraph>
+              </p>
             </div>
           </div>
 
           <div className="terminal-card rounded-none p-6 font-mono">
             <SectionHeading>[About Me]</SectionHeading>
             <div className="mt-4 space-y-4 text-gray-700 dark:text-gray-300">
-              <MdxParagraph>
+              <p className="leading-7">
                 whoami: Software Engineer.
                 <br />
                 interests: Generative AI, Rust, etc.
@@ -67,7 +66,7 @@ export function AboutPresenter() {
                 works: Frontend Engineer, Data Engineering.
                 <br />
                 hobbies: Anime, Basketball, Mahjong, Travel, etc.
-              </MdxParagraph>
+              </p>
             </div>
           </div>
 

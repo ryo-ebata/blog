@@ -26,7 +26,9 @@ export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
         <JsonLd data={articleJsonLd} />
         <Container maxWidth="3xl">
           <BlogPostPresenter metadata={post.metadata} />
-          <post.Content />
+          <article className="prose prose-neutral dark:prose-invert max-w-none">
+            <post.Content />
+          </article>
         </Container>
       </>
     );

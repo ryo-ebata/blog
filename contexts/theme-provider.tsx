@@ -1,7 +1,15 @@
 'use client';
 
 import { parseAsString, useQueryState } from 'nuqs';
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
