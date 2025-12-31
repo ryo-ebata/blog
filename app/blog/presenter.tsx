@@ -4,6 +4,7 @@ import { Container } from '@/components/composites/container';
 import { PostList } from '@/components/elements';
 import { Pagination } from '@/components/elements/pagination/pagination';
 import { SearchInput } from '@/components/elements/search-input';
+import { siteConfig } from '@/config/site';
 import type { PostMetadata } from '@/lib/posts';
 import { parseAsString, useQueryState } from 'nuqs';
 
@@ -35,7 +36,7 @@ export function BlogListPresenter({
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <h1 className="font-bold scroll-m-20 text-3xl text-foreground">Blog</h1>
+          <h1 className="font-bold scroll-m-20 text-3xl text-foreground">{siteConfig.name}</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">すべてのブログ記事</p>
         </div>
 

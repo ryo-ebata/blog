@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/elements/theme-toggle/theme-toggle';
+import { siteConfig } from '@/config/site';
 
 const navigationItems = [
   { href: '/', label: 'Home' },
@@ -24,7 +25,7 @@ export function Header() {
     <header className="border-b bg-background">
       <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-foreground hover:text-primary transition-colors duration-200">
-          Blog
+          {siteConfig.name}
         </Link>
         <nav className="flex items-center gap-6">
           {navigationItems.map((item) => (
