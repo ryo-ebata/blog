@@ -6,68 +6,18 @@ body:
   - type: markdown
     attributes:
       value: |
-        **⚠️ セキュリティに関する重要なIssueです**
-
-        セキュリティ上の脆弱性を発見した場合は、公開Issueではなく、メンテナーに直接連絡してください。
-
-  - type: dropdown
-    id: severity
-    attributes:
-      label: 深刻度
-      description: セキュリティ問題の深刻度を選択してください
-      options:
-        - 低 - 軽微な問題
-        - 中 - 注意が必要
-        - 高 - 緊急に対応が必要
-        - 重大 - 即座に対応が必要
-    validations:
-      required: true
+        ⚠️ **重大な脆弱性は公開Issueではなく、直接連絡してください**
 
   - type: textarea
     id: description
     attributes:
-      label: 問題の説明
+      label: 内容
       description: セキュリティ上の問題を説明してください
-      placeholder: 具体的な問題内容を記入してください
-    validations:
-      required: true
-
-  - type: textarea
-    id: impact
-    attributes:
-      label: 影響範囲
-      description: この問題がどのような影響を与えるか説明してください
-      placeholder: "例: ユーザーデータの漏洩、認証の回避、XSS攻撃など"
-    validations:
-      required: true
-
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: 再現手順
-      description: 問題を再現する手順を記入してください（公開可能な範囲で）
       placeholder: |
-        1. '...' に移動
-        2. '...' を実行
-        3. 問題を確認
-    validations:
-      required: false
+        【問題】
 
-  - type: textarea
-    id: proposal
-    attributes:
-      label: 修正提案
-      description: どのように修正すべきか提案があれば記入してください
-      placeholder: 修正案を記入してください
-    validations:
-      required: false
 
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: 既存のIssueを確認しました
-          required: true
-        - label: この問題を公開しても問題ないことを確認しました
-          required: false
+        【影響範囲】
+
+    validations:
+      required: true

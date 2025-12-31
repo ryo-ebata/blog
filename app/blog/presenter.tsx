@@ -1,6 +1,6 @@
 'use client';
 
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
+import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 import { Container } from '@/components/composites/container';
 import { BubbleTagFilter } from '@/components/composites/tag-filter';
 import { PostList } from '@/components/elements';
@@ -27,29 +27,24 @@ export function BlogListPresenter({
   selectedTags,
   tagCounts,
 }: BlogListPresenterProps) {
-  const [, setSearch] = useQueryState(
-    'search',
-    parseAsString.withOptions({ shallow: false, clearOnDefault: true }).withDefault('')
-  );
-  const [, setPage] = useQueryState('page', parseAsString.withOptions({ shallow: false }));
-  const [, setTags] = useQueryState(
-    'tags',
-    parseAsArrayOf(parseAsString, ',')
-      .withOptions({ shallow: false, clearOnDefault: true })
-      .withDefault([])
+  const [, setSearchParams] = useQueryStates(
+    {
+      search: parseAsString.withDefault(''),
+      page: parseAsString,
+      tags: parseAsArrayOf(parseAsString, ',').withDefault([]),
+    },
+    { shallow: false, clearOnDefault: true }
   );
 
-  const handleSearchChange = async (value: string) => {
-    await setPage(null);
-    await setSearch(value || null);
+  const handleSearchChange = (value: string) => {
+    setSearchParams({ page: null, search: value || null });
   };
 
-  const handleTagToggle = async (tag: string) => {
-    await setPage(null);
+  const handleTagToggle = (tag: string) => {
     const newTags = selectedTags.includes(tag)
       ? selectedTags.filter((t) => t !== tag)
       : [...selectedTags, tag];
-    await setTags(newTags.length > 0 ? newTags : null);
+    setSearchParams({ page: null, tags: newTags.length > 0 ? newTags : null });
   };
 
   return (

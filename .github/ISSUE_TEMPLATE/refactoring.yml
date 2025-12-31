@@ -3,51 +3,16 @@ description: リファクタリングの提案
 title: "[Refactoring] "
 labels: ["♻️ リファクタリング"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        リファクタリングの提案ありがとうございます！
-
   - type: textarea
-    id: target
+    id: description
     attributes:
-      label: リファクタリング対象
-      description: どの部分をリファクタリングしたいか説明してください
-      placeholder: "例: XXXコンポーネント、YYY関数など"
+      label: 内容
+      description: 何をどうリファクタリングしたいか教えてください
+      placeholder: |
+        【対象】
+
+
+        【理由・改善案】
+
     validations:
       required: true
-
-  - type: textarea
-    id: reason
-    attributes:
-      label: リファクタリングの理由
-      description: なぜリファクタリングが必要か説明してください
-      placeholder: "例: コードの可読性向上、パフォーマンス改善、保守性向上など"
-    validations:
-      required: true
-
-  - type: textarea
-    id: proposal
-    attributes:
-      label: 提案内容
-      description: どのようにリファクタリングしたいか説明してください
-      placeholder: 具体的なリファクタリング案を記入してください
-    validations:
-      required: true
-
-  - type: textarea
-    id: benefits
-    attributes:
-      label: 期待される効果
-      description: リファクタリングによって得られる効果を説明してください
-      placeholder: "例: コードの可読性が向上する、テストが書きやすくなるなど"
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: 既存のIssueを確認しました
-          required: true
-        - label: このリファクタリングを実装する意思があります（PRを提出する予定）
-          required: false

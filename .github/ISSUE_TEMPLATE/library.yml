@@ -3,85 +3,16 @@ description: ライブラリが絡むIssue（ライブラリアップデート�
 title: "[Library] "
 labels: ["📚 ライブラリ"]
 body:
-  - type: markdown
+  - type: textarea
+    id: description
     attributes:
-      value: |
-        ライブラリ関連のIssueありがとうございます！
+      label: 内容
+      description: ライブラリの追加・更新・削除など
+      placeholder: |
+        【ライブラリ名】
 
-  - type: dropdown
-    id: type
-    attributes:
-      label: Issueの種類
-      description: どの種類のIssueか選択してください
-      options:
-        - ライブラリのアップデート
-        - 新しいライブラリの追加
-        - ライブラリの削除・置き換え
-        - ライブラリに関する問題
-        - その他
+
+        【理由】
+
     validations:
       required: true
-
-  - type: input
-    id: library-name
-    attributes:
-      label: ライブラリ名
-      description: 対象となるライブラリの名前を記入してください
-      placeholder: "例: next, react, tailwindcss"
-    validations:
-      required: true
-
-  - type: input
-    id: current-version
-    attributes:
-      label: 現在のバージョン
-      description: 現在使用しているバージョンを記入してください
-      placeholder: "例: 16.0.3"
-    validations:
-      required: false
-
-  - type: input
-    id: target-version
-    attributes:
-      label: 対象バージョン（アップデートの場合）
-      description: アップデート先のバージョンを記入してください
-      placeholder: "例: 16.1.0"
-    validations:
-      required: false
-
-  - type: textarea
-    id: reason
-    attributes:
-      label: 理由
-      description: なぜこのライブラリの変更が必要か説明してください
-      placeholder: "例: セキュリティ修正、新機能の利用、パフォーマンス改善など"
-    validations:
-      required: true
-
-  - type: textarea
-    id: breaking-changes
-    attributes:
-      label: 破壊的変更
-      description: アップデートに伴う破壊的変更があれば記入してください
-      placeholder: "例: APIの変更、設定ファイルの変更が必要など"
-    validations:
-      required: false
-
-  - type: textarea
-    id: migration
-    attributes:
-      label: 移行手順
-      description: 移行に必要な手順があれば記入してください
-      placeholder: 具体的な移行手順を記入してください
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 確認事項
-      options:
-        - label: 既存のIssueを確認しました
-          required: true
-        - label: この変更を実装する意思があります（PRを提出する予定）
-          required: false
