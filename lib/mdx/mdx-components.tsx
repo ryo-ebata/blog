@@ -1,3 +1,10 @@
+import { MdxBlockquote, type MdxBlockquoteProps } from '@/components/mdx/blockquote/blockquote';
+import {
+  MdxCode,
+  type MdxCodeProps,
+  MdxPre,
+  type MdxPreProps,
+} from '@/components/mdx/code-block/code-block';
 import { MdxHeading, type MdxHeadingProps } from '@/components/mdx/heading/heading';
 import { MdxLink, type MdxLinkProps } from '@/components/mdx/link/link';
 import { LinkCard, type LinkCardProps } from '@/components/mdx/link/link-card';
@@ -35,6 +42,7 @@ export const mdxComponents = {
   h5: (props: MdxHeadingProps) => <MdxHeading as="h5" {...props} />,
   h6: (props: MdxHeadingProps) => <MdxHeading as="h6" {...props} />,
   p: (props: MdxParagraphProps) => <MdxParagraph {...props} />,
+  blockquote: (props: MdxBlockquoteProps) => <MdxBlockquote {...props} />,
   a: (props: MdxLinkProps) => <MdxLink {...props} />,
   LinkCard: (props: LinkCardProps) => <LinkCard {...props} />,
   ul: (props: MdxListProps) => <MdxList {...props} />,
@@ -47,4 +55,6 @@ export const mdxComponents = {
   th: (props: MdxTableHeadProps) => <MdxTableHead {...props} />,
   td: (props: MdxTableCellProps) => <MdxTableCell {...props} />,
   caption: (props: MdxTableCaptionProps) => <MdxTableCaption {...props} />,
+  pre: (props: MdxPreProps) => <MdxPre {...props} />,
+  code: (props: MdxCodeProps) => <MdxCode {...props} />,
 };

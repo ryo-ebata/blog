@@ -130,8 +130,12 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
     )
   ).filter((post) => post !== null);
 
-  // 日付でソート（新しい順）
-  return posts.sort((a, b) => (a.metadata.createdAt > b.metadata.createdAt ? -1 : 1));
+  // 日付でソート（新しい順、updatedAtがあれば優先）
+  return posts.sort((a, b) => {
+    const dateA = new Date(a.metadata.updatedAt || a.metadata.createdAt).getTime();
+    const dateB = new Date(b.metadata.updatedAt || b.metadata.createdAt).getTime();
+    return dateB - dateA;
+  });
 }
 
 // すべての記事のメタデータを取得（キャッシュ付き）
@@ -174,7 +178,14 @@ export async function getAllPosts(): Promise<PostData[]> {
     })
   );
 
-  return posts.filter((post): post is PostData => post !== null);
+  const filteredPosts = posts.filter((post): post is PostData => post !== null);
+
+  // 日付でソート（新しい順、updatedAtがあれば優先）
+  return filteredPosts.sort((a, b) => {
+    const dateA = new Date(a.metadata.updatedAt || a.metadata.createdAt).getTime();
+    const dateB = new Date(b.metadata.updatedAt || b.metadata.createdAt).getTime();
+    return dateB - dateA;
+  });
 }
 
 // スラッグから記事を取得
