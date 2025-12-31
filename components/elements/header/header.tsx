@@ -24,12 +24,19 @@ export function Header() {
   return (
     <header className="border-b bg-background">
       <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-foreground hover:text-primary transition-colors duration-200">
+        <Link
+          href="/"
+          className="text-xl font-bold text-foreground hover:text-primary transition-colors duration-200"
+        >
           {siteConfig.name}
         </Link>
         <nav className="flex items-center gap-6">
           {navigationItems.map((item) => (
-            <Link key={item.href} href={item.href} className={getLinkClassName(pathname === item.href)}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={getLinkClassName(pathname === item.href)}
+            >
               {item.label}
             </Link>
           ))}

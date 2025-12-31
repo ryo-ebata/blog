@@ -3,7 +3,7 @@ import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { BlogListContainer } from './container';
 
 interface BlogPageProps {
-  searchParams: Promise<{ page?: string; search?: string }>;
+  searchParams: Promise<{ page?: string; search?: string; tags?: string }>;
 }
 
 export const revalidate = 3600; // 1時間ごとに再検証
@@ -15,9 +15,14 @@ export const metadata = generatePageMetadata({
 });
 
 export default async function BlogListPage({ searchParams }: BlogPageProps) {
-  const { page, search } = await searchParams;
+  const { page, search, tags } = await searchParams;
+  const selectedTags = tags ? tags.split(',').filter(Boolean) : [];
 
   return (
-    <BlogListContainer currentPage={page ? parseInt(page, 10) : 1} searchQuery={search ?? ''} />
+    <BlogListContainer
+      currentPage={page ? parseInt(page, 10) : 1}
+      searchQuery={search ?? ''}
+      selectedTags={selectedTags}
+    />
   );
 }
