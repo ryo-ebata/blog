@@ -14,14 +14,22 @@ const COLORS = {
 /** バブルの背景色を取得 */
 export const getBubbleColor = (isSelected: boolean, isDark: boolean): string =>
   isSelected
-    ? isDark ? COLORS.selected.dark : COLORS.selected.light
-    : isDark ? COLORS.unselected.dark : COLORS.unselected.light;
+    ? isDark
+      ? COLORS.selected.dark
+      : COLORS.selected.light
+    : isDark
+      ? COLORS.unselected.dark
+      : COLORS.unselected.light;
 
 /** バブルのテキスト色を取得 */
 export const getTextColor = (isSelected: boolean, isDark: boolean): string =>
   isSelected
-    ? isDark ? COLORS.text.selected.dark : COLORS.text.selected.light
-    : isDark ? COLORS.text.unselected.dark : COLORS.text.unselected.light;
+    ? isDark
+      ? COLORS.text.selected.dark
+      : COLORS.text.selected.light
+    : isDark
+      ? COLORS.text.unselected.dark
+      : COLORS.text.unselected.light;
 
 /** 背景グラデーションの中心色を取得 */
 export const getBgGradientColor = (isDark: boolean): string =>
@@ -29,11 +37,11 @@ export const getBgGradientColor = (isDark: boolean): string =>
 
 /** バブルの見た目設定 */
 export const BUBBLE_CONFIG: BubbleConfig = {
-  scaleFactor: 250,   // スケール計算の基準距離
-  baseRadiusY: 18,    // バブルの縦半径
-  charWidth: 8,       // 文字幅（横半径計算用）
-  paddingX: 6,        // 横方向の余白
-  paddingY: 6,        // 縦方向の余白
+  scaleFactor: 250, // スケール計算の基準距離
+  baseRadiusY: 18, // バブルの縦半径
+  charWidth: 8, // 文字幅（横半径計算用）
+  paddingX: 6, // 横方向の余白
+  paddingY: 6, // 縦方向の余白
 };
 
 /** キャンバスの最大サイズ */

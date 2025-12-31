@@ -5,7 +5,7 @@ import { createBubbles, layoutBubbles } from './bubbles';
 import { INTERPOLATION_FACTOR, MAX_CANVAS_SIZE } from './constants';
 import { drawAllBubbles, drawBackground, drawVignette } from './drawing';
 import { createPointerHandlers, useDarkMode } from './hooks';
-import { createInitialState, type BubbleTagFilterProps } from './types';
+import { type BubbleTagFilterProps, createInitialState } from './types';
 
 /**
  * バブル型のタグフィルター
@@ -133,7 +133,10 @@ export function BubbleTagFilter({ tags, selectedTags, onTagToggle }: BubbleTagFi
   if (tags.length === 0) return null;
 
   return (
-    <div ref={containerRefCallback} className="w-full flex justify-center overflow-hidden rounded-lg">
+    <div
+      ref={containerRefCallback}
+      className="w-full flex justify-center overflow-hidden rounded-lg"
+    >
       <canvas
         ref={canvasRef}
         className="cursor-grab active:cursor-grabbing touch-none"
@@ -141,9 +144,15 @@ export function BubbleTagFilter({ tags, selectedTags, onTagToggle }: BubbleTagFi
         onMouseMove={(e) => pointerHandlers.onPointerMove(e.clientX, e.clientY)}
         onMouseUp={(e) => pointerHandlers.onPointerUp(e.clientX, e.clientY)}
         onMouseLeave={pointerHandlers.onPointerLeave}
-        onTouchStart={(e) => pointerHandlers.onPointerDown(e.touches[0].clientX, e.touches[0].clientY)}
-        onTouchMove={(e) => pointerHandlers.onPointerMove(e.touches[0].clientX, e.touches[0].clientY)}
-        onTouchEnd={(e) => pointerHandlers.onPointerUp(e.changedTouches[0].clientX, e.changedTouches[0].clientY)}
+        onTouchStart={(e) =>
+          pointerHandlers.onPointerDown(e.touches[0].clientX, e.touches[0].clientY)
+        }
+        onTouchMove={(e) =>
+          pointerHandlers.onPointerMove(e.touches[0].clientX, e.touches[0].clientY)
+        }
+        onTouchEnd={(e) =>
+          pointerHandlers.onPointerUp(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
+        }
       />
     </div>
   );

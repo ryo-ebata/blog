@@ -81,6 +81,8 @@ export function createPointerHandlers(
     onPointerDown: (x, y) => handlePointerDown(stateRef.current, x, y),
     onPointerMove: (x, y) => handlePointerMove(stateRef.current, x, y),
     onPointerUp: (x, y) => handlePointerUp(stateRef.current, x, y, canvasRef, onTagToggle),
-    onPointerLeave: () => { stateRef.current.isDragging = false; },
+    onPointerLeave: () => {
+      stateRef.current.isDragging = false;
+    },
   };
 }

@@ -1,4 +1,4 @@
-import { BUBBLE_CONFIG, getBgGradientColor, getBubbleColor, getTextColor } from './constants';
+import { getBgGradientColor, getBubbleColor, getTextColor } from './constants';
 import type { BubbleState, TagBubble } from './types';
 
 /** 中心からの距離に応じたスケールを計算（端はドットサイズまで縮小） */
@@ -34,8 +34,12 @@ export function drawBackground(
   const maxRadius = Math.max(state.width, state.height) * 0.7;
 
   const gradient = ctx.createRadialGradient(
-    state.centerX, state.centerY, 0,
-    state.centerX, state.centerY, maxRadius
+    state.centerX,
+    state.centerY,
+    0,
+    state.centerX,
+    state.centerY,
+    maxRadius
   );
 
   // 中央から外側へ透明にフェードアウト
@@ -51,8 +55,12 @@ export function drawBackground(
 /** バブルが画面内かどうか判定 */
 function isInViewport(screenX: number, screenY: number, state: BubbleState): boolean {
   const margin = 100;
-  return screenX >= -margin && screenX <= state.width + margin &&
-         screenY >= -margin && screenY <= state.height + margin;
+  return (
+    screenX >= -margin &&
+    screenX <= state.width + margin &&
+    screenY >= -margin &&
+    screenY <= state.height + margin
+  );
 }
 
 /** 単一のバブルを描画 */
@@ -157,8 +165,12 @@ export function drawVignette(
 
   // 四隅から中央に向かって透明になるグラデーション
   const gradient = ctx.createRadialGradient(
-    centerX, centerY, maxRadius * 0.5,  // 内側（透明開始）
-    centerX, centerY, maxRadius         // 外側（暗い）
+    centerX,
+    centerY,
+    maxRadius * 0.5, // 内側（透明開始）
+    centerX,
+    centerY,
+    maxRadius // 外側（暗い）
   );
 
   const shadowColor = isDarkMode ? '0, 0, 0' : '0, 0, 0';
