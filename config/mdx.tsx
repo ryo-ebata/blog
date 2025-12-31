@@ -10,10 +10,10 @@ import { remarkLinkCard } from '@/lib/mdx/remark-link-card';
 function ContentLinkCardLoading({ url }: { url: string }) {
   const shortUrl = new URL(url).hostname;
   return (
-    <div className="not-prose flex w-full items-center gap-3 rounded-lg border border-terminal-border bg-terminal-bg p-4 animate-pulse">
-      <span className="text-terminal-cyan">🔗</span>
+    <div className="not-prose flex w-full items-center gap-3 rounded-lg border bg-card p-4 animate-pulse">
+      <span>🔗</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-mono text-terminal-cyan">{shortUrl}</p>
+        <p className="text-sm text-foreground">{shortUrl}</p>
         <p className="text-xs text-muted-foreground">読み込み中...</p>
       </div>
     </div>

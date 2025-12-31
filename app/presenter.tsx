@@ -16,16 +16,8 @@ interface HomePresenterProps {
   articles: ArticleItem[];
 }
 
-const HEADING_TEXT = '$ ls -la articles/';
-const DESCRIPTION_TEXT =
-  '// 情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。';
-
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-3xl font-bold font-mono text-terminal-cyan dark:text-terminal-cyan terminal-glow">
-      {children}
-    </h2>
-  );
+  return <h2 className="text-2xl font-bold text-foreground">{children}</h2>;
 }
 
 export function HomePresenter({ posts, articles }: HomePresenterProps) {
@@ -37,18 +29,16 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <h1 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-3xl">
-            {HEADING_TEXT}
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
-            {DESCRIPTION_TEXT}
+          <h1 className="font-bold scroll-m-20 text-3xl text-foreground">Articles</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。
           </p>
         </div>
 
         {hasPosts && (
           <div className="space-y-4">
             <div className="mb-8 flex items-center justify-between">
-              <SectionHeading>[最新記事]</SectionHeading>
+              <SectionHeading>最新記事</SectionHeading>
             </div>
             <div className="space-y-6">
               {posts.map((post) => (
@@ -59,14 +49,13 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                   date={post.createdAt}
                   tags={post.tags}
                   description={post.description}
-                  icon={post.icon ? { type: 'icon', name: post.icon, color: 'green' } : undefined}
-                  hoverColor="green"
+                  icon={post.icon ? { type: 'icon', name: post.icon } : undefined}
                   isExternal={false}
                 />
               ))}
             </div>
             <div className="text-center flex justify-end">
-              <BackLink href="/blog" label="$ cd ./blog # すべての記事" />
+              <BackLink href="/blog" label="すべての記事を見る" />
             </div>
           </div>
         )}
@@ -74,7 +63,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
         {hasArticles && (
           <div className="space-y-4">
             <div className="mb-8 flex items-center justify-between">
-              <SectionHeading>[外部記事]</SectionHeading>
+              <SectionHeading>外部記事</SectionHeading>
             </div>
             <div className="space-y-6">
               {articles.map((item, index) =>
@@ -85,8 +74,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                     href={`https://zenn.dev${item.article.path}`}
                     date={item.article.published_at}
                     tags={[item.article.post_type]}
-                    icon={{ type: 'emoji', emoji: item.article.emoji, color: 'purple' }}
-                    hoverColor="purple"
+                    icon={{ type: 'emoji', emoji: item.article.emoji }}
                     isExternal={true}
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
@@ -101,9 +89,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                       type: 'image',
                       src: '/image/qiita-icon/qiita-icon.png',
                       alt: item.article.user.name,
-                      color: 'orange',
                     }}
-                    hoverColor="orange"
                     isExternal={true}
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
@@ -111,7 +97,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
               )}
             </div>
             <div className="text-end">
-              <BackLink href="/about" label="$ cd ./about # その他ソーシャル記事を見る" />
+              <BackLink href="/about" label="その他ソーシャル記事を見る" />
             </div>
           </div>
         )}

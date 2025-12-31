@@ -61,20 +61,20 @@ export async function ContentLinkCard({ url, className }: ContentLinkCardProps) 
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          'not-prose group flex w-full flex-col-reverse overflow-hidden rounded-lg border border-terminal-border',
-          'bg-terminal-bg hover:border-terminal-green transition-colors duration-200',
+          'not-prose group flex w-full flex-col-reverse overflow-hidden rounded-lg border',
+          'bg-card hover:border-primary transition-colors duration-200',
           'md:flex-row',
           className
         )}
       >
         <div className="flex flex-1 flex-col justify-between gap-2 p-4">
-          <p className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-terminal-green transition-colors">
+          <p className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
             {title}
           </p>
           {description && (
             <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
           )}
-          <p className="text-xs font-mono text-terminal-cyan">{shortUrl}</p>
+          <p className="text-xs text-muted-foreground">{shortUrl}</p>
         </div>
         {image && (
           <div className="relative h-32 w-full shrink-0 overflow-hidden md:h-auto md:w-48">
@@ -103,11 +103,11 @@ function FallbackCard({ url }: { url: string }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="not-prose group flex w-full items-center gap-3 rounded-lg border border-terminal-border bg-terminal-bg p-4 hover:border-terminal-green transition-colors duration-200"
+      className="not-prose group flex w-full items-center gap-3 rounded-lg border bg-card p-4 hover:border-primary transition-colors duration-200"
     >
-      <span className="text-terminal-cyan">🔗</span>
+      <span>🔗</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-mono text-terminal-cyan truncate">{shortUrl}</p>
+        <p className="text-sm text-foreground truncate">{shortUrl}</p>
         <p className="text-xs text-muted-foreground truncate">{url}</p>
       </div>
     </a>

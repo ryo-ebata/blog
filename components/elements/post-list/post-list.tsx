@@ -23,8 +23,7 @@ export function PostList({ posts }: PostListProps) {
           date={post.createdAt}
           tags={post.tags}
           description={post.description}
-          icon={post.icon ? { type: 'icon', name: post.icon, color: 'green' } : undefined}
-          hoverColor="green"
+          icon={post.icon ? { type: 'icon', name: post.icon } : undefined}
           isExternal={false}
         />
       ))}

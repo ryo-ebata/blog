@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 interface BackLinkProps {
@@ -12,8 +13,9 @@ export function BackLink({ href, label }: BackLinkProps) {
     <div className="mb-6">
       <Link
         href={href}
-        className="terminal-glow text-terminal-cyan dark:text-terminal-cyan hover:text-terminal-green dark:hover:text-terminal-green underline transition-colors duration-200 font-mono"
+        className="text-primary hover:text-primary/80 transition-colors duration-200 inline-flex items-center gap-1"
       >
+        <ArrowLeft className="w-4 h-4" />
         {label}
       </Link>
     </div>
