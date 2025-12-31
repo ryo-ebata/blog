@@ -1,18 +1,22 @@
 'use client';
 
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import { Container } from '@/components/composites/container';
+import { BubbleTagFilter } from '@/components/composites/tag-filter';
 import { PostList } from '@/components/elements';
 import { Pagination } from '@/components/elements/pagination/pagination';
 import { SearchInput } from '@/components/elements/search-input';
 import { siteConfig } from '@/config/site';
 import type { PostMetadata } from '@/lib/posts';
-import { parseAsString, useQueryState } from 'nuqs';
+import type { TagCount } from '@/lib/tags';
 
 interface BlogListPresenterProps {
   posts: PostMetadata[];
   currentPage: number;
   totalPages: number;
   searchQuery: string;
+  selectedTags: string[];
+  tagCounts: TagCount[];
 }
 
 export function BlogListPresenter({
@@ -20,16 +24,32 @@ export function BlogListPresenter({
   currentPage,
   totalPages,
   searchQuery,
+  selectedTags,
+  tagCounts,
 }: BlogListPresenterProps) {
   const [, setSearch] = useQueryState(
     'search',
     parseAsString.withOptions({ shallow: false, clearOnDefault: true }).withDefault('')
   );
   const [, setPage] = useQueryState('page', parseAsString.withOptions({ shallow: false }));
+  const [, setTags] = useQueryState(
+    'tags',
+    parseAsArrayOf(parseAsString, ',')
+      .withOptions({ shallow: false, clearOnDefault: true })
+      .withDefault([])
+  );
 
   const handleSearchChange = async (value: string) => {
     await setPage(null);
     await setSearch(value || null);
+  };
+
+  const handleTagToggle = async (tag: string) => {
+    await setPage(null);
+    const newTags = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag];
+    await setTags(newTags.length > 0 ? newTags : null);
   };
 
   return (
@@ -41,11 +61,16 @@ export function BlogListPresenter({
         </div>
 
         <div className="space-y-6">
+          <BubbleTagFilter
+            tags={tagCounts}
+            selectedTags={selectedTags}
+            onTagToggle={handleTagToggle}
+          />
           <SearchInput value={searchQuery} onChange={handleSearchChange} />
           <PostList posts={posts} />
-          {posts.length === 0 && searchQuery && (
+          {posts.length === 0 && (searchQuery || selectedTags.length > 0) && (
             <p className="text-center text-muted-foreground py-8">
-              「{searchQuery}」に一致する記事が見つかりませんでした
+              条件に一致する記事が見つかりませんでした
             </p>
           )}
           <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/blog" />

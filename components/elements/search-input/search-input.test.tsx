@@ -40,9 +40,7 @@ describe('SearchInput', () => {
   });
 
   it('カスタムプレースホルダーを設定できる', () => {
-    render(
-      <SearchInput value="" onChange={vi.fn()} placeholder="カスタム検索" />
-    );
+    render(<SearchInput value="" onChange={vi.fn()} placeholder="カスタム検索" />);
 
     const input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('placeholder', 'カスタム検索');

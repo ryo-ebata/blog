@@ -27,7 +27,13 @@ function getIconComponent(iconName: string): LucideIcon | null {
   return Icon || null;
 }
 
-function ArticleIcon({ icon, priority = false }: { icon: ArticleCardIconType; priority?: boolean }) {
+function ArticleIcon({
+  icon,
+  priority = false,
+}: {
+  icon: ArticleCardIconType;
+  priority?: boolean;
+}) {
   return (
     <div className="shrink-0 mt-1">
       <div className="w-12 h-12 rounded-lg bg-muted border flex items-center justify-center">

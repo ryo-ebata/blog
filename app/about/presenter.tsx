@@ -89,7 +89,12 @@ export function AboutPresenter() {
               )}
               {siteConfig.links.qiita && (
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Image src="/image/qiita-icon/qiita-icon.png" alt="Qiita" width={20} height={20} />
+                  <Image
+                    src="/image/qiita-icon/qiita-icon.png"
+                    alt="Qiita"
+                    width={20}
+                    height={20}
+                  />
                   <SocialLink href={siteConfig.links.qiita} label={siteConfig.links.qiita} />
                 </div>
               )}
