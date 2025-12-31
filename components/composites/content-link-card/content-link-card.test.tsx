@@ -5,7 +5,7 @@ import { ContentLinkCard } from './content-link-card';
 // Next.js Imageコンポーネントのモック
 vi.mock('next/image', () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
+    // biome-ignore lint/performance/noImgElement: テスト用のモックでは<img>を使用
     <img src={src} alt={alt} {...props} />
   ),
 }));
