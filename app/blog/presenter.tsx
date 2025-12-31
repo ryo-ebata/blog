@@ -14,9 +14,6 @@ interface BlogListPresenterProps {
   searchQuery: string;
 }
 
-const HEADING_TEXT = '$ ls -la ./blog';
-const DESCRIPTION_TEXT = '// すべてのブログ記事';
-
 export function BlogListPresenter({
   posts,
   currentPage,
@@ -38,19 +35,15 @@ export function BlogListPresenter({
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <h1 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-3xl">
-            {HEADING_TEXT}
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
-            {DESCRIPTION_TEXT}
-          </p>
+          <h1 className="font-bold scroll-m-20 text-3xl text-foreground">Blog</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">すべてのブログ記事</p>
         </div>
 
         <div className="space-y-6">
           <SearchInput value={searchQuery} onChange={handleSearchChange} />
           <PostList posts={posts} />
           {posts.length === 0 && searchQuery && (
-            <p className="text-center text-gray-500 py-8">
+            <p className="text-center text-muted-foreground py-8">
               「{searchQuery}」に一致する記事が見つかりませんでした
             </p>
           )}

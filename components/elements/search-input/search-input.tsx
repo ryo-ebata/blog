@@ -54,7 +54,7 @@ export function SearchInput({
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
         placeholder={placeholder}
-        className="w-full rounded-md border border-gray-600 bg-gray-800 py-2 pl-10 pr-10 text-sm text-gray-100 placeholder-gray-400 focus:border-terminal-green focus:outline-none focus:ring-1 focus:ring-terminal-green"
+        className="w-full rounded-md border bg-background py-2 pl-10 pr-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       />
       {inputValue && (
         <button

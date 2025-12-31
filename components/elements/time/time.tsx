@@ -9,8 +9,8 @@ interface TimeProps {
 
 export function Time({ date }: TimeProps) {
   return (
-    <time className="text-gray-600 dark:text-gray-300 text-base flex items-center font-mono">
-      <Calendar className="w-4 h-4 mr-1 text-terminal-cyan dark:text-terminal-cyan" />
+    <time className="text-muted-foreground text-sm flex items-center">
+      <Calendar className="w-4 h-4 mr-1" />
       {formatDate(date)}
     </time>
   );
