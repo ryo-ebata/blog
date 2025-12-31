@@ -2,8 +2,6 @@
 
 import { Pen } from 'lucide-react';
 import { TagList } from '@/components/composites/tag-list';
-import { MdxHeading } from '@/components/mdx/heading/heading';
-import { MdxParagraph } from '@/components/mdx/paragragh/paragragh';
 import type { PostMetadata } from '@/lib/posts';
 import { Time } from '../time/time';
 
@@ -14,9 +12,9 @@ interface PostHeaderProps {
 export function PostHeader({ metadata }: PostHeaderProps) {
   return (
     <div className="mb-8 space-y-4 p-6 font-mono border-b-2 border-terminal-border">
-      <MdxHeading as="h1" className="text-terminal-green dark:text-terminal-green terminal-glow">
+      <h1 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-3xl">
         {metadata.title}
-      </MdxHeading>
+      </h1>
       <div className="flex items-center gap-4">
         {metadata.tags && <TagList tags={metadata.tags} />}
         <Time date={metadata.createdAt} />
@@ -25,12 +23,10 @@ export function PostHeader({ metadata }: PostHeaderProps) {
           {metadata.characterCount} characters
         </span>
       </div>
-      <MdxHeading as="h2" className="text-terminal-green dark:text-terminal-green terminal-glow">
+      <h2 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-2xl border-b-2 border-dashed border-terminal-border pb-2">
         TL;DR:
-      </MdxHeading>
-      <MdxParagraph className="text-gray-600 dark:text-gray-300">
-        {metadata.description}
-      </MdxParagraph>
+      </h2>
+      <p className="leading-7 text-gray-600 dark:text-gray-300">{metadata.description}</p>
     </div>
   );
 }

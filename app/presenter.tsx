@@ -3,7 +3,6 @@
 import { ArticleCard } from '@/components/composites/article-card/article-card';
 import { Container } from '@/components/composites/container';
 import { BackLink } from '@/components/elements';
-import { MdxHeading } from '@/components/mdx/heading/heading';
 import type { PostMetadata } from '@/lib/posts';
 import type { QiitaArticle } from '@/utils/qiita';
 import type { ZennArticle } from '@/utils/zenn';
@@ -38,12 +37,9 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
     <Container maxWidth="4xl">
       <div className="space-y-12">
         <div className="mb-12 text-center space-y-4">
-          <MdxHeading
-            as="h1"
-            className="text-terminal-green dark:text-terminal-green terminal-glow font-mono"
-          >
+          <h1 className="font-bold font-mono text-terminal-green terminal-glow scroll-m-20 text-3xl">
             {HEADING_TEXT}
-          </MdxHeading>
+          </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-mono">
             {DESCRIPTION_TEXT}
           </p>
