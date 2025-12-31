@@ -173,7 +173,7 @@ export function drawVignette(
     maxRadius // 外側（暗い）
   );
 
-  const shadowColor = isDarkMode ? '0, 0, 0' : '0, 0, 0';
+  const shadowColor = isDarkMode ? '0, 0, 0' : '255, 255, 255';
   gradient.addColorStop(0, `rgba(${shadowColor}, 0)`);
   gradient.addColorStop(0.5, `rgba(${shadowColor}, 0.15)`);
   gradient.addColorStop(0.8, `rgba(${shadowColor}, 0.4)`);
