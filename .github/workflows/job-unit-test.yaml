@@ -1,0 +1,38 @@
+name: Job Unit Test
+
+on:
+  workflow_call:
+
+jobs:
+  unit-test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 📦 Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: 💾 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: 📋 Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: 🧪 Run unit tests
+        run: bun run test:unit --run
+
+      - name: 📊 Run tests with coverage
+        run: bun run test:coverage --run

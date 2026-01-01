@@ -1,0 +1,58 @@
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { Pagination } from './pagination';
+
+describe('Pagination', () => {
+  it('totalPagesが1以下の場合は何も表示しない', () => {
+    const { container } = render(<Pagination currentPage={1} totalPages={1} basePath="/blog" />);
+
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('ページネーションをレンダリングする', () => {
+    render(<Pagination currentPage={1} totalPages={5} basePath="/blog" />);
+
+    expect(screen.getByRole('navigation', { name: 'ページネーション' })).toBeInTheDocument();
+  });
+
+  it('最初のページでは「前へ」ボタンが表示されない', () => {
+    render(<Pagination currentPage={1} totalPages={5} basePath="/blog" />);
+
+    expect(screen.queryByRole('link', { name: '前へ' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '次へ' })).toBeInTheDocument();
+  });
+
+  it('最後のページでは「次へ」ボタンが表示されない', () => {
+    render(<Pagination currentPage={5} totalPages={5} basePath="/blog" />);
+
+    expect(screen.getByRole('link', { name: '前へ' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: '次へ' })).not.toBeInTheDocument();
+  });
+
+  it('中間ページでは「前へ」「次へ」両方表示される', () => {
+    render(<Pagination currentPage={3} totalPages={5} basePath="/blog" />);
+
+    expect(screen.getByRole('link', { name: '前へ' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '次へ' })).toBeInTheDocument();
+  });
+
+  it('現在のページ番号が表示される', () => {
+    render(<Pagination currentPage={3} totalPages={5} basePath="/blog" />);
+
+    expect(screen.getByRole('link', { name: '3' })).toBeInTheDocument();
+  });
+
+  it('最初のページへのリンクはbasePathのみ', () => {
+    render(<Pagination currentPage={2} totalPages={5} basePath="/blog" />);
+
+    const firstPageLink = screen.getByRole('link', { name: '1' });
+    expect(firstPageLink).toHaveAttribute('href', '/blog');
+  });
+
+  it('2ページ目以降へのリンクはクエリパラメータ付き', () => {
+    render(<Pagination currentPage={1} totalPages={5} basePath="/blog" />);
+
+    const secondPageLink = screen.getByRole('link', { name: '2' });
+    expect(secondPageLink).toHaveAttribute('href', '/blog?page=2');
+  });
+});

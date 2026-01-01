@@ -14,6 +14,12 @@ jobs:
     code-quality:
         uses: ./.github/workflows/job-biome-check.yaml
 
+    unit-test:
+        uses: ./.github/workflows/job-unit-test.yaml
+
+    e2e-test:
+        uses: ./.github/workflows/job-e2e-test.yaml
+
     build-check:
         uses: ./.github/workflows/job-build-check.yaml
 
