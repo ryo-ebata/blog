@@ -1,5 +1,5 @@
-import { paginateItems } from '@/lib/pagination';
 import { getAllNotes } from '@/lib/notes';
+import { paginateItems } from '@/lib/pagination';
 import { filterPostsByTitle } from '@/lib/search';
 import { aggregateTags, filterPostsByTags } from '@/lib/tags';
 import { NotesListPresenter } from './presenter';

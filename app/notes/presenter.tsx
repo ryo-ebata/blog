@@ -6,7 +6,6 @@ import { BubbleTagFilter } from '@/components/composites/tag-filter';
 import { PostList } from '@/components/elements';
 import { Pagination } from '@/components/elements/pagination/pagination';
 import { SearchInput } from '@/components/elements/search-input';
-import { siteConfig } from '@/config/site';
 import type { NoteMetadata } from '@/lib/notes';
 import type { TagCount } from '@/lib/tags';
 

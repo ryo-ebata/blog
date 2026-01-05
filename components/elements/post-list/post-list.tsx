@@ -2,8 +2,8 @@
 
 import { ArticleCard } from '@/components/composites/article-card/article-card';
 import { EmptyState } from '@/components/elements/empty-state/empty-state';
-import type { PostMetadata } from '@/lib/posts';
 import type { NoteMetadata } from '@/lib/notes';
+import type { PostMetadata } from '@/lib/posts';
 
 interface PostListProps {
   posts: (PostMetadata | NoteMetadata)[];

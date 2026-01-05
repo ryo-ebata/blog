@@ -138,7 +138,9 @@ export async function getAllContent(
     })
   );
 
-  const filteredContents = contents.filter((content): content is BaseContentData => content !== null);
+  const filteredContents = contents.filter(
+    (content): content is BaseContentData => content !== null
+  );
 
   // 日付でソート（新しい順、updatedAtがあれば優先）
   return filteredContents.sort((a, b) => {

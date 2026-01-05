@@ -73,5 +73,4 @@ describe('isFuturePost', () => {
       expect(isFuturePost('2025-01-06', '2025-01-07T00:00:00Z', today)).toBe(true);
     });
   });
-
 });
