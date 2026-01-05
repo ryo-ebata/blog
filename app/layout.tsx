@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BIZ_UDGothic } from 'next/font/google';
+import { BIZ_UDPGothic } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
 import { Header } from '@/components/elements/header/header';
@@ -10,10 +10,10 @@ import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import './globals.css';
 import { Footer } from '@/components/elements/footer/footer';
 
-const bizUDGothic = BIZ_UDGothic({
+const bizUDPGothic = BIZ_UDPGothic({
   weight: ['400', '700'],
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-biz-ud-gothic',
+  variable: '--font-biz-udp-gothic',
   display: 'swap',
   preload: true,
   adjustFontFallback: true,
@@ -98,7 +98,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${bizUDGothic.variable} antialiased font-sans`}>
+      <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
         <JsonLd data={organizationJsonLd} />
         <NuqsAdapter>
           <Suspense fallback={null}>
