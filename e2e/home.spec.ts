@@ -24,8 +24,8 @@ test.describe('Home Page', () => {
   test('should navigate to blog page', async ({ page }) => {
     await page.goto('/');
 
-    // ブログへのリンクをクリック
-    const blogLink = page.getByRole('link', { name: /blog/i });
+    // ヘッダーのBlogリンクをクリック（タグリンクと区別するためexact: trueを使用）
+    const blogLink = page.getByRole('link', { name: 'Blog', exact: true });
     if (await blogLink.isVisible()) {
       await blogLink.click();
       await expect(page).toHaveURL(/\/blog/);
