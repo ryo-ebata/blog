@@ -10,7 +10,7 @@ interface BlogPostPresenterProps {
 export function BlogPostPresenter({ metadata }: BlogPostPresenterProps) {
   return (
     <>
-      <BackLink href="/blog" label="cd .. # ブログ一覧に戻る" />
+      <BackLink href="/blog" label="ブログ一覧に戻る" />
       <PostHeader metadata={metadata} />
     </>
   );
