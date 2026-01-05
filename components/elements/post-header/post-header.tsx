@@ -3,10 +3,11 @@
 import { Pen } from 'lucide-react';
 import { TagList } from '@/components/composites/tag-list';
 import type { PostMetadata } from '@/lib/posts';
+import type { NoteMetadata } from '@/lib/notes';
 import { Time } from '../time/time';
 
 interface PostHeaderProps {
-  metadata: PostMetadata;
+  metadata: PostMetadata | NoteMetadata;
 }
 
 export function PostHeader({ metadata }: PostHeaderProps) {
