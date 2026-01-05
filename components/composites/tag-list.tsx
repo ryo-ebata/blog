@@ -1,4 +1,5 @@
 import { TagsIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface TagListProps {
   tags: string[];
@@ -20,9 +21,15 @@ export function TagList({ tags }: TagListProps) {
 }
 
 function Tag({ tag }: { tag: string }) {
+  // nuqsの形式に合わせて、tagsパラメータをカンマ区切りで設定
+  const tagUrl = `/blog?tags=${encodeURIComponent(tag)}`;
+
   return (
-    <span className="text-xs bg-secondary border px-2 py-1 rounded-md text-secondary-foreground font-medium">
+    <Link
+      href={tagUrl}
+      className="text-xs bg-secondary border px-2 py-1 rounded-md text-secondary-foreground font-medium hover:bg-secondary/80 transition-colors"
+    >
       {tag}
-    </span>
+    </Link>
   );
 }
