@@ -2,8 +2,8 @@
 
 import { Pen } from 'lucide-react';
 import { TagList } from '@/components/composites/tag-list';
-import type { PostMetadata } from '@/lib/posts';
 import type { NoteMetadata } from '@/lib/notes';
+import type { PostMetadata } from '@/lib/posts';
 import { Time } from '../time/time';
 
 interface PostHeaderProps {

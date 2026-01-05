@@ -4,7 +4,7 @@ import { IconBrandGithub, IconBrandX } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from '@/components/composites/container';
-import { BackLink } from '@/components/elements';
+import { BackLink, BuyMeACoffee } from '@/components/elements';
 import { siteConfig } from '@/config/site';
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -106,6 +106,7 @@ export function AboutPresenter() {
           </div>
         </div>
       </div>
+      <BuyMeACoffee />
     </Container>
   );
 }
