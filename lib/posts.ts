@@ -34,6 +34,43 @@ interface PostMetadataWithFile {
 }
 
 /**
+ * 投稿が未来日付（予約投稿）かどうかをチェック
+ * createdAtまたはupdatedAtが現在日付より未来の場合、trueを返す
+ * 時刻は無視し、日付のみで比較する
+ * @param createdAt 作成日（YYYY-MM-DD形式）
+ * @param updatedAt 更新日（YYYY-MM-DD形式）
+ * @param today 現在の日付（デフォルトは現在時刻）
+ */
+export function isFuturePost(
+  createdAt: string,
+  updatedAt: string,
+  today: Date = new Date()
+): boolean {
+  // 現在の日付を00:00:00に設定（時刻を無視）
+  const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const createdDate = new Date(createdAt);
+  // 作成日の日付を00:00:00に設定（時刻を無視）
+  const createdDateOnly = new Date(
+    createdDate.getFullYear(),
+    createdDate.getMonth(),
+    createdDate.getDate()
+  );
+
+  const updatedDate = new Date(updatedAt);
+  // 更新日の日付を00:00:00に設定（時刻を無視）
+  const updatedDateOnly = new Date(
+    updatedDate.getFullYear(),
+    updatedDate.getMonth(),
+    updatedDate.getDate()
+  );
+
+  // createdAtまたはupdatedAtが未来日付の場合、予約投稿とみなす
+  // 同じ日付の場合は表示する（> ではなく >= を使わない）
+  return createdDateOnly > todayDateOnly || updatedDateOnly > todayDateOnly;
+}
+
+/**
  * MDXコンテンツから文字数をカウント
  * Markdownの記法（見出し、リンク、画像、コードブロックなど）を除去してテキストのみをカウント
  */
@@ -105,6 +142,15 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
           return null;
         }
 
+        // createdAtとupdatedAtを取得
+        const createdAt = data.createdAt;
+        const updatedAt = data.updatedAt || data.createdAt;
+
+        // 未来日付（予約投稿）の場合はスキップ
+        if (isFuturePost(createdAt, updatedAt)) {
+          return null;
+        }
+
         // slugが指定されていなければファイル名から生成
         const slug = data.slug || file.replace(/\.mdx$/, '');
 
@@ -115,8 +161,8 @@ async function getAllPostsMetadataInternal(): Promise<PostMetadataWithFile[]> {
           metadata: {
             slug,
             title: data.title || 'Untitled',
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt || data.createdAt,
+            createdAt,
+            updatedAt,
             description: data.description,
             tags: data.tags,
             icon: data.icon,
@@ -201,6 +247,20 @@ export async function getPostBySlug(slug: string | string[]): Promise<PostData> 
     const fileContents = fs.readFileSync(filePath, 'utf8');
     const { data, content } = matter(fileContents);
 
+    // draftがtrueの場合はエラー
+    if (data.draft) {
+      throw new Error(`Post not found: ${slugPath}`);
+    }
+
+    // createdAtとupdatedAtを取得
+    const createdAt = data.createdAt;
+    const updatedAt = data.updatedAt || data.createdAt;
+
+    // 未来日付（予約投稿）の場合はエラー
+    if (isFuturePost(createdAt, updatedAt)) {
+      throw new Error(`Post not found: ${slugPath}`);
+    }
+
     // slugが指定されていなければファイル名から生成
     const postSlug = data.slug || slugPath;
 
@@ -218,8 +278,8 @@ export async function getPostBySlug(slug: string | string[]): Promise<PostData> 
       metadata: {
         slug: postSlug,
         title: data.title || 'Untitled',
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt || data.createdAt,
+        createdAt,
+        updatedAt,
         description: data.description,
         tags: data.tags,
         icon: data.icon,
