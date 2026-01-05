@@ -35,6 +35,7 @@ export default defineConfig({
         ],
         test: {
           name: 'storybook',
+          exclude: ['**/node_modules/**'],
           browser: {
             enabled: true,
             headless: true,

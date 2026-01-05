@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/nextjs-vite';
+import { NuqsAdapter } from 'nuqs/adapters/react';
 import { StorybookThemeProvider } from './ThemeProviderWrapper';
 import '../app/globals.css';
 
@@ -20,9 +21,11 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <StorybookThemeProvider>
-        <Story />
-      </StorybookThemeProvider>
+      <NuqsAdapter>
+        <StorybookThemeProvider>
+          <Story />
+        </StorybookThemeProvider>
+      </NuqsAdapter>
     ),
   ],
 };
