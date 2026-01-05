@@ -1,0 +1,331 @@
+---
+slug: 'example-post'
+title: 'Example Post'
+createdAt: '2026-01-06'
+updatedAt: '2026-01-06'
+description: 'Example Post Description'
+tags: ['example', 'post']
+icon: 'FileText'
+author: 'ryo-ebata'
+draft: true
+---
+
+# 見出しレベル1
+
+## 見出しレベル2
+
+### 見出しレベル3
+
+#### 見出しレベル4
+
+##### 見出しレベル5
+
+###### 見出しレベル6
+
+---
+
+## テキストの装飾
+
+**太字（Bold）** と *斜体（Italic）* と ***太字斜体（Bold Italic）***
+
+~~打ち消し線（Strikethrough）~~
+
+`インラインコード`
+
+---
+
+## リスト
+
+### 順序なしリスト
+
+- 項目1
+- 項目2
+  - ネストされた項目2-1
+  - ネストされた項目2-2
+    - さらにネストされた項目2-2-1
+- 項目3
+
+### 順序ありリスト
+
+1. 最初の項目
+2. 2番目の項目
+3. 3番目の項目
+   1. ネストされた項目3-1
+   2. ネストされた項目3-2
+4. 4番目の項目
+
+### チェックボックスリスト
+
+- [x] 完了したタスク
+- [ ] 未完了のタスク1
+- [ ] 未完了のタスク2
+
+---
+
+## リンクと画像
+
+[テキストリンク](https://example.com)
+
+[参照形式のリンク][ref-link]
+
+[ref-link]: https://example.com
+
+![代替テキスト](https://via.placeholder.com/400x200 "画像のタイトル")
+
+---
+
+## 引用
+
+> これは引用ブロックです。
+> 複数行にわたって引用することができます。
+>
+> 空行を挟むことも可能です。
+
+> ネストされた引用
+> > さらにネストされた引用
+
+---
+
+## コードブロック
+
+### 言語指定なし
+
+```
+これはコードブロックです
+複数行にわたって記述できます
+```
+
+### JavaScript
+
+```javascript
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+
+greet('World');
+```
+
+### TypeScript
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const user: User = {
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
+};
+```
+
+### Python
+
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(10))
+```
+
+### HTML
+
+```html
+<div class="container">
+  <h1>タイトル</h1>
+  <p>段落テキスト</p>
+</div>
+```
+
+### CSS
+
+```css
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  color: #333;
+}
+```
+
+### JSON
+
+```json
+{
+  "name": "example",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.0.0"
+  }
+}
+```
+
+### Bash/Shell
+
+```bash
+#!/bin/bash
+echo "Hello, World!"
+npm install
+npm run dev
+```
+
+---
+
+## テーブル
+
+| 列1 | 列2 | 列3 |
+|-----|-----|-----|
+| セル1-1 | セル1-2 | セル1-3 |
+| セル2-1 | セル2-2 | セル2-3 |
+| セル3-1 | セル3-2 | セル3-3 |
+
+### テーブルの配置
+
+| 左揃え | 中央揃え | 右揃え |
+|:-------|:--------:|-------:|
+| 左 | 中央 | 右 |
+| 左 | 中央 | 右 |
+
+---
+
+## 水平線
+
+---
+
+上記は水平線です。
+
+---
+
+## Details/Summary（折りたたみ）
+
+<details>
+<summary>クリックして展開</summary>
+
+これは折りたたみ可能なコンテンツです。
+
+- リスト項目1
+- リスト項目2
+
+```javascript
+console.log('折りたたみ内のコードブロック');
+```
+
+</details>
+
+<details>
+<summary>ネストされた折りたたみ</summary>
+
+<details>
+<summary>さらにネストされた折りたたみ</summary>
+
+深くネストされたコンテンツです。
+
+</details>
+
+</details>
+
+---
+
+## 改行と段落
+
+これは1つの段落です。複数の文を含むことができます。
+
+これは別の段落です。空行で区切られています。
+
+この行は末尾に2つのスペースがあるため、  
+強制改行されます。
+
+---
+
+## エスケープ
+
+エスケープの例（コードブロック内で表示）:
+
+```
+\*エスケープされたアスタリスク\*
+
+\`エスケープされたバッククォート\`
+
+\[エスケープされた角括弧\]
+```
+
+> **注意**: MDXではバックスラッシュのエスケープがJSX式として解釈される可能性があるため、エスケープの表示例はコードブロック内で確認してください。
+
+---
+
+## その他の記法
+
+### インラインHTML
+
+<p>これは<strong>HTMLタグ</strong>を使用した段落です。</p>
+
+<kbd>Ctrl</kbd> + <kbd>C</kbd> でコピー
+
+HTMLタグの例（コードブロック内）:
+
+```html
+<p>これは<strong>HTMLタグ</strong>を使用した段落です。</p>
+<kbd>Ctrl</kbd> + <kbd>C</kbd> でコピー
+```
+
+### 数式（MathJax対応の場合）
+
+インライン数式の例（コードブロック内）:
+
+```latex
+$E = mc^2$
+```
+
+ブロック数式の例（コードブロック内）:
+
+```latex
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+```
+
+> **注意**: MDXでは数式のバックスラッシュがJSX式として解釈される可能性があるため、実際の数式表示はコードブロック内で確認してください。
+
+---
+
+## 脚注
+
+これは脚注の例です[^1]。
+
+別の脚注[^note]も追加できます。
+
+[^1]: これは最初の脚注です。
+[^note]: これは名前付きの脚注です。
+
+---
+
+## 定義リスト（一部のMarkdownパーサーで対応）
+
+用語1
+: 用語1の定義
+
+用語2
+: 用語2の定義
+: 用語2の別の定義
+
+---
+
+## タスクリスト（GitHub風）
+
+- [x] 完了したタスク
+- [ ] 未完了のタスク
+- [x] 別の完了タスク
+  - [x] ネストされた完了タスク
+  - [ ] ネストされた未完了タスク
+
+---
+
+以上が主要なMarkdown記法の例です。
