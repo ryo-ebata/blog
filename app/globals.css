@@ -120,6 +120,24 @@
   }
   body {
     @apply bg-background text-foreground;
+
+    /*
+      デフォルトは無効のため、bodyで一律で有効化
+    */
+    text-autospace: normal;
+
+    /*
+      長い英単語のレイアウト突き抜けを防止
+      word-break: break-all; は英単語を強制的に折り返してしまう
+      word-wrapは古い
+    */
+    overflow-wrap: anywhere;
+    word-break: normal;
+
+    /*
+      子音や」、。が行頭に来ないように指定
+    */
+    line-break: strict;
   }
   html {
     @apply bg-white dark:bg-[#0d1117];
