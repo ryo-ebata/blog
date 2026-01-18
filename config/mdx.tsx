@@ -5,6 +5,8 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
 import { CodeBlock } from '@/components/molecules/code-block';
+import { MdxBlockquote } from '@/components/molecules/mdx-blockquote';
+import { MdxH1, MdxH2, MdxH3, MdxH4, MdxH5, MdxH6 } from '@/components/molecules/mdx-heading';
 import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
 import { rehypeCodeMeta } from '@/lib/mdx/rehype-code-meta';
 import { remarkLinkCard } from '@/lib/mdx/remark-link-card';
@@ -58,6 +60,13 @@ const Pre = (props: PreProps) => {
 
 const mdxComponents = {
   ContentLinkCard,
+  blockquote: MdxBlockquote,
+  h1: MdxH1,
+  h2: MdxH2,
+  h3: MdxH3,
+  h4: MdxH4,
+  h5: MdxH5,
+  h6: MdxH6,
   pre: Pre,
 };
 
