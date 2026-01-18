@@ -143,3 +143,85 @@
     @apply bg-white dark:bg-[#0d1117];
   }
 }
+
+/* ==============================================
+   コードブロック (rehype-pretty-code / Shiki)
+   ============================================== */
+
+/* タイトル表示 */
+[data-rehype-pretty-code-title] {
+  @apply rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
+}
+
+[data-rehype-pretty-code-title] + pre {
+  @apply rounded-t-none;
+}
+
+/* キャプション表示 */
+[data-rehype-pretty-code-caption] {
+  @apply border border-t-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
+}
+
+/* pre要素の基本スタイル */
+pre[data-theme] {
+  @apply overflow-x-auto rounded-lg border border-border;
+}
+
+/* コード行の基本スタイル */
+pre [data-line] {
+  @apply border-l-2 border-transparent px-4;
+}
+
+/* 行番号表示 */
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply mr-6 inline-block w-4 text-right text-muted-foreground;
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  @apply w-6;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  @apply w-8;
+}
+
+/* 行ハイライト */
+[data-line][data-highlighted-line] {
+  @apply border-l-primary bg-primary/10;
+}
+
+/* 文字ハイライト */
+[data-highlighted-chars] {
+  @apply rounded bg-primary/20 px-1;
+}
+
+/* Diff表示: 追加行 */
+[data-line].diff.add {
+  @apply border-l-green-500 bg-green-500/15;
+}
+
+[data-line].diff.add::before {
+  content: "+";
+  @apply mr-2 text-green-500;
+}
+
+/* Diff表示: 削除行 */
+[data-line].diff.remove {
+  @apply border-l-red-500 bg-red-500/15;
+}
+
+[data-line].diff.remove::before {
+  content: "-";
+  @apply mr-2 text-red-500;
+}
+
+/* ハイライト表示 (transformerNotationHighlight) */
+[data-line].highlighted {
+  @apply border-l-yellow-500 bg-yellow-500/15;
+}

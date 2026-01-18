@@ -1,4 +1,8 @@
 import type { EvaluateOptions } from '@mdx-js/mdx';
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+} from '@shikijs/transformers';
 import { Suspense } from 'react';
 import * as runtime from 'react/jsx-runtime';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -43,6 +47,7 @@ export const mdxConfig: Readonly<EvaluateOptions> = {
       {
         theme: 'github-dark',
         keepBackground: true,
+        transformers: [transformerNotationDiff(), transformerNotationHighlight()],
       },
     ],
   ],

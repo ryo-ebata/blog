@@ -96,11 +96,77 @@ draft: true
 複数行にわたって記述できます
 ```
 
+### 行番号表示
+
+```typescript showLineNumbers
+interface User {
+	id: number;
+	name: string;
+	email: string;
+}
+
+const user: User = {
+	id: 1,
+	name: 'John Doe',
+	email: 'john@example.com',
+};
+```
+
+### 行ハイライト
+
+```typescript {1,4-6}
+interface User {
+	id: number;
+	name: string;
+	email: string;
+}
+
+const user: User = {
+	id: 1,
+	name: 'John Doe',
+	email: 'john@example.com',
+};
+```
+
+### ファイル名/タイトル表示
+
+```typescript title="types/user.ts"
+interface User {
+	id: number;
+	name: string;
+	email: string;
+}
+```
+
+### 行番号 + 行ハイライト + タイトル
+
+```typescript title="components/UserCard.tsx" showLineNumbers {3-5}
+import type { User } from '@/types/user';
+
+export function UserCard({ user }: { user: User }) {
+  return (
+    <div className="card">
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+### Diff表示
+
+```typescript
+function greet(name: string) {
+	console.log('Hello, World!'); // [!code --]
+	console.log(`Hello, ${name}!`); // [!code ++]
+}
+```
+
 ### JavaScript
 
 ```javascript
 function greet(name) {
-  console.log(`Hello, ${name}!`);
+	console.log(`Hello, ${name}!`);
 }
 
 greet('World');
@@ -110,15 +176,15 @@ greet('World');
 
 ```typescript
 interface User {
-  id: number;
-  name: string;
-  email: string;
+	id: number;
+	name: string;
+	email: string;
 }
 
 const user: User = {
-  id: 1,
-  name: 'John Doe',
-  email: 'john@example.com',
+	id: 1,
+	name: 'John Doe',
+	email: 'john@example.com',
 };
 ```
 
@@ -137,8 +203,8 @@ print(fibonacci(10))
 
 ```html
 <div class="container">
-  <h1>タイトル</h1>
-  <p>段落テキスト</p>
+	<h1>タイトル</h1>
+	<p>段落テキスト</p>
 </div>
 ```
 
@@ -146,14 +212,14 @@ print(fibonacci(10))
 
 ```css
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
 }
 
 .title {
-  font-size: 2rem;
-  color: #333;
+	font-size: 2rem;
+	color: #333;
 }
 ```
 
@@ -161,11 +227,11 @@ print(fibonacci(10))
 
 ```json
 {
-  "name": "example",
-  "version": "1.0.0",
-  "dependencies": {
-    "react": "^18.0.0"
-  }
+	"name": "example",
+	"version": "1.0.0",
+	"dependencies": {
+		"react": "^18.0.0"
+	}
 }
 ```
 
@@ -266,9 +332,15 @@ console.log('折りたたみ内のコードブロック');
 
 ### インラインHTML
 
+<<<<<<< HEAD
 <p>
   これは<strong>HTMLタグ</strong>を使用した段落です。
 </p>
+=======
+<div>
+	これは<strong>HTMLタグ</strong>を使用した段落です。
+</div>
+>>>>>>> ea23a111d1cf3011e54b898c609e2b1bfec2ae39
 
 <kbd>Ctrl</kbd> + <kbd>C</kbd> でコピー
 
