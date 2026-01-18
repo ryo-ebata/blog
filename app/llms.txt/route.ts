@@ -1,7 +1,22 @@
-import { siteConfig } from '@/config/site';
+import type { ContentMetadataWithFile } from '@/lib/content';
 import { getAllPostsMetadata } from '@/lib/posts';
+import { siteConfig } from '@/config/site';
 
-export async function GET() {
+const formatTags = (tags?: string[]): string => {
+  if (!tags) {
+    return '';
+  }
+  return ` [${tags.join(', ')}]`;
+};
+
+const formatDescription = (description?: string): string => {
+  if (!description) {
+    return '';
+  }
+  return `Description: ${description}`;
+};
+
+export const GET = async () => {
   const posts = await getAllPostsMetadata();
   const siteUrl = siteConfig.url;
 
@@ -20,13 +35,13 @@ ${Object.entries(siteConfig.links)
 
 ## Posts
 ${posts
-  .map((post) => {
+  .map((post: ContentMetadataWithFile) => {
     const postUrl = `${siteUrl}/blog/${post.metadata.slug}`;
-    const tags = post.metadata.tags ? ` [${post.metadata.tags.join(', ')}]` : '';
+    const tags = formatTags(post.metadata.tags);
     return `- ${post.metadata.title}${tags}
   URL: ${postUrl}
   Created: ${post.metadata.createdAt}
-  ${post.metadata.description ? `Description: ${post.metadata.description}` : ''}`;
+  ${formatDescription(post.metadata.description)}`;
   })
   .join('\n')}
 `;
@@ -36,4 +51,4 @@ ${posts
       'content-type': 'text/plain; charset=utf-8',
     },
   });
-}
+};

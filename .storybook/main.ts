@@ -1,7 +1,60 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite';
 
+/*
+ * チャンクサイズの閾値
+ */
+const CHUNK_SIZE_WARNING_LIMIT = 2500;
+
+const shouldSuppressWarning = (message?: string): boolean => {
+  if (!message) {
+    return false;
+  }
+  /*
+   * "use client" 関連の警告をフィルタリング
+   */
+  if (
+    message.includes('use client') ||
+    message.includes('Module level directives') ||
+    message.includes("Can't resolve original location")
+  ) {
+    return true;
+  }
+  /*
+   * チャンクサイズの警告を抑制（Storybookのテスト用エントリーポイントが大きいため）
+   */
+  if (message.includes('chunks are larger') || message.includes('Some chunks are larger')) {
+    return true;
+  }
+  return false;
+};
+
+const getManualChunks = (id: string): string | undefined => {
+  if (!id.includes('node_modules')) {
+    return undefined;
+  }
+
+  if (id.includes('react') || id.includes('react-dom')) {
+    return 'vendor-react';
+  }
+  if (id.includes('@storybook')) {
+    if (id.includes('@storybook/core') || id.includes('@storybook/preview')) {
+      return 'vendor-storybook-core';
+    }
+    if (id.includes('@storybook/addon')) {
+      return 'vendor-storybook-addons';
+    }
+    return 'vendor-storybook';
+  }
+  if (id.includes('lucide-react') || id.includes('@tabler')) {
+    return 'vendor-icons';
+  }
+  if (id.includes('next-themes')) {
+    return 'vendor-themes';
+  }
+  return 'vendor';
+};
+
 const config: StorybookConfig = {
-  stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)', '!../node_modules/**'],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-docs',
@@ -13,32 +66,20 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
-  async viteFinal(config) {
-    // チャンクサイズの警告を改善するための設定
-    config.build = config.build || {};
-    // Storybookのテスト用エントリーポイント（vite-inject-mocker-entry.js）が大きいため、閾値を上げる
-    config.build.chunkSizeWarningLimit = 2500; // 2.5MBに引き上げ
-    config.build.rollupOptions = config.build.rollupOptions || {};
+  stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)', '!../node_modules/**'],
+  viteFinal(viteConfig) {
+    viteConfig.build = viteConfig.build || {};
+    /*
+     * Storybookのテスト用エントリーポイント（vite-inject-mocker-entry.js）が大きいため、閾値を上げる
+     */
+    viteConfig.build.chunkSizeWarningLimit = CHUNK_SIZE_WARNING_LIMIT;
+    viteConfig.build.rollupOptions = viteConfig.build.rollupOptions || {};
 
-    // "use client" ディレクティブとチャンクサイズの警告を抑制
-    const originalOnwarn = config.build.rollupOptions.onwarn;
-    config.build.rollupOptions.onwarn = (warning, warn) => {
-      // "use client" 関連の警告をフィルタリング
-      if (
-        warning.message?.includes('use client') ||
-        warning.message?.includes('Module level directives') ||
-        warning.message?.includes("Can't resolve original location")
-      ) {
-        return; // 警告を抑制
+    const originalOnwarn = viteConfig.build.rollupOptions.onwarn;
+    viteConfig.build.rollupOptions.onwarn = (warning, warn) => {
+      if (shouldSuppressWarning(warning.message)) {
+        return;
       }
-      // チャンクサイズの警告を抑制（Storybookのテスト用エントリーポイントが大きいため）
-      if (
-        warning.message?.includes('chunks are larger') ||
-        warning.message?.includes('Some chunks are larger')
-      ) {
-        return; // 警告を抑制
-      }
-      // その他の警告は通常通り処理
       if (originalOnwarn) {
         originalOnwarn(warning, warn);
       } else {
@@ -46,36 +87,12 @@ const config: StorybookConfig = {
       }
     };
 
-    config.build.rollupOptions.output = {
-      ...config.build.rollupOptions.output,
-      manualChunks: (id) => {
-        // node_modulesを別チャンクに分離
-        if (id.includes('node_modules')) {
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'vendor-react';
-          }
-          if (id.includes('@storybook')) {
-            // Storybookのチャンクをさらに分割
-            if (id.includes('@storybook/core') || id.includes('@storybook/preview')) {
-              return 'vendor-storybook-core';
-            }
-            if (id.includes('@storybook/addon')) {
-              return 'vendor-storybook-addons';
-            }
-            return 'vendor-storybook';
-          }
-          if (id.includes('lucide-react') || id.includes('@tabler')) {
-            return 'vendor-icons';
-          }
-          if (id.includes('next-themes')) {
-            return 'vendor-themes';
-          }
-          return 'vendor';
-        }
-      },
+    viteConfig.build.rollupOptions.output = {
+      ...viteConfig.build.rollupOptions.output,
+      manualChunks: getManualChunks,
     };
 
-    return config;
+    return viteConfig;
   },
 };
 export default config;

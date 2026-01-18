@@ -1,22 +1,32 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/* 定数 */
+const CI_RETRIES = 2;
+const LOCAL_RETRIES = 0;
+const CI_WORKERS = 1;
+const WEB_SERVER_TIMEOUT = 120000;
+
+const getRetries = () => {
+  if (process.env.CI) {
+    return CI_RETRIES;
+  }
+  return LOCAL_RETRIES;
+};
+
+const getWorkers = () => {
+  if (process.env.CI) {
+    return CI_WORKERS;
+  }
+  return undefined;
+};
+
 /**
  * Playwright E2E Test Configuration
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './e2e',
+  forbidOnly: Boolean(process.env.CI),
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { open: 'never' }], ['list']],
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-  },
-
   projects: [
     {
       name: 'chromium',
@@ -27,10 +37,6 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
@@ -38,12 +44,24 @@ export default defineConfig({
       name: 'mobile-safari',
       use: { ...devices['iPhone 12'] },
     },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
-
+  reporter: [['html', { open: 'never' }], ['list']],
+  retries: getRetries(),
+  testDir: './e2e',
+  use: {
+    baseURL: 'http://localhost:3000',
+    screenshot: 'only-on-failure',
+    trace: 'on-first-retry',
+  },
   webServer: {
     command: 'pnpm run build && pnpm run start',
-    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: WEB_SERVER_TIMEOUT,
+    url: 'http://localhost:3000',
   },
+  workers: getWorkers(),
 });

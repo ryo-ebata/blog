@@ -11,7 +11,6 @@ const parseResult = envSchema.safeParse({
 });
 
 if (!parseResult.success) {
-  console.error('Environment variable validation failed:', parseResult.error);
   throw new Error('Invalid environment variables');
 }
 

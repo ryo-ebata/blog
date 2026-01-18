@@ -13,7 +13,8 @@
   "rules": {
     "no-console": "warn",
     "react/react-in-jsx-scope": "off",
-    "nextjs/no-html-link-for-pages": "off"
+    "nextjs/no-html-link-for-pages": "off",
+    "sort-imports": ["warn", { "ignoreDeclarationSort": true }]
   },
   "overrides": [
     {
@@ -25,7 +26,55 @@
     {
       "files": ["**/*.test.tsx", "**/*.test.ts"],
       "rules": {
-        "nextjs/no-img-element": "off"
+        "nextjs/no-img-element": "off",
+        "max-lines-per-function": "off",
+        "new-cap": "off",
+        "arrow-body-style": "off",
+        "react/jsx-props-no-spreading": "off"
+      }
+    },
+    {
+      "files": ["**/*.stories.tsx", "**/*.stories.ts"],
+      "rules": {
+        "max-lines-per-function": "off"
+      }
+    },
+    {
+      "files": [".storybook/**/*.ts", ".storybook/**/*.tsx"],
+      "rules": {
+        "max-lines-per-function": "off",
+        "max-statements": "off"
+      }
+    },
+    {
+      "files": [
+        "components/atoms/empty.tsx",
+        "components/atoms/table.tsx",
+        "components/atoms/button.tsx",
+        "components/organisms/article-card/article-card.tsx"
+      ],
+      "rules": {
+        "react/jsx-props-no-spreading": "off"
+      }
+    },
+    {
+      "files": ["lib/content.ts"],
+      "rules": {
+        "no-ternary": "off",
+        "max-statements": "off",
+        "max-lines": "off"
+      }
+    },
+    {
+      "files": ["app/**/container.tsx"],
+      "rules": {
+        "react/jsx-max-depth": "off"
+      }
+    },
+    {
+      "files": ["components/organisms/content-link-card/content-link-card.tsx"],
+      "rules": {
+        "max-statements": "off"
       }
     }
   ],

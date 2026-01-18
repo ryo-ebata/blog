@@ -1,22 +1,29 @@
-export interface PaginationResult<T> {
-  items: T[];
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 10;
+
+export interface PaginationResult<TItem> {
   currentPage: number;
-  totalPages: number;
+  items: TItem[];
   totalItems: number;
+  totalPages: number;
 }
 
-export function paginateItems<T>(items: T[], page = 1, pageSize = 10): PaginationResult<T> {
+export const paginateItems = <TItem>(
+  items: TItem[],
+  page = DEFAULT_PAGE,
+  pageSize = DEFAULT_PAGE_SIZE
+): PaginationResult<TItem> => {
   const totalItems = items.length;
   const totalPages = Math.ceil(totalItems / pageSize);
-  const currentPage = Math.max(1, Math.min(page, totalPages));
+  const currentPage = Math.max(DEFAULT_PAGE, Math.min(page, totalPages));
 
-  const startIndex = (currentPage - 1) * pageSize;
+  const startIndex = (currentPage - DEFAULT_PAGE) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalItems);
 
   return {
-    items: items.slice(startIndex, endIndex),
     currentPage,
-    totalPages,
+    items: items.slice(startIndex, endIndex),
     totalItems,
+    totalPages,
   };
-}
+};

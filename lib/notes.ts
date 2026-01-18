@@ -1,38 +1,43 @@
-import path from 'node:path';
 import { unstable_cache } from 'next/cache';
-import type { BaseContentData, BaseContentMetadata } from './content';
-import { getAllContent, getAllContentMetadataInternal, getContentBySlug } from './content';
+import path from 'node:path';
+import {
+  type BaseContentData,
+  type BaseContentMetadata,
+  getAllContent,
+  getAllContentMetadataInternal,
+  getContentBySlug,
+} from './content';
 
 const notesDirectory = path.join(process.cwd(), 'notes');
 
-// NoteMetadataはBaseContentMetadataのエイリアス
+/* NoteMetadataはBaseContentMetadataのエイリアス */
 export type NoteMetadata = BaseContentMetadata;
 
-// NoteDataはBaseContentDataのエイリアス
+/* NoteDataはBaseContentDataのエイリアス */
 export type NoteData = BaseContentData;
 
-// メタデータのみを取得（内部実装）
-async function getAllNotesMetadataInternal() {
-  return getAllContentMetadataInternal(notesDirectory);
-}
+/* メタデータのみを取得（内部実装） */
+const getAllNotesMetadataInternal = () =>
+  Promise.resolve(getAllContentMetadataInternal(notesDirectory));
 
-// すべてのノートのメタデータを取得（キャッシュ付き）
+/* すべてのノートのメタデータを取得（キャッシュ付き） */
+const REVALIDATE_INTERVAL_SECONDS = 3600;
+
 export const getAllNotesMetadata = unstable_cache(
   getAllNotesMetadataInternal,
   ['all-notes-metadata'],
   {
-    revalidate: 3600, // 1時間ごとに再検証
+    revalidate: REVALIDATE_INTERVAL_SECONDS,
     tags: ['notes'],
   }
 );
 
-// すべてのノートを取得（メタデータ + Content）
-export async function getAllNotes(): Promise<NoteData[]> {
+/* すべてのノートを取得（メタデータ + Content） */
+export const getAllNotes = async (): Promise<NoteData[]> => {
   const notesWithFiles = await getAllNotesMetadata();
   return getAllContent(notesDirectory, notesWithFiles);
-}
+};
 
-// スラッグからノートを取得
-export async function getNoteBySlug(slug: string | string[]): Promise<NoteData> {
-  return getContentBySlug(slug, notesDirectory, 'Note');
-}
+/* スラッグからノートを取得 */
+export const getNoteBySlug = (slug: string | string[]): Promise<NoteData> =>
+  getContentBySlug(slug, notesDirectory, 'Note');

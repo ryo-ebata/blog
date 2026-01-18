@@ -2,6 +2,90 @@ import type { Link, Paragraph, Root, Text } from 'mdast';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 
+const FIRST_ELEMENT_INDEX = 0;
+const SINGLE_ELEMENT_LENGTH = 1;
+
+/**
+ * MDX JSXノードを生成
+ */
+const createContentLinkCardNode = (url: string) => ({
+  attributes: [
+    {
+      name: 'url',
+      type: 'mdxJsxAttribute',
+      value: url,
+    },
+  ],
+  children: [],
+  name: 'ContentLinkCard',
+  type: 'mdxJsxFlowElement',
+});
+
+/**
+ * 外部URLかどうかを判定
+ */
+const isExternalUrl = (url: string): boolean =>
+  url.startsWith('http://') || url.startsWith('https://');
+
+/**
+ * URLパターンにマッチするかを判定
+ */
+const isUrlPattern = (text: string): boolean => /^https?:\/\/[^\s]+$/.test(text);
+
+/**
+ * 空白以外の子要素を抽出
+ */
+const getNonWhitespaceChildren = (children: Paragraph['children']) =>
+  children.filter((child) => {
+    if (child.type === 'text') {
+      return (child as Text).value.trim() !== '';
+    }
+    return true;
+  });
+
+/**
+ * リンク要素を処理してContentLinkCardに変換
+ */
+const processLinkElement = (
+  nonWhitespaceChildren: Paragraph['children'],
+  parent: Root,
+  index: number
+): boolean => {
+  const firstChild = nonWhitespaceChildren[FIRST_ELEMENT_INDEX];
+  if (firstChild.type !== 'link') {
+    return false;
+  }
+
+  const link = firstChild as Link;
+  const { url } = link;
+
+  if (isExternalUrl(url)) {
+    (parent.children as unknown[])[index] = createContentLinkCardNode(url);
+    return true;
+  }
+  return false;
+};
+
+/**
+ * テキスト要素（Autolink）を処理してContentLinkCardに変換
+ */
+const processTextElement = (
+  nonWhitespaceChildren: Paragraph['children'],
+  parent: Root,
+  index: number
+): void => {
+  const firstChild = nonWhitespaceChildren[FIRST_ELEMENT_INDEX];
+  if (firstChild.type !== 'text') {
+    return;
+  }
+
+  const text = (firstChild as Text).value.trim();
+
+  if (isUrlPattern(text)) {
+    (parent.children as unknown[])[index] = createContentLinkCardNode(text);
+  }
+};
+
 /**
  * 段落内に単独のリンクのみが含まれている場合、
  * ContentLinkCardコンポーネントに変換するremarkプラグイン
@@ -11,67 +95,25 @@ import { visit } from 'unist-util-visit';
  * - `[リンク](https://example.com)` (単独行) → ContentLinkCardに変換
  * - `これは[リンク](https://example.com)です` → そのまま（インライン）
  */
-export const remarkLinkCard: Plugin<[], Root> = () => {
-  return (tree: Root) => {
-    visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
-      if (index === undefined || !parent) return;
+export const remarkLinkCard: Plugin<[], Root> = () => (tree: Root) => {
+  visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
+    if (index === undefined || !parent) {
+      return;
+    }
 
-      // 段落の子要素を確認
-      const children = node.children;
+    const nonWhitespaceChildren = getNonWhitespaceChildren(node.children);
 
-      // 単一のリンクのみ、または空白+リンク+空白のパターンを検出
-      const nonWhitespaceChildren = children.filter((child) => {
-        if (child.type === 'text') {
-          return (child as Text).value.trim() !== '';
-        }
-        return true;
-      });
+    if (nonWhitespaceChildren.length !== SINGLE_ELEMENT_LENGTH) {
+      return;
+    }
 
-      // 単一のリンク要素のみの場合
-      if (nonWhitespaceChildren.length === 1 && nonWhitespaceChildren[0].type === 'link') {
-        const link = nonWhitespaceChildren[0] as Link;
-        const url = link.url;
+    /* 単一のリンク要素の場合 */
+    const processed = processLinkElement(nonWhitespaceChildren, parent as Root, index);
+    if (processed) {
+      return;
+    }
 
-        // 外部リンクのみ対象（httpまたはhttpsで始まる）
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-          return;
-        }
-
-        // MDX JSXノードに変換
-        (parent.children as unknown[])[index] = {
-          type: 'mdxJsxFlowElement',
-          name: 'ContentLinkCard',
-          attributes: [
-            {
-              type: 'mdxJsxAttribute',
-              name: 'url',
-              value: url,
-            },
-          ],
-          children: [],
-        };
-      }
-
-      // autolink（URLがそのまま書かれている）の場合も対応
-      if (nonWhitespaceChildren.length === 1 && nonWhitespaceChildren[0].type === 'text') {
-        const text = (nonWhitespaceChildren[0] as Text).value.trim();
-
-        // URLパターンにマッチするか確認
-        if (/^https?:\/\/[^\s]+$/.test(text)) {
-          (parent.children as unknown[])[index] = {
-            type: 'mdxJsxFlowElement',
-            name: 'ContentLinkCard',
-            attributes: [
-              {
-                type: 'mdxJsxAttribute',
-                name: 'url',
-                value: text,
-              },
-            ],
-            children: [],
-          };
-        }
-      }
-    });
-  };
+    /* Autolink（URLがそのまま書かれている）の場合 */
+    processTextElement(nonWhitespaceChildren, parent as Root, index);
+  });
 };

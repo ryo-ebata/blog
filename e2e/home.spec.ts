@@ -25,7 +25,7 @@ test.describe('Home Page', () => {
     await page.goto('/');
 
     // ヘッダーのBlogリンクをクリック（タグリンクと区別するためexact: trueを使用）
-    const blogLink = page.getByRole('link', { name: 'Blog', exact: true });
+    const blogLink = page.getByRole('link', { exact: true, name: 'Blog' });
     if (await blogLink.isVisible()) {
       await blogLink.click();
       await expect(page).toHaveURL(/\/blog/);

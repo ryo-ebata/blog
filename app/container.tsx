@@ -1,23 +1,22 @@
-import { getAllPosts } from '@/lib/posts';
-import type { QiitaArticle } from '@/utils/qiita';
-import { getQiitaArticles } from '@/utils/qiita';
-import type { ZennArticle } from '@/utils/zenn';
-import { getZennArticles } from '@/utils/zenn';
+import { type QiitaArticle, getQiitaArticles } from '@/lib/external/qiita';
+import { type ZennArticle, getZennArticles } from '@/lib/external/zenn';
 import { HomePresenter } from './presenter';
+import { getAllPosts } from '@/lib/posts';
 
 type ArticleItem =
-  | { type: 'zenn'; article: ZennArticle }
-  | { type: 'qiita'; article: QiitaArticle };
+  | { article: ZennArticle; type: 'zenn' }
+  | { article: QiitaArticle; type: 'qiita' };
 
 interface ArticleWithLikes {
-  type: 'zenn' | 'qiita';
   article: ZennArticle | QiitaArticle;
   likesCount: number;
+  type: 'zenn' | 'qiita';
 }
 
+const SLICE_START_INDEX = 0;
 const MAX_EXTERNAL_ARTICLES = 5;
 
-export async function HomeContainer() {
+export const HomeContainer = async () => {
   const [posts, zennArticlesResponse, qiitaArticles] = await Promise.all([
     getAllPosts(),
     getZennArticles(),
@@ -26,29 +25,29 @@ export async function HomeContainer() {
 
   const zennArticles = zennArticlesResponse.articles;
 
-  // Zenn記事とQiita記事をマージしていいね数でソート（最大5件）
+  /* Zenn記事とQiita記事をマージしていいね数でソート（最大5件） */
   const articlesWithLikes: ArticleWithLikes[] = [
     ...zennArticles.map((article) => ({
-      type: 'zenn' as const,
       article,
       likesCount: article.liked_count,
+      type: 'zenn' as const,
     })),
     ...qiitaArticles.map((article) => ({
-      type: 'qiita' as const,
       article,
       likesCount: article.likes_count,
+      type: 'qiita' as const,
     })),
   ];
 
   const allArticles: ArticleItem[] = articlesWithLikes
-    .sort((a, b) => b.likesCount - a.likesCount)
-    .slice(0, MAX_EXTERNAL_ARTICLES)
-    .map(({ type, article }): ArticleItem => {
+    .sort((itemA, itemB) => itemB.likesCount - itemA.likesCount)
+    .slice(SLICE_START_INDEX, MAX_EXTERNAL_ARTICLES)
+    .map(({ article, type }): ArticleItem => {
       if (type === 'zenn') {
-        return { type: 'zenn', article: article as ZennArticle };
+        return { article: article as ZennArticle, type: 'zenn' };
       }
-      return { type: 'qiita', article: article as QiitaArticle };
+      return { article: article as QiitaArticle, type: 'qiita' };
     });
 
-  return <HomePresenter posts={posts.map((post) => post.metadata)} articles={allArticles} />;
-}
+  return <HomePresenter articles={allArticles} posts={posts.map((post) => post.metadata)} />;
+};

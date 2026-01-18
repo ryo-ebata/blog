@@ -7,7 +7,7 @@ test.describe('Accessibility', () => {
     test(`should have lang attribute on ${path}`, async ({ page }) => {
       await page.goto(path);
 
-      // html要素にlang属性があることを確認
+      // Html要素にlang属性があることを確認
       const lang = await page.locator('html').getAttribute('lang');
       expect(lang).toBe('ja');
     });

@@ -1,22 +1,22 @@
 'use client';
 
-import { parseAsString, useQueryState } from 'nuqs';
 import {
-  createContext,
   type ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
+import { parseAsString, useQueryState } from 'nuqs';
 
 type Theme = 'light' | 'dark' | 'system';
 
 interface ThemeContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
   actualTheme: 'light' | 'dark';
+  setTheme: (theme: Theme) => void;
+  theme: Theme;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -25,24 +25,56 @@ const themeParser = parseAsString.withDefault('dark').withOptions({
   clearOnDefault: true,
 });
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [queryTheme, setQueryTheme] = useQueryState('theme', themeParser);
+const resolveActualTheme = (theme: Theme, prefersDark: boolean): 'dark' | 'light' => {
+  if (theme === 'dark') {
+    return 'dark';
+  }
+  if (theme === 'light') {
+    return 'light';
+  }
+  if (prefersDark) {
+    return 'dark';
+  }
+  return 'light';
+};
+
+const applyThemeToDOM = (actualTheme: 'dark' | 'light'): void => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  if (actualTheme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+};
+
+const resolveThemeFromQuery = (queryTheme: string | null): Theme => {
+  if (queryTheme === 'light' || queryTheme === 'dark' || queryTheme === 'system') {
+    return queryTheme;
+  }
+  return 'dark';
+};
+
+const usePreferColorScheme = (queryTheme: string | null) => {
   const [preferColorSchemeIsDark, setPreferColorSchemeIsDark] = useState(false);
 
   useEffect(() => {
-    // クライアントサイドでのみ実行
+    /* クライアントサイドでのみ実行 */
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setPreferColorSchemeIsDark(mediaQuery.matches);
 
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPreferColorSchemeIsDark(e.matches);
-      // イベントハンドラ内でのDOM操作は許容される
-      // systemテーマの場合、OS設定の変更に応じてDOMを更新
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPreferColorSchemeIsDark(event.matches);
+      /*
+       * イベントハンドラ内でのDOM操作は許容される
+       * Systemテーマの場合、OS設定の変更に応じてDOMを更新
+       */
       if (queryTheme === 'system' || queryTheme === null) {
-        if (e.matches) {
-          document.documentElement.classList.add('dark');
+        if (event.matches) {
+          applyThemeToDOM('dark');
         } else {
-          document.documentElement.classList.remove('dark');
+          applyThemeToDOM('light');
         }
       }
     };
@@ -51,67 +83,60 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [queryTheme]);
 
+  return preferColorSchemeIsDark;
+};
+
+const useThemeState = () => {
+  const [queryTheme, setQueryTheme] = useQueryState('theme', themeParser);
+  const preferColorSchemeIsDark = usePreferColorScheme(queryTheme);
+
   const actualTheme = useMemo(() => {
     const currentTheme = queryTheme ?? 'dark';
-    if (currentTheme === 'dark') return 'dark';
-    if (currentTheme === 'light') return 'light';
-    // theme === 'system' の場合はOS設定を反映
-    return preferColorSchemeIsDark ? 'dark' : 'light';
+    /* Theme === 'system' の場合はOS設定を反映 */
+    return resolveActualTheme(currentTheme as Theme, preferColorSchemeIsDark);
   }, [queryTheme, preferColorSchemeIsDark]);
 
-  // テーマを更新する関数
-  // イベントハンドラ内でのDOM操作は許容される
+  /*
+   * テーマを更新する関数
+   * イベントハンドラ内でのDOM操作は許容される
+   */
   const updateTheme = useCallback(
     (newTheme: Theme) => {
       if (newTheme === 'system') {
         setQueryTheme('system');
       } else if (newTheme === 'dark') {
-        setQueryTheme(null); // デフォルト値なのでクエリパラメータをクリア
+        /* デフォルト値なのでクエリパラメータをクリア */
+        setQueryTheme(null);
       } else {
         setQueryTheme(newTheme);
       }
-
-      // イベントハンドラ内でのDOM操作は許容される
-      // 新しいテーマに基づいてDOMを更新
-      const newActualTheme =
-        newTheme === 'system'
-          ? preferColorSchemeIsDark
-            ? 'dark'
-            : 'light'
-          : newTheme === 'light'
-            ? 'light'
-            : 'dark';
-
-      if (typeof document !== 'undefined') {
-        if (newActualTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      }
+      const newActualTheme = resolveActualTheme(newTheme, preferColorSchemeIsDark);
+      applyThemeToDOM(newActualTheme);
     },
     [preferColorSchemeIsDark, setQueryTheme]
   );
 
   const value: ThemeContextValue = useMemo(() => {
-    const theme: Theme =
-      queryTheme === 'light' || queryTheme === 'dark' || queryTheme === 'system'
-        ? queryTheme
-        : 'dark';
+    const theme = resolveThemeFromQuery(queryTheme);
     return {
-      theme,
-      setTheme: updateTheme,
       actualTheme,
+      setTheme: updateTheme,
+      theme,
     };
   }, [queryTheme, actualTheme, updateTheme]);
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
-}
+  return value;
+};
 
-export function useTheme() {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const value = useThemeState();
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+};
+
+export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within ThemeProvider');
   }
   return context;
-}
+};
