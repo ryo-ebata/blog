@@ -38,6 +38,9 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      hast-util-to-jsx-runtime:
+        specifier: ^2.3.6
+        version: 2.3.6
       isomorphic-dompurify:
         specifier: ^2.33.0
         version: 2.35.0

@@ -1,3 +1,4 @@
+/* oxlint-disable max-lines -- 関連機能を1ファイルにまとめるため許容 */
 'use client';
 
 import { type BubbleState, type BubbleTagFilterProps, createInitialState } from './types';

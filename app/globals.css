@@ -1,10 +1,18 @@
-@import 'tailwindcss';
+/* ==============================================
+   レイヤー順序の定義
+   ============================================== */
+@layer reset, base, vendor, components, utilities, overrides;
+
+@import 'tailwindcss' layer(vendor);
 
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
+/* ==============================================
+   Tailwind テーマ設定
+   ============================================== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,183 +53,175 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: #fdfdfd;
-  --foreground: oklch(0.145 0 0);
-  --card: #fdfdfd;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: #fdfdfd;
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+@layer reset {
+  /*
+  Josh W. Comeau's Custom CSS Reset
+  www.joshwcomeau.com
+*/
 
-.dark {
-  --background: #0d1117;
-  --foreground: #c9d1d9;
-  --card: #161b22;
-  --card-foreground: #c9d1d9;
-  --popover: #161b22;
-  --popover-foreground: #c9d1d9;
-  --primary: #58a6ff;
-  --primary-foreground: #0d1117;
-  --secondary: #21262d;
-  --secondary-foreground: #c9d1d9;
-  --muted: #21262d;
-  --muted-foreground: #8b949e;
-  --accent: #1f6feb;
-  --accent-foreground: #c9d1d9;
-  --destructive: #f85149;
-  --border: #30363d;
-  --input: #21262d;
-  --ring: #58a6ff;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: #161b22;
-  --sidebar-foreground: #c9d1d9;
-  --sidebar-primary: #58a6ff;
-  --sidebar-primary-foreground: #0d1117;
-  --sidebar-accent: #21262d;
-  --sidebar-accent-foreground: #c9d1d9;
-  --sidebar-border: #30363d;
-  --sidebar-ring: #58a6ff;
-}
+  /* 1. ボックスモデルの修正：余白や境界線が幅を壊さないようにする */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-@layer base {
+  /* 2. デフォルトの余白を削除 */
   * {
-    @apply border-border outline-ring/50;
+    margin: 0;
   }
+
+  /* 3. 本文の行間を整え、フォントのレンダリングを滑らかにする */
   body {
-    @apply bg-background text-foreground;
-
-    /*
-      デフォルトは無効のため、bodyで一律で有効化
-    */
-    text-autospace: normal;
-
-    /*
-      長い英単語のレイアウト突き抜けを防止
-      word-break: break-all; は英単語を強制的に折り返してしまう
-      word-wrapは古い
-    */
-    overflow-wrap: anywhere;
-    word-break: normal;
-
-    /*
-      子音や」、。が行頭に来ないように指定
-    */
-    line-break: strict;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
-  html {
-    @apply bg-white dark:bg-[#0d1117];
+
+  /* 4. メディア要素（画像など）がはみ出さないようにし、ブロック要素化する */
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* 5. フォーム要素が親のフォント設定を無視するのを防ぐ */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  /* 6. 長い単語が画面からはみ出して横スクロールが出るのを防ぐ */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  /* 7. ルート（#rootや#__nextなど）にスタック文脈を作成する（Reactなどのフレームワーク用） */
+  #root,
+  #__next {
+    isolation: isolate;
   }
 }
 
 /* ==============================================
-   コードブロック (rehype-pretty-code / Shiki)
+   Base レイヤー: CSS変数・基本スタイル
    ============================================== */
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    --background: #fdfdfd;
+    --foreground: oklch(0.145 0 0);
+    --card: #fdfdfd;
+    --card-foreground: oklch(0.145 0 0);
+    --popover: #fdfdfd;
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
 
-/* タイトル表示 */
-[data-rehype-pretty-code-title] {
-  @apply rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
+  .dark {
+    --background: #0d1117;
+    --foreground: #c9d1d9;
+    --card: #161b22;
+    --card-foreground: #c9d1d9;
+    --popover: #161b22;
+    --popover-foreground: #c9d1d9;
+    --primary: #58a6ff;
+    --primary-foreground: #0d1117;
+    --secondary: #21262d;
+    --secondary-foreground: #c9d1d9;
+    --muted: #21262d;
+    --muted-foreground: #8b949e;
+    --accent: #1f6feb;
+    --accent-foreground: #c9d1d9;
+    --destructive: #f85149;
+    --border: #30363d;
+    --input: #21262d;
+    --ring: #58a6ff;
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: #161b22;
+    --sidebar-foreground: #c9d1d9;
+    --sidebar-primary: #58a6ff;
+    --sidebar-primary-foreground: #0d1117;
+    --sidebar-accent: #21262d;
+    --sidebar-accent-foreground: #c9d1d9;
+    --sidebar-border: #30363d;
+    --sidebar-ring: #58a6ff;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-white dark:bg-[#0d1117];
+  }
+
+  body {
+    @apply bg-background text-foreground;
+
+    /* デフォルトは無効のため、bodyで一律で有効化 */
+    text-autospace: normal;
+
+    /* 長い英単語のレイアウト突き抜けを防止 */
+    overflow-wrap: anywhere;
+    word-break: normal;
+
+    /* 子音や」、。が行頭に来ないように指定 */
+    line-break: strict;
+  }
 }
 
-[data-rehype-pretty-code-title] + pre {
-  @apply rounded-t-none;
-}
+/* ==============================================
+   Vendor レイヤー: サードパーティライブラリのスタイル
+   ============================================== */
+@layer vendor {
+  /* ------------------------------------------
+     Tailwind Typography: インラインコード
+     ------------------------------------------ */
+  .prose :where(code):not(:where(pre code, [class~='not-prose'], [class~='not-prose'] *)) {
+    @apply rounded bg-muted px-1.5 py-0.5 text-sm font-normal;
+  }
 
-/* キャプション表示 */
-[data-rehype-pretty-code-caption] {
-  @apply border border-t-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
-}
-
-/* pre要素の基本スタイル */
-pre[data-theme] {
-  @apply overflow-x-auto rounded-lg border border-border;
-}
-
-/* コード行の基本スタイル */
-pre [data-line] {
-  @apply border-l-2 border-transparent px-4;
-}
-
-/* 行番号表示 */
-code[data-line-numbers] {
-  counter-reset: line;
-}
-
-code[data-line-numbers] > [data-line]::before {
-  counter-increment: line;
-  content: counter(line);
-  @apply mr-6 inline-block w-4 text-right text-muted-foreground;
-}
-
-code[data-line-numbers-max-digits='2'] > [data-line]::before {
-  @apply w-6;
-}
-
-code[data-line-numbers-max-digits='3'] > [data-line]::before {
-  @apply w-8;
-}
-
-/* 行ハイライト */
-[data-line][data-highlighted-line] {
-  @apply border-l-primary bg-primary/10;
-}
-
-/* 文字ハイライト */
-[data-highlighted-chars] {
-  @apply rounded bg-primary/20 px-1;
-}
-
-/* Diff表示: 追加行 */
-[data-line].diff.add {
-  @apply border-l-green-500 bg-green-500/15;
-}
-
-[data-line].diff.add::before {
-  content: '+';
-  @apply mr-2 text-green-500;
-}
-
-/* Diff表示: 削除行 */
-[data-line].diff.remove {
-  @apply border-l-red-500 bg-red-500/15;
-}
-
-[data-line].diff.remove::before {
-  content: '-';
-  @apply mr-2 text-red-500;
-}
-
-/* ハイライト表示 (transformerNotationHighlight) */
-[data-line].highlighted {
-  @apply border-l-yellow-500 bg-yellow-500/15;
+  .prose :where(code):not(:where(pre code, [class~='not-prose'], [class~='not-prose'] *))::before,
+  .prose :where(code):not(:where(pre code, [class~='not-prose'], [class~='not-prose'] *))::after {
+    content: none;
+  }
 }

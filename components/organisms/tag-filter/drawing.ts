@@ -1,3 +1,4 @@
+/* oxlint-disable max-lines -- 描画関連の関数を1ファイルにまとめるため許容 */
 import type { BubbleState, TagBubble } from './types';
 
 import { getBgGradientColor, getBubbleColor, getTextColor } from './constants';

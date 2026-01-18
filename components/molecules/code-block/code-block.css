@@ -1,0 +1,114 @@
+@reference '../../../app/globals.css';
+
+/* ==============================================
+   CodeBlock コンポーネントスタイル
+   ============================================== */
+
+@layer components {
+  .code-block-wrapper {
+    @apply my-4;
+  }
+
+  /* タイトル表示 */
+  .code-block-title {
+    @apply rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
+  }
+
+  .code-block-title + .code-block-content pre {
+    @apply rounded-t-none;
+  }
+
+  /* pre要素の基本スタイル */
+  .code-block-content pre {
+    @apply overflow-x-auto rounded-lg border border-border;
+  }
+
+  /* コード行の基本スタイル */
+  .code-block-content pre [data-line] {
+    @apply border-l-2 border-transparent px-4;
+  }
+
+  /* ==============================================
+   デュアルテーマ: CSS変数ベース
+   shikiがspan要素に--shiki-light, --shiki-darkを設定
+   ============================================== */
+  .code-block-content pre,
+  .code-block-content pre span {
+    color: var(--shiki-light);
+    background-color: var(--shiki-light-bg);
+  }
+
+  .dark .code-block-content pre,
+  .dark .code-block-content pre span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+
+  /* ==============================================
+   行番号表示
+   ============================================== */
+  pre[data-line-numbers] code {
+    counter-reset: line;
+  }
+
+  pre[data-line-numbers] [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply mr-6 inline-block w-4 text-right text-muted-foreground;
+  }
+
+  pre[data-line-numbers] code[data-line-numbers-max-digits='2'] > [data-line]::before {
+    @apply w-6;
+  }
+
+  pre[data-line-numbers] code[data-line-numbers-max-digits='3'] > [data-line]::before {
+    @apply w-8;
+  }
+
+  /* ==============================================
+   行ハイライト
+   ============================================== */
+  [data-line].highlighted {
+    @apply border-l-yellow-500 bg-yellow-500/15;
+  }
+
+  [data-line].highlighted span {
+    background-color: transparent;
+  }
+
+  /* ==============================================
+   Diff表示
+   ============================================== */
+  [data-line].diff.add {
+    @apply border-l-green-500 bg-green-500/15;
+  }
+
+  [data-line].diff.add span {
+    background-color: transparent;
+  }
+
+  [data-line].diff.add::before {
+    content: '+';
+    @apply mr-2 text-green-500;
+  }
+
+  [data-line].diff.remove {
+    @apply border-l-red-500 bg-red-500/15;
+  }
+
+  [data-line].diff.remove span {
+    background-color: transparent;
+  }
+
+  [data-line].diff.remove::before {
+    content: '-';
+    @apply mr-2 text-red-500;
+  }
+
+  /* ==============================================
+   文字ハイライト (// [!code highlight])
+   ============================================== */
+  [data-highlighted-chars] {
+    @apply rounded bg-primary/20 px-1;
+  }
+}
