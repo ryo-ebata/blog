@@ -1,8 +1,8 @@
 'use client';
 
 import {
-  createContext,
   type ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -36,7 +36,7 @@ export function StorybookThemeProvider({ children }: { children: ReactNode }) {
     const handleChange = (e: MediaQueryListEvent) => {
       setPreferColorSchemeIsDark(e.matches);
       // イベントハンドラ内でのDOM操作は許容される
-      // systemテーマの場合、OS設定の変更に応じてDOMを更新
+      // Systemテーマの場合、OS設定の変更に応じてDOMを更新
       if (theme === 'system') {
         if (e.matches) {
           document.documentElement.classList.add('dark');
@@ -51,9 +51,9 @@ export function StorybookThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const actualTheme = useMemo(() => {
-    if (theme === 'dark') return 'dark';
-    if (theme === 'light') return 'light';
-    // theme === 'system' の場合はOS設定を反映
+    if (theme === 'dark') {return 'dark';}
+    if (theme === 'light') {return 'light';}
+    // Theme === 'system' の場合はOS設定を反映
     return preferColorSchemeIsDark ? 'dark' : 'light';
   }, [theme, preferColorSchemeIsDark]);
 
@@ -85,13 +85,11 @@ export function StorybookThemeProvider({ children }: { children: ReactNode }) {
     [preferColorSchemeIsDark]
   );
 
-  const value: ThemeContextValue = useMemo(() => {
-    return {
+  const value: ThemeContextValue = useMemo(() => ({
       theme,
       setTheme: updateTheme,
       actualTheme,
-    };
-  }, [theme, actualTheme, updateTheme]);
+    }), [theme, actualTheme, updateTheme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

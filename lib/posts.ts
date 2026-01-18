@@ -43,7 +43,7 @@ export function isFuturePost(
     updatedDate.getDate()
   );
 
-  // createdAtまたはupdatedAtが未来日付の場合、予約投稿とみなす
+  // CreatedAtまたはupdatedAtが未来日付の場合、予約投稿とみなす
   // 同じ日付の場合は表示する（> ではなく >= を使わない）
   return createdDateOnly > todayDateOnly || updatedDateOnly > todayDateOnly;
 }

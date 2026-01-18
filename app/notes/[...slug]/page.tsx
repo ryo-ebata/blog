@@ -25,26 +25,26 @@ export async function generateMetadata({ params }: Props) {
 
     return {
       ...generatePageMetadata({
-        title: note.metadata.title,
-        description: note.metadata.description || siteConfig.description,
-        url: noteUrl,
-        type: 'article',
-        imageAlt: note.metadata.title,
-        publishedTime: note.metadata.createdAt,
-        modifiedTime: note.metadata.updatedAt,
         authors: note.metadata.author ? [note.metadata.author] : undefined,
+        description: note.metadata.description || siteConfig.description,
+        imageAlt: note.metadata.title,
+        modifiedTime: note.metadata.updatedAt,
+        publishedTime: note.metadata.createdAt,
         tags: note.metadata.tags,
+        title: note.metadata.title,
+        type: 'article',
+        url: noteUrl,
       }),
       robots: {
-        index: false,
         follow: true,
+        index: false,
       },
     };
   } catch {
     return {
       robots: {
-        index: false,
         follow: true,
+        index: false,
       },
     };
   }

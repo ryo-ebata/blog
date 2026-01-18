@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Container } from '@/components/composites/container';
+import { Container } from '@/components/organisms';
 import { getNoteBySlug } from '@/lib/notes';
 import { NotesPostPresenter } from './presenter';
 

@@ -1,5 +1,5 @@
-import { Container } from '@/components/composites/container';
-import { BackLink } from '@/components/elements';
+import { BackLink } from '@/components/atoms';
+import { Container } from '@/components/organisms';
 
 export default function NotFound() {
   return (

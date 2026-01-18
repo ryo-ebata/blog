@@ -1,11 +1,10 @@
 'use client';
 
-import { ArticleCard } from '@/components/composites/article-card/article-card';
-import { Container } from '@/components/composites/container';
-import { BackLink } from '@/components/elements';
+import { BackLink } from '@/components/atoms';
+import { ArticleCard, Container } from '@/components/organisms';
+import type { QiitaArticle } from '@/lib/external/qiita';
+import type { ZennArticle } from '@/lib/external/zenn';
 import type { PostMetadata } from '@/lib/posts';
-import type { QiitaArticle } from '@/utils/qiita';
-import type { ZennArticle } from '@/utils/zenn';
 
 type ArticleItem =
   | { type: 'zenn'; article: ZennArticle }
@@ -49,7 +48,7 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                   date={post.createdAt}
                   tags={post.tags}
                   description={post.description}
-                  icon={post.icon ? { type: 'icon', name: post.icon } : undefined}
+                  icon={post.icon ? { name: post.icon, type: 'icon' } : undefined}
                   isExternal={false}
                 />
               ))}
@@ -74,8 +73,8 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                     href={`https://zenn.dev${item.article.path}`}
                     date={item.article.published_at}
                     tags={[item.article.post_type]}
-                    icon={{ type: 'emoji', emoji: item.article.emoji }}
-                    isExternal={true}
+                    icon={{ emoji: item.article.emoji, type: 'emoji' }}
+                    isExternal
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 ) : (
@@ -86,11 +85,11 @@ export function HomePresenter({ posts, articles }: HomePresenterProps) {
                     date={item.article.created_at}
                     tags={item.article.tags.length > 0 ? [item.article.tags[0].name] : []}
                     icon={{
-                      type: 'image',
-                      src: '/image/qiita-icon/qiita-icon.png',
                       alt: item.article.user.name,
+                      src: '/image/qiita-icon/qiita-icon.png',
+                      type: 'image',
                     }}
-                    isExternal={true}
+                    isExternal
                     priority={index === 0 && shouldPrioritizeFirstArticle}
                   />
                 )

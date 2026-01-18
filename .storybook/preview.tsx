@@ -4,6 +4,15 @@ import { StorybookThemeProvider } from './ThemeProviderWrapper';
 import '../app/globals.css';
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <NuqsAdapter>
+        <StorybookThemeProvider>
+          <Story />
+        </StorybookThemeProvider>
+      </NuqsAdapter>
+    ),
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -19,15 +28,6 @@ const preview: Preview = {
       test: 'todo',
     },
   },
-  decorators: [
-    (Story) => (
-      <NuqsAdapter>
-        <StorybookThemeProvider>
-          <Story />
-        </StorybookThemeProvider>
-      </NuqsAdapter>
-    ),
-  ],
 };
 
 export default preview;

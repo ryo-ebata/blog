@@ -7,8 +7,8 @@ import { HomeContainer } from './container';
 export const revalidate = 3600; // 1時間ごとに再検証
 
 export const metadata = generatePageMetadata({
-  title: siteConfig.name,
   description: siteConfig.description,
+  title: siteConfig.name,
   url: siteConfig.url,
 });
 

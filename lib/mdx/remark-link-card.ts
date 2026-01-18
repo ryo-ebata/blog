@@ -11,8 +11,7 @@ import { visit } from 'unist-util-visit';
  * - `[リンク](https://example.com)` (単独行) → ContentLinkCardに変換
  * - `これは[リンク](https://example.com)です` → そのまま（インライン）
  */
-export const remarkLinkCard: Plugin<[], Root> = () => {
-  return (tree: Root) => {
+export const remarkLinkCard: Plugin<[], Root> = () => (tree: Root) => {
     visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
       if (index === undefined || !parent) return;
 
@@ -74,4 +73,3 @@ export const remarkLinkCard: Plugin<[], Root> = () => {
       }
     });
   };
-};

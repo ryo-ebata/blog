@@ -4,35 +4,35 @@ import { filterPostsByTitle } from './search';
 
 const mockPosts: PostMetadata[] = [
   {
-    slug: 'react-hooks',
-    title: 'React Hooksの使い方',
     createdAt: '2024-01-01',
-    updatedAt: '2024-01-01',
     description: 'Reactの基本的なフックについて解説',
+    slug: 'react-hooks',
     tags: ['React', 'JavaScript'],
+    title: 'React Hooksの使い方',
+    updatedAt: '2024-01-01',
   },
   {
-    slug: 'nextjs-intro',
-    title: 'Next.js入門ガイド',
     createdAt: '2024-01-02',
-    updatedAt: '2024-01-02',
     description: 'Next.jsの基本的な使い方',
+    slug: 'nextjs-intro',
     tags: ['Next.js', 'React'],
+    title: 'Next.js入門ガイド',
+    updatedAt: '2024-01-02',
   },
   {
-    slug: 'typescript-basics',
-    title: 'TypeScript基礎講座',
     createdAt: '2024-01-03',
-    updatedAt: '2024-01-03',
     description: 'TypeScriptの基本を学ぶ',
+    slug: 'typescript-basics',
     tags: ['TypeScript'],
+    title: 'TypeScript基礎講座',
+    updatedAt: '2024-01-03',
   },
   {
-    slug: 'daily-note',
-    title: '日記：今日の出来事',
     createdAt: '2024-01-04',
-    updatedAt: '2024-01-04',
+    slug: 'daily-note',
     tags: ['日記'],
+    title: '日記：今日の出来事',
+    updatedAt: '2024-01-04',
   },
 ];
 
@@ -64,11 +64,11 @@ describe('filterPostsByTitle', () => {
     const postsWithSharedWord: PostMetadata[] = [
       ...mockPosts,
       {
-        slug: 'react-patterns',
-        title: 'React設計パターン',
         createdAt: '2024-01-05',
-        updatedAt: '2024-01-05',
+        slug: 'react-patterns',
         tags: ['React'],
+        title: 'React設計パターン',
+        updatedAt: '2024-01-05',
       },
     ];
     const result = filterPostsByTitle(postsWithSharedWord, 'React');

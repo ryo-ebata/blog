@@ -1,7 +1,6 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite';
 
 const config: StorybookConfig = {
-  stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)', '!../node_modules/**'],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-docs',
@@ -13,6 +12,7 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
+  stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)', '!../node_modules/**'],
   async viteFinal(config) {
     // チャンクサイズの警告を改善するための設定
     config.build = config.build || {};

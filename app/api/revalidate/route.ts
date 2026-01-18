@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       revalidatePath('/blog');
     }
 
-    return Response.json({ revalidated: true, now: Date.now() });
+    return Response.json({ now: Date.now(), revalidated: true });
   } catch {
     return Response.json({ message: 'Error' }, { status: 500 });
   }

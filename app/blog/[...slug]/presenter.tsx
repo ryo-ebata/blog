@@ -1,6 +1,7 @@
 'use client';
 
-import { BackLink, PostHeader } from '@/components/elements';
+import { BackLink } from '@/components/atoms';
+import { PostHeader } from '@/components/organisms';
 import type { PostMetadata } from '@/lib/posts';
 
 interface BlogPostPresenterProps {

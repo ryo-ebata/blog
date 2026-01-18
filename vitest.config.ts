@@ -19,10 +19,10 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: 'unit',
-          include: ['**/*.test.{ts,tsx}'],
-          exclude: ['**/node_modules/**', '**/stories/**'],
           environment: 'jsdom',
+          exclude: ['**/node_modules/**', '**/stories/**'],
+          include: ['**/*.test.{ts,tsx}'],
+          name: 'unit',
           setupFiles: ['./vitest.setup.ts'],
         },
       },
@@ -34,14 +34,14 @@ export default defineConfig({
           storybookTest({ configDir: path.join(dirname, '.storybook') }),
         ],
         test: {
-          name: 'storybook',
-          exclude: ['**/node_modules/**'],
           browser: {
             enabled: true,
             headless: true,
             provider: playwright({}),
             instances: [{ browser: 'chromium' }],
           },
+          exclude: ['**/node_modules/**'],
+          name: 'storybook',
           setupFiles: ['.storybook/vitest.setup.ts'],
         },
       },

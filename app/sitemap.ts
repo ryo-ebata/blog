@@ -32,7 +32,7 @@ import { getAllPostsMetadata } from '@/lib/posts';
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // すべての公開済み記事のメタデータを取得
-  // draft: trueの記事は自動的に除外される
+  // Draft: trueの記事は自動的に除外される
   const posts = await getAllPostsMetadata();
 
   // 基本ページのサイトマップエントリ

@@ -19,7 +19,7 @@ test.describe('Blog Page', () => {
   });
 
   test('should be accessible on mobile viewport', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
+    await page.setViewportSize({ height: 667, width: 375 });
     await page.goto('/blog');
 
     // モバイルでもメインコンテンツが表示されることを確認

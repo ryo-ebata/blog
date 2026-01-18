@@ -10,13 +10,13 @@ export const revalidate = 3600; // 1時間ごとに再検証
 
 export const metadata = {
   ...generatePageMetadata({
-    title: 'ノート',
     description: `${siteConfig.name}の雑記・書き殴りノート一覧です。`,
+    title: 'ノート',
     url: `${siteConfig.url}/notes`,
   }),
   robots: {
-    index: false,
     follow: true,
+    index: false,
   },
 };
 

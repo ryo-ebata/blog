@@ -14,9 +14,9 @@ export function paginateItems<T>(items: T[], page = 1, pageSize = 10): Paginatio
   const endIndex = Math.min(startIndex + pageSize, totalItems);
 
   return {
-    items: items.slice(startIndex, endIndex),
     currentPage,
-    totalPages,
+    items: items.slice(startIndex, endIndex),
     totalItems,
+    totalPages,
   };
 }

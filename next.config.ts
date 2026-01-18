@@ -1,8 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // cacheComponents: true,
+  /* Config options here */
+  // CacheComponents: true,
   // パフォーマンス最適化
   compress: true,
   // 実験的な機能

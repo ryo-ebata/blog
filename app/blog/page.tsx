@@ -9,8 +9,8 @@ interface BlogPageProps {
 export const revalidate = 3600; // 1時間ごとに再検証
 
 export const metadata = generatePageMetadata({
-  title: 'ブログ',
   description: `${siteConfig.name}のブログ記事一覧です。技術的な学びや日々の気づきを共有しています。`,
+  title: 'ブログ',
   url: `${siteConfig.url}/blog`,
 });
 

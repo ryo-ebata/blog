@@ -1,13 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/atoms';
 
 const meta = {
-  title: 'shadcn/Button',
-  component: Button,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -21,6 +15,12 @@ const meta = {
       control: 'boolean',
     },
   },
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  title: 'shadcn/Button',
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -34,56 +34,55 @@ export const Default: Story = {
 
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
     children: 'Destructive',
+    variant: 'destructive',
   },
 };
 
 export const Outline: Story = {
   args: {
-    variant: 'outline',
     children: 'Outline',
+    variant: 'outline',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
     children: 'Secondary',
+    variant: 'secondary',
   },
 };
 
 export const Ghost: Story = {
   args: {
-    variant: 'ghost',
     children: 'Ghost',
+    variant: 'ghost',
   },
 };
 
 export const Link: Story = {
   args: {
-    variant: 'link',
     children: 'Link',
+    variant: 'link',
   },
 };
 
 export const Small: Story = {
   args: {
-    size: 'sm',
     children: 'Small',
+    size: 'sm',
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'lg',
     children: 'Large',
+    size: 'lg',
   },
 };
 
 export const Icon: Story = {
   args: {
-    size: 'icon',
     children: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -102,13 +101,14 @@ export const Icon: Story = {
         <path d="m12 5 7 7-7 7" />
       </svg>
     ),
+    size: 'icon',
   },
 };
 
 export const Disabled: Story = {
   args: {
-    disabled: true,
     children: 'Disabled',
+    disabled: true,
   },
 };
 

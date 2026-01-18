@@ -3,8 +3,9 @@
 import { IconBrandGithub, IconBrandX } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Container } from '@/components/composites/container';
-import { BackLink, BuyMeACoffee } from '@/components/elements';
+import { BackLink } from '@/components/atoms';
+import { BuyMeACoffee } from '@/components/molecules';
+import { Container } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
 
 function SectionHeading({ children }: { children: React.ReactNode }) {

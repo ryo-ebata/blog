@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Container } from '@/components/composites/container';
+import { Container } from '@/components/organisms';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd } from '@/lib/jsonld';

@@ -5,7 +5,7 @@ import * as runtime from 'react/jsx-runtime';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-import { ContentLinkCard as ContentLinkCardAsync } from '@/components/composites/content-link-card/content-link-card';
+import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
 import { remarkLinkCard } from '@/lib/mdx/remark-link-card';
 
 function ContentLinkCardLoading({ url }: { url: string }) {
@@ -42,8 +42,8 @@ export const mdxConfig: Readonly<EvaluateOptions> = {
     [
       rehypePrettyCode,
       {
-        theme: 'github-dark',
         keepBackground: true,
+        theme: 'github-dark',
         transformers: [transformerNotationDiff(), transformerNotationHighlight()],
       },
     ],

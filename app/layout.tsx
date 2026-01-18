@@ -2,28 +2,23 @@ import type { Metadata } from 'next';
 import { BIZ_UDPGothic } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
-import { Header } from '@/components/elements/header/header';
 import { JsonLd } from '@/components/jsonld/jsonld';
+import { Footer, Header } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import './globals.css';
-import { Footer } from '@/components/elements/footer/footer';
 
 const bizUDPGothic = BIZ_UDPGothic({
-  weight: ['400', '700'],
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-biz-udp-gothic',
+  adjustFontFallback: true,
   display: 'swap',
   preload: true,
-  adjustFontFallback: true,
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-biz-udp-gothic',
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
   description: siteConfig.description,
   openGraph: {
     type: 'website',
@@ -40,6 +35,10 @@ export const metadata: Metadata = {
         alt: siteConfig.name,
       },
     ],
+  },
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
   },
   twitter: {
     card: 'summary_large_image',

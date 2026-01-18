@@ -11,20 +11,20 @@ export function generateArticleJsonLd(
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: metadata.title,
-    description: metadata.description || siteConfig.description,
-    url,
-    datePublished: metadata.createdAt,
-    dateModified: metadata.updatedAt || metadata.createdAt,
     author: {
       '@type': 'Person',
       name: metadata.author || 'Author',
     },
+    dateModified: metadata.updatedAt || metadata.createdAt,
+    datePublished: metadata.createdAt,
+    description: metadata.description || siteConfig.description,
+    headline: metadata.title,
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,
       url: siteConfig.url,
     },
+    url,
   };
 
   // タグがある場合はkeywordsに追加
@@ -42,9 +42,8 @@ export function generateWebSiteJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: siteConfig.name,
     description: siteConfig.description,
-    url: siteConfig.url,
+    name: siteConfig.name,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -53,6 +52,7 @@ export function generateWebSiteJsonLd(): Record<string, unknown> {
       },
       'query-input': 'required name=search_term_string',
     },
+    url: siteConfig.url,
   };
 }
 

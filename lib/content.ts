@@ -55,13 +55,13 @@ export function getAllContentMetadataInternal(directory: string): ContentMetadat
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data, content } = matter(fileContents);
 
-      // data.draftがtrueの場合はスキップ
+      // Data.draftがtrueの場合はスキップ
       if (data.draft) {
         return null;
       }
 
-      // createdAtとupdatedAtを取得
-      const createdAt = data.createdAt;
+      // CreatedAtとupdatedAtを取得
+      const {createdAt} = data;
       const updatedAt = data.updatedAt || data.createdAt;
 
       // 未来日付（予約投稿）の場合はスキップ
@@ -69,13 +69,14 @@ export function getAllContentMetadataInternal(directory: string): ContentMetadat
         return null;
       }
 
-      // slugが指定されていなければファイル名から生成
+      // Slugが指定されていなければファイル名から生成
       const slug = data.slug || file.replace(/\.mdx$/, '');
 
       // 文字数をカウント
       const characterCount = countCharacters(content);
 
       return {
+        fileName: file,
         metadata: {
           slug,
           title: data.title || 'Untitled',
@@ -88,7 +89,6 @@ export function getAllContentMetadataInternal(directory: string): ContentMetadat
           draft: data.draft || false,
           characterCount,
         },
-        fileName: file,
       };
     })
     .filter((content) => content !== null);
@@ -124,8 +124,8 @@ export async function getAllContent(
         }
 
         return {
-          metadata,
           Content,
+          metadata,
         };
       } catch (error) {
         console.error(`Failed to load content "${fileName}":`, error);
@@ -165,13 +165,13 @@ export async function getContentBySlug(
     const fileContents = fs.readFileSync(filePath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    // draftがtrueの場合はエラー
+    // Draftがtrueの場合はエラー
     if (data.draft) {
       throw new Error(`${contentType} not found: ${slugPath}`);
     }
 
-    // createdAtとupdatedAtを取得
-    const createdAt = data.createdAt;
+    // CreatedAtとupdatedAtを取得
+    const {createdAt} = data;
     const updatedAt = data.updatedAt || data.createdAt;
 
     // 未来日付（予約投稿）の場合はエラー
@@ -179,7 +179,7 @@ export async function getContentBySlug(
       throw new Error(`${contentType} not found: ${slugPath}`);
     }
 
-    // slugが指定されていなければファイル名から生成
+    // Slugが指定されていなければファイル名から生成
     const contentSlug = data.slug || slugPath;
 
     // MDXを評価してReactコンポーネントを取得
@@ -193,6 +193,7 @@ export async function getContentBySlug(
     const characterCount = countCharacters(content);
 
     return {
+      Content,
       metadata: {
         slug: contentSlug,
         title: data.title || 'Untitled',
@@ -205,7 +206,6 @@ export async function getContentBySlug(
         draft: data.draft || false,
         characterCount,
       },
-      Content,
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -39,7 +39,6 @@ export function generateMetadata(params: MetadataParams): Metadata {
   const imageAltText = imageAlt || title;
 
   const baseMetadata: Metadata = {
-    title,
     description,
     openGraph: {
       type,
@@ -57,6 +56,7 @@ export function generateMetadata(params: MetadataParams): Metadata {
         },
       ],
     },
+    title,
     twitter: {
       card: 'summary_large_image',
       title: ogTitle,

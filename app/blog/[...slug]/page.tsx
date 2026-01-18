@@ -24,15 +24,15 @@ export async function generateMetadata({ params }: Props) {
     const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
 
     return generatePageMetadata({
-      title: post.metadata.title,
-      description: post.metadata.description || siteConfig.description,
-      url: postUrl,
-      type: 'article',
-      imageAlt: post.metadata.title,
-      publishedTime: post.metadata.createdAt,
-      modifiedTime: post.metadata.updatedAt,
       authors: post.metadata.author ? [post.metadata.author] : undefined,
+      description: post.metadata.description || siteConfig.description,
+      imageAlt: post.metadata.title,
+      modifiedTime: post.metadata.updatedAt,
+      publishedTime: post.metadata.createdAt,
       tags: post.metadata.tags,
+      title: post.metadata.title,
+      type: 'article',
+      url: postUrl,
     });
   } catch {
     return {};

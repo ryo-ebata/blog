@@ -1,11 +1,9 @@
 'use client';
 
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
-import { Container } from '@/components/composites/container';
-import { BubbleTagFilter } from '@/components/composites/tag-filter';
-import { PostList } from '@/components/elements';
-import { Pagination } from '@/components/elements/pagination/pagination';
-import { SearchInput } from '@/components/elements/search-input';
+import { SearchInput } from '@/components/atoms';
+import { Pagination } from '@/components/molecules';
+import { BubbleTagFilter, Container, PostList } from '@/components/organisms';
 import type { NoteMetadata } from '@/lib/notes';
 import type { TagCount } from '@/lib/tags';
 
@@ -28,11 +26,11 @@ export function NotesListPresenter({
 }: NotesListPresenterProps) {
   const [, setSearchParams] = useQueryStates(
     {
-      search: parseAsString.withDefault(''),
       page: parseAsString,
+      search: parseAsString.withDefault(''),
       tags: parseAsArrayOf(parseAsString, ',').withDefault([]),
     },
-    { shallow: false, clearOnDefault: true }
+    { clearOnDefault: true, shallow: false }
   );
 
   const handleSearchChange = (value: string) => {

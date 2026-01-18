@@ -1,21 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@/components/ui/button';
 import {
+  Button,
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/components/ui/empty';
+} from '@/components/atoms';
 
 const meta = {
-  title: 'shadcn/Empty',
   component: Empty,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  title: 'shadcn/Empty',
 } satisfies Meta<typeof Empty>;
 
 export default meta;

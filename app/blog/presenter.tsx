@@ -1,11 +1,9 @@
 'use client';
 
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
-import { Container } from '@/components/composites/container';
-import { BubbleTagFilter } from '@/components/composites/tag-filter';
-import { PostList } from '@/components/elements';
-import { Pagination } from '@/components/elements/pagination/pagination';
-import { SearchInput } from '@/components/elements/search-input';
+import { SearchInput } from '@/components/atoms';
+import { Pagination } from '@/components/molecules';
+import { BubbleTagFilter, Container, PostList } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
 import type { PostMetadata } from '@/lib/posts';
 import type { TagCount } from '@/lib/tags';
@@ -29,11 +27,11 @@ export function BlogListPresenter({
 }: BlogListPresenterProps) {
   const [, setSearchParams] = useQueryStates(
     {
-      search: parseAsString.withDefault(''),
       page: parseAsString,
+      search: parseAsString.withDefault(''),
       tags: parseAsArrayOf(parseAsString, ',').withDefault([]),
     },
-    { shallow: false, clearOnDefault: true }
+    { clearOnDefault: true, shallow: false }
   );
 
   const handleSearchChange = (value: string) => {

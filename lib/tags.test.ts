@@ -4,30 +4,30 @@ import { aggregateTags, filterPostsByTags } from './tags';
 
 const mockPosts: PostMetadata[] = [
   {
-    slug: 'react-hooks',
-    title: 'React Hooksの使い方',
     createdAt: '2024-01-01',
-    updatedAt: '2024-01-01',
+    slug: 'react-hooks',
     tags: ['React', 'TypeScript'],
+    title: 'React Hooksの使い方',
+    updatedAt: '2024-01-01',
   },
   {
-    slug: 'nextjs-intro',
-    title: 'Next.js入門ガイド',
     createdAt: '2024-01-02',
-    updatedAt: '2024-01-02',
+    slug: 'nextjs-intro',
     tags: ['React', 'Next.js'],
+    title: 'Next.js入門ガイド',
+    updatedAt: '2024-01-02',
   },
   {
-    slug: 'keiba',
-    title: '競馬の楽しみ方',
     createdAt: '2024-01-03',
-    updatedAt: '2024-01-03',
+    slug: 'keiba',
     tags: ['競馬'],
+    title: '競馬の楽しみ方',
+    updatedAt: '2024-01-03',
   },
   {
+    createdAt: '2024-01-04',
     slug: 'no-tags',
     title: 'タグなしの記事',
-    createdAt: '2024-01-04',
     updatedAt: '2024-01-04',
   },
 ];
@@ -36,10 +36,10 @@ describe('aggregateTags', () => {
   it('全記事からタグと記事数を集計し、記事数の多い順にソートする', () => {
     const result = aggregateTags(mockPosts);
     expect(result).toEqual([
-      { tag: 'React', count: 2 },
-      { tag: 'TypeScript', count: 1 },
-      { tag: 'Next.js', count: 1 },
-      { tag: '競馬', count: 1 },
+      { count: 2, tag: 'React' },
+      { count: 1, tag: 'TypeScript' },
+      { count: 1, tag: 'Next.js' },
+      { count: 1, tag: '競馬' },
     ]);
   });
 

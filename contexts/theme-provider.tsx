@@ -2,8 +2,8 @@
 
 import { parseAsString, useQueryState } from 'nuqs';
 import {
-  createContext,
   type ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -37,7 +37,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const handleChange = (e: MediaQueryListEvent) => {
       setPreferColorSchemeIsDark(e.matches);
       // イベントハンドラ内でのDOM操作は許容される
-      // systemテーマの場合、OS設定の変更に応じてDOMを更新
+      // Systemテーマの場合、OS設定の変更に応じてDOMを更新
       if (queryTheme === 'system' || queryTheme === null) {
         if (e.matches) {
           document.documentElement.classList.add('dark');
@@ -53,9 +53,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const actualTheme = useMemo(() => {
     const currentTheme = queryTheme ?? 'dark';
-    if (currentTheme === 'dark') return 'dark';
-    if (currentTheme === 'light') return 'light';
-    // theme === 'system' の場合はOS設定を反映
+    if (currentTheme === 'dark') {return 'dark';}
+    if (currentTheme === 'light') {return 'light';}
+    // Theme === 'system' の場合はOS設定を反映
     return preferColorSchemeIsDark ? 'dark' : 'light';
   }, [queryTheme, preferColorSchemeIsDark]);
 
@@ -99,9 +99,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         ? queryTheme
         : 'dark';
     return {
-      theme,
-      setTheme: updateTheme,
       actualTheme,
+      setTheme: updateTheme,
+      theme,
     };
   }, [queryTheme, actualTheme, updateTheme]);
 
