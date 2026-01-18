@@ -31,8 +31,8 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
   return (
     <nav className="flex items-center justify-center gap-2 mt-8" aria-label="ページネーション">
       {currentPage > 1 && (
-        <Button variant="outline" asChild>
-          <Link href={getPageUrl(basePath, currentPage - 1)}>前へ</Link>
+        <Button variant="outline" render={<Link href={getPageUrl(basePath, currentPage - 1)} />}>
+          前へ
         </Button>
       )}
 
@@ -40,8 +40,12 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
         {pages.map((page) => {
           if (shouldShowPage(page, currentPage, totalPages)) {
             return (
-              <Button key={page} variant={currentPage === page ? 'default' : 'outline'} asChild>
-                <Link href={getPageUrl(basePath, page)}>{page}</Link>
+              <Button
+                key={page}
+                variant={currentPage === page ? 'default' : 'outline'}
+                render={<Link href={getPageUrl(basePath, page)} />}
+              >
+                {page}
               </Button>
             );
           }
@@ -53,8 +57,8 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       </div>
 
       {currentPage < totalPages && (
-        <Button variant="outline" asChild>
-          <Link href={getPageUrl(basePath, currentPage + 1)}>次へ</Link>
+        <Button variant="outline" render={<Link href={getPageUrl(basePath, currentPage + 1)} />}>
+          次へ
         </Button>
       )}
     </nav>

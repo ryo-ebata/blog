@@ -1,216 +1,207 @@
 name: Reusable Lighthouse Check
 
 on:
-    workflow_call:
-        inputs:
-            url:
-                description: "URL to test with Lighthouse"
-                required: false
-                type: string
-                default: "http://localhost:3000"
+  workflow_call:
+    inputs:
+      url:
+        description: 'URL to test with Lighthouse'
+        required: false
+        type: string
+        default: 'http://localhost:3000'
 
 jobs:
-    lighthouse:
-        timeout-minutes: 10
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            pull-requests: write
-            issues: write
-        steps:
-            - uses: actions/checkout@v4
+  lighthouse:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: 📦 Setup bun
-              uses: oven-sh/setup-bun@v2
-              with:
-                  bun-version: latest
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
 
-            - name: 🔧 Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "24"
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
 
-            - name: 💾 Cache Bun dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ~/.bun/install/cache
-                  key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-                  restore-keys: |
-                      ${{ runner.os }}-bun-
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: 📋 Install dependencies
-              run: bun install --frozen-lockfile --ignore-scripts
+      - name: 🏗️ Build
+        run: pnpm run build
 
-            - name: 🏗️ Build
-              run: bun run build
+      - name: 🔍 Run Lighthouse CI
+        id: lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ inputs.url }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./.lighthouserc.json
+        continue-on-error: true
 
-            - name: 🔍 Run Lighthouse CI
-              id: lighthouse
-              uses: treosh/lighthouse-ci-action@v12
-              with:
-                  urls: |
-                      ${{ inputs.url }}
-                  uploadArtifacts: true
-                  temporaryPublicStorage: true
-                  configPath: ./.lighthouserc.json
-              continue-on-error: true
-
-            - name: 📊 Extract Lighthouse report URL
-              id: extract-url
-              run: |
-                  # .lighthouseci ディレクトリからHTMLレポートのURLを探す
-                  if [ -d ".lighthouseci" ]; then
-                      # manifest.jsonからURLを取得
-                      if [ -f ".lighthouseci/manifest.json" ]; then
-                          REPORT_URL=$(cat .lighthouseci/manifest.json | grep -o 'https://storage.googleapis.com/[^"]*\.report\.html' | head -1)
-                          if [ -n "$REPORT_URL" ]; then
-                              echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
-                              echo "Found report URL: $REPORT_URL"
-                          fi
-                      fi
-                      
-                      # または、リンクファイルから取得
-                      if [ -f ".lighthouseci/links.json" ]; then
-                          REPORT_URL=$(cat .lighthouseci/links.json | grep -o 'https://storage.googleapis.com/[^"]*\.report\.html' | head -1)
-                          if [ -n "$REPORT_URL" ]; then
-                              echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
-                              echo "Found report URL: $REPORT_URL"
-                          fi
-                      fi
+      - name: 📊 Extract Lighthouse report URL
+        id: extract-url
+        run: |
+          # .lighthouseci ディレクトリからHTMLレポートのURLを探す
+          if [ -d ".lighthouseci" ]; then
+              # manifest.jsonからURLを取得
+              if [ -f ".lighthouseci/manifest.json" ]; then
+                  REPORT_URL=$(cat .lighthouseci/manifest.json | grep -o 'https://storage.googleapis.com/[^"]*\.report\.html' | head -1)
+                  if [ -n "$REPORT_URL" ]; then
+                      echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
+                      echo "Found report URL: $REPORT_URL"
                   fi
+              fi
 
-                  # ログからURLを抽出（フォールバック）
-                  if [ -z "$REPORT_URL" ]; then
-                      REPORT_URL=$(grep -o 'https://storage.googleapis.com/lighthouse-infrastructure[^ ]*\.report\.html' "$GITHUB_STEP_SUMMARY" 2>/dev/null | head -1)
-                      if [ -n "$REPORT_URL" ]; then
-                          echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
-                      fi
+              # または、リンクファイルから取得
+              if [ -f ".lighthouseci/links.json" ]; then
+                  REPORT_URL=$(cat .lighthouseci/links.json | grep -o 'https://storage.googleapis.com/[^"]*\.report\.html' | head -1)
+                  if [ -n "$REPORT_URL" ]; then
+                      echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
+                      echo "Found report URL: $REPORT_URL"
                   fi
+              fi
+          fi
 
-            - name: 📊 Read Lighthouse JSON results
-              id: read-results
-              run: |
-                  if [ -d ".lighthouseci" ]; then
-                      # JSON結果ファイルを探す
-                      JSON_FILE=$(find .lighthouseci -name "*.json" -type f | grep -v manifest | grep -v links | head -1)
-                      if [ -n "$JSON_FILE" ]; then
-                          cat "$JSON_FILE" > lighthouse-results.json
-                          echo "Found results file: $JSON_FILE"
-                      fi
-                  fi
+          # ログからURLを抽出（フォールバック）
+          if [ -z "$REPORT_URL" ]; then
+              REPORT_URL=$(grep -o 'https://storage.googleapis.com/lighthouse-infrastructure[^ ]*\.report\.html' "$GITHUB_STEP_SUMMARY" 2>/dev/null | head -1)
+              if [ -n "$REPORT_URL" ]; then
+                  echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
+              fi
+          fi
 
-            - name: 📊 Comment PR with Lighthouse results
-              if: github.event.pull_request.number != null
-              uses: actions/github-script@v7
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      const fs = require('fs');
-                      const path = require('path');
+      - name: 📊 Read Lighthouse JSON results
+        id: read-results
+        run: |
+          if [ -d ".lighthouseci" ]; then
+              # JSON結果ファイルを探す
+              JSON_FILE=$(find .lighthouseci -name "*.json" -type f | grep -v manifest | grep -v links | head -1)
+              if [ -n "$JSON_FILE" ]; then
+                  cat "$JSON_FILE" > lighthouse-results.json
+                  echo "Found results file: $JSON_FILE"
+              fi
+          fi
 
-                      let comment = '## 🔍 Lighthouse Results\n\n';
-                      let reportUrl = '${{ steps.extract-url.outputs.report_url }}';
+      - name: 📊 Comment PR with Lighthouse results
+        if: github.event.pull_request.number != null
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
 
-                      // JSON結果を読み込む
-                      try {
-                          if (fs.existsSync('lighthouse-results.json')) {
-                              const results = JSON.parse(fs.readFileSync('lighthouse-results.json', 'utf8'));
-                              
-                              const categories = results.categories || {};
-                              const scores = Object.keys(categories).map(key => ({
-                                  name: key,
-                                  score: Math.round(categories[key].score * 100),
-                                  title: categories[key].title
-                              }));
-                              
-                              comment += '### Performance Scores\n\n';
-                              comment += '| Category | Score | Status |\n';
-                              comment += '|----------|-------|--------|\n';
-                              
-                              scores.forEach(({ name, score, title }) => {
-                                  const emoji = score >= 90 ? '✅' : score >= 50 ? '⚠️' : '❌';
-                                  comment += `| ${title} | ${score} | ${emoji} |\n`;
-                              });
-                              
-                              comment += '\n### Key Metrics\n\n';
-                              const audits = results.audits || {};
-                              const metrics = [
-                                  { key: 'first-contentful-paint', label: 'First Contentful Paint' },
-                                  { key: 'largest-contentful-paint', label: 'Largest Contentful Paint' },
-                                  { key: 'total-blocking-time', label: 'Total Blocking Time' },
-                                  { key: 'cumulative-layout-shift', label: 'Cumulative Layout Shift' },
-                                  { key: 'speed-index', label: 'Speed Index' }
-                              ];
-                              
-                              metrics.forEach(({ key, label }) => {
-                                  if (audits[key]) {
-                                      const value = audits[key].numericValue;
-                                      const unit = audits[key].numericUnit || 'ms';
-                                      const displayValue = audits[key].displayValue || `${value}${unit}`;
-                                      comment += `- **${label}**: ${displayValue}\n`;
-                                  }
-                              });
-                          } else {
-                              comment += '⚠️ Lighthouse JSON results not found.\n';
-                          }
-                      } catch (error) {
-                          comment += `⚠️ Error reading Lighthouse results: ${error.message}\n`;
-                      }
+            let comment = '## 🔍 Lighthouse Results\n\n';
+            let reportUrl = '${{ steps.extract-url.outputs.report_url }}';
 
-                      // HTMLレポートのリンクを追加
-                      if (reportUrl && reportUrl !== '') {
-                          comment += '\n### 📊 Detailed Report\n\n';
-                          comment += `[📄 View Full HTML Report](${reportUrl})\n\n`;
-                          comment += `> 詳細なレポートは上記のリンクから確認できます。\n`;
-                      } else {
-                          comment += '\n⚠️ Report URL not found. Check the workflow logs for details.\n';
-                      }
+            // JSON結果を読み込む
+            try {
+                if (fs.existsSync('lighthouse-results.json')) {
+                    const results = JSON.parse(fs.readFileSync('lighthouse-results.json', 'utf8'));
 
-                      // PR番号を取得（workflow_callの場合も対応）
-                      const prNumber = context.payload.pull_request?.number || context.issue?.number || github.event.pull_request?.number;
+                    const categories = results.categories || {};
+                    const scores = Object.keys(categories).map(key => ({
+                        name: key,
+                        score: Math.round(categories[key].score * 100),
+                        title: categories[key].title
+                    }));
 
-                      if (!prNumber) {
-                          console.log('PR number not found, skipping comment');
-                          return;
-                      }
+                    comment += '### Performance Scores\n\n';
+                    comment += '| Category | Score | Status |\n';
+                    comment += '|----------|-------|--------|\n';
 
-                      console.log(`Posting comment to PR #${prNumber}`);
+                    scores.forEach(({ name, score, title }) => {
+                        const emoji = score >= 90 ? '✅' : score >= 50 ? '⚠️' : '❌';
+                        comment += `| ${title} | ${score} | ${emoji} |\n`;
+                    });
 
-                      // PRのコメントを取得（PRコメントとIssueコメントの両方を確認）
-                      const [issueComments, prComments] = await Promise.all([
-                          github.rest.issues.listComments({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              issue_number: prNumber,
-                          }),
-                          github.rest.pulls.listReviewComments({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              pull_number: prNumber,
-                          }).catch(() => ({ data: [] })) // エラー時は空配列を返す
-                      ]);
+                    comment += '\n### Key Metrics\n\n';
+                    const audits = results.audits || {};
+                    const metrics = [
+                        { key: 'first-contentful-paint', label: 'First Contentful Paint' },
+                        { key: 'largest-contentful-paint', label: 'Largest Contentful Paint' },
+                        { key: 'total-blocking-time', label: 'Total Blocking Time' },
+                        { key: 'cumulative-layout-shift', label: 'Cumulative Layout Shift' },
+                        { key: 'speed-index', label: 'Speed Index' }
+                    ];
 
-                      // Issueコメントから既存のLighthouseコメントを探す
-                      const existingComment = issueComments.data.find(
-                          c => c.user.type === 'Bot' && c.body.includes('## 🔍 Lighthouse Results')
-                      );
+                    metrics.forEach(({ key, label }) => {
+                        if (audits[key]) {
+                            const value = audits[key].numericValue;
+                            const unit = audits[key].numericUnit || 'ms';
+                            const displayValue = audits[key].displayValue || `${value}${unit}`;
+                            comment += `- **${label}**: ${displayValue}\n`;
+                        }
+                    });
+                } else {
+                    comment += '⚠️ Lighthouse JSON results not found.\n';
+                }
+            } catch (error) {
+                comment += `⚠️ Error reading Lighthouse results: ${error.message}\n`;
+            }
 
-                      if (existingComment) {
-                          // 既存のコメントを更新
-                          console.log(`Updating existing comment #${existingComment.id}`);
-                          await github.rest.issues.updateComment({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              comment_id: existingComment.id,
-                              body: comment
-                          });
-                      } else {
-                          // 新しいコメントを投稿
-                          console.log(`Creating new comment on PR #${prNumber}`);
-                          await github.rest.issues.createComment({
-                              issue_number: prNumber,
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              body: comment
-                          });
-                      }
+            // HTMLレポートのリンクを追加
+            if (reportUrl && reportUrl !== '') {
+                comment += '\n### 📊 Detailed Report\n\n';
+                comment += `[📄 View Full HTML Report](${reportUrl})\n\n`;
+                comment += `> 詳細なレポートは上記のリンクから確認できます。\n`;
+            } else {
+                comment += '\n⚠️ Report URL not found. Check the workflow logs for details.\n';
+            }
+
+            // PR番号を取得（workflow_callの場合も対応）
+            const prNumber = context.payload.pull_request?.number || context.issue?.number || github.event.pull_request?.number;
+
+            if (!prNumber) {
+                console.log('PR number not found, skipping comment');
+                return;
+            }
+
+            console.log(`Posting comment to PR #${prNumber}`);
+
+            // PRのコメントを取得（PRコメントとIssueコメントの両方を確認）
+            const [issueComments, prComments] = await Promise.all([
+                github.rest.issues.listComments({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: prNumber,
+                }),
+                github.rest.pulls.listReviewComments({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: prNumber,
+                }).catch(() => ({ data: [] })) // エラー時は空配列を返す
+            ]);
+
+            // Issueコメントから既存のLighthouseコメントを探す
+            const existingComment = issueComments.data.find(
+                c => c.user.type === 'Bot' && c.body.includes('## 🔍 Lighthouse Results')
+            );
+
+            if (existingComment) {
+                // 既存のコメントを更新
+                console.log(`Updating existing comment #${existingComment.id}`);
+                await github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: existingComment.id,
+                    body: comment
+                });
+            } else {
+                // 新しいコメントを投稿
+                console.log(`Creating new comment on PR #${prNumber}`);
+                await github.rest.issues.createComment({
+                    issue_number: prNumber,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: comment
+                });
+            }

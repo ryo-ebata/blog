@@ -1,7 +1,7 @@
 name: 🎨 UI/UX
 description: UI/UXに関するIssue
-title: "[UI/UX] "
-labels: ["🎨 UI/UX"]
+title: '[UI/UX] '
+labels: ['🎨 UI/UX']
 body:
   - type: textarea
     id: description

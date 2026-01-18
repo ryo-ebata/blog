@@ -1,7 +1,7 @@
 name: 📚 Library
 description: ライブラリが絡むIssue（ライブラリアップデートなど）
-title: "[Library] "
-labels: ["📚 ライブラリ"]
+title: '[Library] '
+labels: ['📚 ライブラリ']
 body:
   - type: textarea
     id: description

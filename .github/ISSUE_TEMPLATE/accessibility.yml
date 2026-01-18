@@ -1,7 +1,7 @@
 name: ⭐️ Accessibility
 description: アクセシビリティ改善の提案
-title: "[A11y] "
-labels: ["⭐️ アクセシビリティ"]
+title: '[A11y] '
+labels: ['⭐️ アクセシビリティ']
 body:
   - type: textarea
     id: description

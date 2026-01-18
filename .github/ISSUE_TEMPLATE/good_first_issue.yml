@@ -1,7 +1,7 @@
 name: 👍 Good First Issue
 description: 初めてコントリビュートするのに向いているIssue
-title: "[Good First Issue] "
-labels: ["👍 Good First Issue"]
+title: '[Good First Issue] '
+labels: ['👍 Good First Issue']
 body:
   - type: textarea
     id: description

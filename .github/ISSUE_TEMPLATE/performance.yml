@@ -1,7 +1,7 @@
 name: 🕐 Performance
 description: パフォーマンス改善の提案
-title: "[Performance] "
-labels: ["🕐 パフォーマンス"]
+title: '[Performance] '
+labels: ['🕐 パフォーマンス']
 body:
   - type: textarea
     id: description

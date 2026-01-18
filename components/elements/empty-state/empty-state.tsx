@@ -31,10 +31,8 @@ export function EmptyState() {
           <Button variant="outline">Import Project</Button>
         </div>
       </EmptyContent>
-      <Button variant="link" asChild className="text-muted-foreground" size="sm">
-        <Link href="#">
-          Learn More <ArrowUpRightIcon />
-        </Link>
+      <Button variant="link" render={<Link href="#" />} className="text-muted-foreground" size="sm">
+        Learn More <ArrowUpRightIcon />
       </Button>
     </Empty>
   );

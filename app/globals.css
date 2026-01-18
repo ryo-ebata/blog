@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
@@ -183,11 +183,11 @@ code[data-line-numbers] > [data-line]::before {
   @apply mr-6 inline-block w-4 text-right text-muted-foreground;
 }
 
-code[data-line-numbers-max-digits="2"] > [data-line]::before {
+code[data-line-numbers-max-digits='2'] > [data-line]::before {
   @apply w-6;
 }
 
-code[data-line-numbers-max-digits="3"] > [data-line]::before {
+code[data-line-numbers-max-digits='3'] > [data-line]::before {
   @apply w-8;
 }
 
@@ -207,7 +207,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 [data-line].diff.add::before {
-  content: "+";
+  content: '+';
   @apply mr-2 text-green-500;
 }
 
@@ -217,7 +217,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 [data-line].diff.remove::before {
-  content: "-";
+  content: '-';
   @apply mr-2 text-red-500;
 }
 

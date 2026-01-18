@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "numberOfRuns": 3,
-      "startServerCommand": "bun run start",
+      "startServerCommand": "pnpm run start",
       "startServerReadyPattern": "ready",
       "startServerReadyTimeout": 60000,
       "url": ["http://localhost:3000"]

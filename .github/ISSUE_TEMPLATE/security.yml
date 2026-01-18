@@ -1,7 +1,7 @@
 name: 👮 Security
 description: セキュリティ関連のIssue
-title: "[Security] "
-labels: ["👮 セキュリティ"]
+title: '[Security] '
+labels: ['👮 セキュリティ']
 body:
   - type: markdown
     attributes:
