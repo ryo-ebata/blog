@@ -1,7 +1,7 @@
 name: ♻️ Refactoring
 description: リファクタリングの提案
-title: "[Refactoring] "
-labels: ["♻️ リファクタリング"]
+title: '[Refactoring] '
+labels: ['♻️ リファクタリング']
 body:
   - type: textarea
     id: description

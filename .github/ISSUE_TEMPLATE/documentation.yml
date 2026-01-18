@@ -1,7 +1,7 @@
 name: 📚 Documentation
 description: ドキュメントの改善や追加を提案する
-title: "[Docs] "
-labels: ["📃 ドキュメント"]
+title: '[Docs] '
+labels: ['📃 ドキュメント']
 body:
   - type: textarea
     id: description

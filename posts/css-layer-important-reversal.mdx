@@ -46,16 +46,16 @@ CSSは「詳細度(specificity)」でスタイルの優先順位が決まるた�
 ```css
 /* LOSER... */
 @layer base {
-	.button {
-		color: red;
-	}
+  .button {
+    color: red;
+  }
 }
 
 /* WINNER! */
 @layer utilities {
-	.button {
-		color: blue;
-	}
+  .button {
+    color: blue;
+  }
 }
 ```
 
@@ -71,15 +71,15 @@ CSSは「詳細度(specificity)」でスタイルの優先順位が決まるた�
 @layer base, utilities;
 
 @layer base {
-	.button {
-		color: red !important;
-	}
+  .button {
+    color: red !important;
+  }
 }
 
 @layer utilities {
-	.button {
-		color: blue !important;
-	}
+  .button {
+    color: blue !important;
+  }
 }
 ```
 

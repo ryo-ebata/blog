@@ -1,7 +1,7 @@
 name: ⚙️ Settings
 description: 設定まわりのIssue（Githubなど）
-title: "[Settings] "
-labels: ["⚙️ Settings"]
+title: '[Settings] '
+labels: ['⚙️ Settings']
 body:
   - type: textarea
     id: description

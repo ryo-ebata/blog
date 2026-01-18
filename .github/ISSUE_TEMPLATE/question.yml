@@ -1,7 +1,7 @@
 name: 💬 Question
 description: 質問やサポートを求める
-title: "[Question] "
-labels: ["💭 質問"]
+title: '[Question] '
+labels: ['💭 質問']
 body:
   - type: textarea
     id: description

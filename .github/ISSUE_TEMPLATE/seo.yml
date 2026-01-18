@@ -1,7 +1,7 @@
 name: 🔍 SEO
 description: SEO関連のIssue
-title: "[SEO] "
-labels: ["🔍 SEO"]
+title: '[SEO] '
+labels: ['🔍 SEO']
 body:
   - type: textarea
     id: description

@@ -42,60 +42,56 @@ export interface ContentMetadataWithFile {
 /**
  * メタデータのみを取得（内部実装）
  */
-export async function getAllContentMetadataInternal(
-  directory: string
-): Promise<ContentMetadataWithFile[]> {
+export function getAllContentMetadataInternal(directory: string): ContentMetadataWithFile[] {
   if (!fs.existsSync(directory)) {
     return [];
   }
 
   const files = fs.readdirSync(directory).filter((file) => file.endsWith('.mdx'));
 
-  const contents = (
-    await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(directory, file);
-        const fileContents = fs.readFileSync(filePath, 'utf8');
-        const { data, content } = matter(fileContents);
+  const contents = files
+    .map((file) => {
+      const filePath = path.join(directory, file);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      const { data, content } = matter(fileContents);
 
-        // data.draftがtrueの場合はスキップ
-        if (data.draft) {
-          return null;
-        }
+      // data.draftがtrueの場合はスキップ
+      if (data.draft) {
+        return null;
+      }
 
-        // createdAtとupdatedAtを取得
-        const createdAt = data.createdAt;
-        const updatedAt = data.updatedAt || data.createdAt;
+      // createdAtとupdatedAtを取得
+      const createdAt = data.createdAt;
+      const updatedAt = data.updatedAt || data.createdAt;
 
-        // 未来日付（予約投稿）の場合はスキップ
-        if (isFuturePost(createdAt, updatedAt)) {
-          return null;
-        }
+      // 未来日付（予約投稿）の場合はスキップ
+      if (isFuturePost(createdAt, updatedAt)) {
+        return null;
+      }
 
-        // slugが指定されていなければファイル名から生成
-        const slug = data.slug || file.replace(/\.mdx$/, '');
+      // slugが指定されていなければファイル名から生成
+      const slug = data.slug || file.replace(/\.mdx$/, '');
 
-        // 文字数をカウント
-        const characterCount = countCharacters(content);
+      // 文字数をカウント
+      const characterCount = countCharacters(content);
 
-        return {
-          metadata: {
-            slug,
-            title: data.title || 'Untitled',
-            createdAt,
-            updatedAt,
-            description: data.description,
-            tags: data.tags,
-            icon: data.icon,
-            author: data.author,
-            draft: data.draft || false,
-            characterCount,
-          },
-          fileName: file,
-        };
-      })
-    )
-  ).filter((content) => content !== null);
+      return {
+        metadata: {
+          slug,
+          title: data.title || 'Untitled',
+          createdAt,
+          updatedAt,
+          description: data.description,
+          tags: data.tags,
+          icon: data.icon,
+          author: data.author,
+          draft: data.draft || false,
+          characterCount,
+        },
+        fileName: file,
+      };
+    })
+    .filter((content) => content !== null);
 
   // 日付でソート（新しい順、updatedAtがあれば優先）
   return contents.sort((a, b) => {
@@ -213,8 +209,10 @@ export async function getContentBySlug(
     };
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Failed to load ${contentType} "${slugPath}": ${error.message}`);
+      throw new Error(`Failed to load ${contentType} "${slugPath}": ${error.message}`, {
+        cause: error,
+      });
     }
-    throw new Error(`Failed to load ${contentType} "${slugPath}"`);
+    throw new Error(`Failed to load ${contentType} "${slugPath}"`, { cause: error });
   }
 }

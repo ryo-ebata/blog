@@ -1,7 +1,7 @@
 name: 📈 Efficiency
 description: 効率化のためのIssue
-title: "[Efficiency] "
-labels: ["📈 効率化"]
+title: '[Efficiency] '
+labels: ['📈 効率化']
 body:
   - type: textarea
     id: description
