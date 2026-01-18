@@ -20,29 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 📦 Setup bun
-        uses: oven-sh/setup-bun@v2
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 10
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-
-      - name: 💾 Cache Bun dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun/install/cache
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
+          cache: 'pnpm'
 
       - name: 📋 Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: 🏗️ Build
-        run: bun run build
+        run: pnpm run build
 
       - name: 🔍 Run Lighthouse CI
         id: lighthouse
@@ -68,7 +61,7 @@ jobs:
                       echo "Found report URL: $REPORT_URL"
                   fi
               fi
-              
+
               # または、リンクファイルから取得
               if [ -f ".lighthouseci/links.json" ]; then
                   REPORT_URL=$(cat .lighthouseci/links.json | grep -o 'https://storage.googleapis.com/[^"]*\.report\.html' | head -1)
@@ -115,23 +108,23 @@ jobs:
             try {
                 if (fs.existsSync('lighthouse-results.json')) {
                     const results = JSON.parse(fs.readFileSync('lighthouse-results.json', 'utf8'));
-                    
+
                     const categories = results.categories || {};
                     const scores = Object.keys(categories).map(key => ({
                         name: key,
                         score: Math.round(categories[key].score * 100),
                         title: categories[key].title
                     }));
-                    
+
                     comment += '### Performance Scores\n\n';
                     comment += '| Category | Score | Status |\n';
                     comment += '|----------|-------|--------|\n';
-                    
+
                     scores.forEach(({ name, score, title }) => {
                         const emoji = score >= 90 ? '✅' : score >= 50 ? '⚠️' : '❌';
                         comment += `| ${title} | ${score} | ${emoji} |\n`;
                     });
-                    
+
                     comment += '\n### Key Metrics\n\n';
                     const audits = results.audits || {};
                     const metrics = [
@@ -141,7 +134,7 @@ jobs:
                         { key: 'cumulative-layout-shift', label: 'Cumulative Layout Shift' },
                         { key: 'speed-index', label: 'Speed Index' }
                     ];
-                    
+
                     metrics.forEach(({ key, label }) => {
                         if (audits[key]) {
                             const value = audits[key].numericValue;

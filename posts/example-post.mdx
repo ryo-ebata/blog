@@ -100,15 +100,15 @@ draft: true
 
 ```typescript showLineNumbers
 interface User {
-	id: number;
-	name: string;
-	email: string;
+  id: number;
+  name: string;
+  email: string;
 }
 
 const user: User = {
-	id: 1,
-	name: 'John Doe',
-	email: 'john@example.com',
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
 };
 ```
 
@@ -116,15 +116,15 @@ const user: User = {
 
 ```typescript {1,4-6}
 interface User {
-	id: number;
-	name: string;
-	email: string;
+  id: number;
+  name: string;
+  email: string;
 }
 
 const user: User = {
-	id: 1,
-	name: 'John Doe',
-	email: 'john@example.com',
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
 };
 ```
 
@@ -132,9 +132,9 @@ const user: User = {
 
 ```typescript title="types/user.ts"
 interface User {
-	id: number;
-	name: string;
-	email: string;
+  id: number;
+  name: string;
+  email: string;
 }
 ```
 
@@ -157,8 +157,8 @@ export function UserCard({ user }: { user: User }) {
 
 ```typescript
 function greet(name: string) {
-	console.log('Hello, World!'); // [!code --]
-	console.log(`Hello, ${name}!`); // [!code ++]
+  console.log('Hello, World!'); // [!code --]
+  console.log(`Hello, ${name}!`); // [!code ++]
 }
 ```
 
@@ -166,7 +166,7 @@ function greet(name: string) {
 
 ```javascript
 function greet(name) {
-	console.log(`Hello, ${name}!`);
+  console.log(`Hello, ${name}!`);
 }
 
 greet('World');
@@ -176,15 +176,15 @@ greet('World');
 
 ```typescript
 interface User {
-	id: number;
-	name: string;
-	email: string;
+  id: number;
+  name: string;
+  email: string;
 }
 
 const user: User = {
-	id: 1,
-	name: 'John Doe',
-	email: 'john@example.com',
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
 };
 ```
 
@@ -203,8 +203,8 @@ print(fibonacci(10))
 
 ```html
 <div class="container">
-	<h1>タイトル</h1>
-	<p>段落テキスト</p>
+  <h1>タイトル</h1>
+  <p>段落テキスト</p>
 </div>
 ```
 
@@ -212,14 +212,14 @@ print(fibonacci(10))
 
 ```css
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .title {
-	font-size: 2rem;
-	color: #333;
+  font-size: 2rem;
+  color: #333;
 }
 ```
 
@@ -227,11 +227,11 @@ print(fibonacci(10))
 
 ```json
 {
-	"name": "example",
-	"version": "1.0.0",
-	"dependencies": {
-		"react": "^18.0.0"
-	}
+  "name": "example",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.0.0"
+  }
 }
 ```
 
@@ -333,6 +333,7 @@ console.log('折りたたみ内のコードブロック');
 ### インラインHTML
 
 <<<<<<< HEAD
+
 <p>
   これは<strong>HTMLタグ</strong>を使用した段落です。
 </p>

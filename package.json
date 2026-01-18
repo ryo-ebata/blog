@@ -2,10 +2,6 @@
   "name": "blog",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.7.0",
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp"]
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -29,6 +25,7 @@
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@monaco-editor/react": "^4.7.0",
+    "@shikijs/transformers": "^3.21.0",
     "@tabler/icons-react": "^3.35.0",
     "@types/mdx": "^2.0.13",
     "class-variance-authority": "^0.7.1",
@@ -86,5 +83,12 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.14"
+  },
+  "packageManager": "pnpm@10.7.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
