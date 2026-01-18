@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { PostMetadata } from '@/lib/posts';
 import { PostHeader } from './post-header';
+import type { PostMetadata } from '@/lib/posts';
 
 const meta = {
   component: PostHeader,

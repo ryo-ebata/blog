@@ -10,7 +10,7 @@ interface BlogPostContainerProps {
   slug: string[];
 }
 
-export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
+export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
   try {
     const post = await getPostBySlug(slug);
 
@@ -32,8 +32,7 @@ export async function BlogPostContainer({ slug }: BlogPostContainerProps) {
         </Container>
       </>
     );
-  } catch (error) {
-    console.error(`Failed to load post with slug "${slug.join('/')}":`, error);
+  } catch {
     notFound();
   }
-}
+};

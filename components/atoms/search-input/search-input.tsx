@@ -4,35 +4,43 @@ import { Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 interface SearchInputProps {
-  value: string;
   onChange: (value: string) => void | Promise<void>;
   placeholder?: string;
+  value: string;
 }
 
-export function SearchInput({
-  value,
+const handleCompositionStart = (isComposingRef: React.RefObject<boolean | null>) => () => {
+  if (isComposingRef.current !== null) {
+    (isComposingRef as React.MutableRefObject<boolean>).current = true;
+  }
+};
+
+const createHandleCompositionEnd =
+  (
+    isComposingRef: React.RefObject<boolean | null>,
+    onChange: (value: string) => void | Promise<void>
+  ) =>
+  (event: React.CompositionEvent<HTMLInputElement>) => {
+    if (isComposingRef.current !== null) {
+      (isComposingRef as React.MutableRefObject<boolean>).current = false;
+    }
+    onChange(event.currentTarget.value);
+  };
+
+export const SearchInput = ({
   onChange,
   placeholder = 'タイトルで検索...',
-}: SearchInputProps) {
+  value,
+}: SearchInputProps) => {
   const [inputValue, setInputValue] = useState(value);
   const isComposingRef = useRef(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
     setInputValue(newValue);
-
     if (!isComposingRef.current) {
       onChange(newValue);
     }
-  };
-
-  const handleCompositionStart = () => {
-    isComposingRef.current = true;
-  };
-
-  const handleCompositionEnd = (e: React.CompositionEvent<HTMLInputElement>) => {
-    isComposingRef.current = false;
-    onChange(e.currentTarget.value);
   };
 
   const handleClear = () => {
@@ -51,8 +59,8 @@ export function SearchInput({
         type="text"
         value={inputValue}
         onChange={handleChange}
-        onCompositionStart={handleCompositionStart}
-        onCompositionEnd={handleCompositionEnd}
+        onCompositionStart={handleCompositionStart(isComposingRef)}
+        onCompositionEnd={createHandleCompositionEnd(isComposingRef, onChange)}
         placeholder={placeholder}
         className="w-full rounded-md border bg-background py-2 pl-10 pr-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       />
@@ -68,4 +76,4 @@ export function SearchInput({
       )}
     </div>
   );
-}
+};

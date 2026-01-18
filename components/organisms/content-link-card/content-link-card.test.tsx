@@ -2,15 +2,24 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContentLinkCard } from './content-link-card';
 
-// Next.js Imageコンポーネントのモック
+/*
+ * ContentLinkCardはServer Componentのため、テストではawaitで直接呼び出す
+ * oxlint-disable new-cap
+ */
+
+/*
+ * Next.js Imageコンポーネントのモック
+ */
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: { src: string; alt: string }) => (
-    // Biome-ignore lint/performance/noImgElement: テスト用のモックでは<img>を使用
-    <img src={src} alt={alt} {...props} />
-  ),
+  default: ({ src, alt, ...props }: { src: string; alt: string }) => {
+    /* Biome-ignore lint/performance/noImgElement: テスト用のモックでは<img>を使用 */
+    return <img src={src} alt={alt} {...props} />;
+  },
 }));
 
-// Fetchのモック
+/*
+ * Fetchのモック
+ */
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 

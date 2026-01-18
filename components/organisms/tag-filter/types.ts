@@ -9,12 +9,12 @@ export interface BubbleTagFilterProps {
 
 /** 個々のバブル（タグ）の情報 */
 export interface TagBubble {
-  x: number;
-  y: number;
-  tag: string;
   count: number;
+  positionX: number;
+  positionY: number;
   radiusX: number;
   radiusY: number;
+  tag: string;
 }
 
 /** ドラッグ操作の状態 */
@@ -62,29 +62,27 @@ export interface BubbleConfig {
   paddingY: number;
 }
 
+/* 初期状態の定数 */
+const INITIAL_VALUE = 0;
+
 /** 初期状態を生成 */
-export function createInitialState(): BubbleState {
-  return {
-    // ドラッグ状態
-    isDragging: false,
-    lastX: 0,
-    lastY: 0,
-    totalDragMove: 0,
-    // キャンバス状態
-    width: 0,
-    height: 0,
-    centerX: 0,
-    centerY: 0,
-    offsetX: 0,
-    offsetY: 0,
-    targetOffsetX: 0,
-    targetOffsetY: 0,
-    baseOffsetX: 0,
-    baseOffsetY: 0,
-    // グリッド状態
-    bubbles: [],
-    gridWidth: 0,
-    gridHeight: 0,
-    initialized: false,
-  };
-}
+export const createInitialState = (): BubbleState => ({
+  baseOffsetX: INITIAL_VALUE,
+  baseOffsetY: INITIAL_VALUE,
+  bubbles: [],
+  centerX: INITIAL_VALUE,
+  centerY: INITIAL_VALUE,
+  gridHeight: INITIAL_VALUE,
+  gridWidth: INITIAL_VALUE,
+  height: INITIAL_VALUE,
+  initialized: false,
+  isDragging: false,
+  lastX: INITIAL_VALUE,
+  lastY: INITIAL_VALUE,
+  offsetX: INITIAL_VALUE,
+  offsetY: INITIAL_VALUE,
+  targetOffsetX: INITIAL_VALUE,
+  targetOffsetY: INITIAL_VALUE,
+  totalDragMove: INITIAL_VALUE,
+  width: INITIAL_VALUE,
+});

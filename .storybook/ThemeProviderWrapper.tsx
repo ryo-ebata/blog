@@ -10,35 +10,52 @@ import {
   useState,
 } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'dark' | 'light' | 'system';
 
 interface ThemeContextValue {
-  theme: Theme;
+  actualTheme: 'dark' | 'light';
   setTheme: (theme: Theme) => void;
-  actualTheme: 'light' | 'dark';
+  theme: Theme;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+
+const getActualTheme = (newTheme: Theme, preferColorSchemeIsDark: boolean): 'dark' | 'light' => {
+  if (newTheme === 'system') {
+    if (preferColorSchemeIsDark) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  if (newTheme === 'light') {
+    return 'light';
+  }
+  return 'dark';
+};
 
 /**
  * Storybook用のThemeProvider
  * nuqsを使わずにローカルステートで管理します
  */
-export function StorybookThemeProvider({ children }: { children: ReactNode }) {
+export const StorybookThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>('dark');
   const [preferColorSchemeIsDark, setPreferColorSchemeIsDark] = useState(false);
 
   useEffect(() => {
-    // クライアントサイドでのみ実行
+    /*
+     * クライアントサイドでのみ実行
+     */
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setPreferColorSchemeIsDark(mediaQuery.matches);
 
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPreferColorSchemeIsDark(e.matches);
-      // イベントハンドラ内でのDOM操作は許容される
-      // Systemテーマの場合、OS設定の変更に応じてDOMを更新
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPreferColorSchemeIsDark(event.matches);
+      /*
+       * イベントハンドラ内でのDOM操作は許容される
+       * Systemテーマの場合、OS設定の変更に応じてDOMを更新
+       */
       if (theme === 'system') {
-        if (e.matches) {
+        if (event.matches) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
@@ -51,28 +68,34 @@ export function StorybookThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const actualTheme = useMemo(() => {
-    if (theme === 'dark') {return 'dark';}
-    if (theme === 'light') {return 'light';}
-    // Theme === 'system' の場合はOS設定を反映
-    return preferColorSchemeIsDark ? 'dark' : 'light';
+    if (theme === 'dark') {
+      return 'dark';
+    }
+    if (theme === 'light') {
+      return 'light';
+    }
+    /*
+     * Theme === 'system' の場合はOS設定を反映
+     */
+    if (preferColorSchemeIsDark) {
+      return 'dark';
+    }
+    return 'light';
   }, [theme, preferColorSchemeIsDark]);
 
-  // テーマを更新する関数
-  // イベントハンドラ内でのDOM操作は許容される
+  /*
+   * テーマを更新する関数
+   * イベントハンドラ内でのDOM操作は許容される
+   */
   const updateTheme = useCallback(
     (newTheme: Theme) => {
       setThemeState(newTheme);
 
-      // イベントハンドラ内でのDOM操作は許容される
-      // 新しいテーマに基づいてDOMを更新
-      const newActualTheme =
-        newTheme === 'system'
-          ? preferColorSchemeIsDark
-            ? 'dark'
-            : 'light'
-          : newTheme === 'light'
-            ? 'light'
-            : 'dark';
+      /*
+       * イベントハンドラ内でのDOM操作は許容される
+       * 新しいテーマに基づいてDOMを更新
+       */
+      const newActualTheme = getActualTheme(newTheme, preferColorSchemeIsDark);
 
       if (typeof document !== 'undefined') {
         if (newActualTheme === 'dark') {
@@ -85,19 +108,22 @@ export function StorybookThemeProvider({ children }: { children: ReactNode }) {
     [preferColorSchemeIsDark]
   );
 
-  const value: ThemeContextValue = useMemo(() => ({
-      theme,
-      setTheme: updateTheme,
+  const value: ThemeContextValue = useMemo(
+    () => ({
       actualTheme,
-    }), [theme, actualTheme, updateTheme]);
+      setTheme: updateTheme,
+      theme,
+    }),
+    [theme, actualTheme, updateTheme]
+  );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
-}
+};
 
-export function useTheme() {
+export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within StorybookThemeProvider');
   }
   return context;
-}
+};

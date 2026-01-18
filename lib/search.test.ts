@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
+
 import type { PostMetadata } from './posts';
 import { filterPostsByTitle } from './search';
+
+/*
+ * テスト用定数
+ */
+const EXPECTED_SINGLE_RESULT = 1;
+const EXPECTED_DOUBLE_RESULT = 2;
+const EXPECTED_NO_RESULT = 0;
+const FIRST_INDEX = 0;
 
 const mockPosts: PostMetadata[] = [
   {
@@ -44,20 +53,20 @@ describe('filterPostsByTitle', () => {
 
   it('タイトルに含まれるキーワードでフィルタリングする', () => {
     const result = filterPostsByTitle(mockPosts, 'React');
-    expect(result).toHaveLength(1);
-    expect(result[0].slug).toBe('react-hooks');
+    expect(result).toHaveLength(EXPECTED_SINGLE_RESULT);
+    expect(result[FIRST_INDEX].slug).toBe('react-hooks');
   });
 
   it('部分一致でフィルタリングする', () => {
     const result = filterPostsByTitle(mockPosts, '入門');
-    expect(result).toHaveLength(1);
-    expect(result[0].slug).toBe('nextjs-intro');
+    expect(result).toHaveLength(EXPECTED_SINGLE_RESULT);
+    expect(result[FIRST_INDEX].slug).toBe('nextjs-intro');
   });
 
   it('大文字小文字を区別しない', () => {
     const result = filterPostsByTitle(mockPosts, 'react');
-    expect(result).toHaveLength(1);
-    expect(result[0].slug).toBe('react-hooks');
+    expect(result).toHaveLength(EXPECTED_SINGLE_RESULT);
+    expect(result[FIRST_INDEX].slug).toBe('react-hooks');
   });
 
   it('複数の記事にマッチする場合すべてを返す', () => {
@@ -72,14 +81,14 @@ describe('filterPostsByTitle', () => {
       },
     ];
     const result = filterPostsByTitle(postsWithSharedWord, 'React');
-    expect(result).toHaveLength(2);
-    expect(result.map((p) => p.slug)).toContain('react-hooks');
-    expect(result.map((p) => p.slug)).toContain('react-patterns');
+    expect(result).toHaveLength(EXPECTED_DOUBLE_RESULT);
+    expect(result.map((post) => post.slug)).toContain('react-hooks');
+    expect(result.map((post) => post.slug)).toContain('react-patterns');
   });
 
   it('マッチしない場合は空配列を返す', () => {
     const result = filterPostsByTitle(mockPosts, 'Python');
-    expect(result).toHaveLength(0);
+    expect(result).toHaveLength(EXPECTED_NO_RESULT);
   });
 
   it('空白のみの検索クエリでは全ての記事を返す', () => {
@@ -89,7 +98,7 @@ describe('filterPostsByTitle', () => {
 
   it('日本語で検索できる', () => {
     const result = filterPostsByTitle(mockPosts, '日記');
-    expect(result).toHaveLength(1);
-    expect(result[0].slug).toBe('daily-note');
+    expect(result).toHaveLength(EXPECTED_SINGLE_RESULT);
+    expect(result[FIRST_INDEX].slug).toBe('daily-note');
   });
 });

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { PostMetadata } from './posts';
 import { aggregateTags, filterPostsByTags } from './tags';
+import type { PostMetadata } from './posts';
+
+/* テスト用定数 */
+const EXPECTED_DOUBLE_RESULT = 2;
+const EXPECTED_TRIPLE_RESULT = 3;
+const EXPECTED_SINGLE_TAG_COUNT = 1;
 
 const mockPosts: PostMetadata[] = [
   {
@@ -45,7 +50,7 @@ describe('aggregateTags', () => {
 
   it('タグがない記事は無視する', () => {
     const result = aggregateTags(mockPosts);
-    expect(result.every((t) => t.tag !== undefined)).toBe(true);
+    expect(result.every((tagItem) => tagItem.tag !== undefined)).toBe(true);
   });
 
   it('空配列を渡すと空配列を返す', () => {
@@ -54,8 +59,8 @@ describe('aggregateTags', () => {
 
   it('同じ記事数のタグは元の順序を維持する', () => {
     const result = aggregateTags(mockPosts);
-    const singleCountTags = result.filter((t) => t.count === 1);
-    expect(singleCountTags.length).toBe(3);
+    const singleCountTags = result.filter((tagItem) => tagItem.count === EXPECTED_SINGLE_TAG_COUNT);
+    expect(singleCountTags.length).toBe(EXPECTED_TRIPLE_RESULT);
   });
 });
 
@@ -67,21 +72,21 @@ describe('filterPostsByTags', () => {
 
   it('単一タグでOR検索する', () => {
     const result = filterPostsByTags(mockPosts, ['React']);
-    expect(result).toHaveLength(2);
-    expect(result.map((p) => p.slug)).toContain('react-hooks');
-    expect(result.map((p) => p.slug)).toContain('nextjs-intro');
+    expect(result).toHaveLength(EXPECTED_DOUBLE_RESULT);
+    expect(result.map((post) => post.slug)).toContain('react-hooks');
+    expect(result.map((post) => post.slug)).toContain('nextjs-intro');
   });
 
   it('複数タグでOR検索する（いずれかを含む記事を返す）', () => {
     const result = filterPostsByTags(mockPosts, ['TypeScript', '競馬']);
-    expect(result).toHaveLength(2);
-    expect(result.map((p) => p.slug)).toContain('react-hooks');
-    expect(result.map((p) => p.slug)).toContain('keiba');
+    expect(result).toHaveLength(EXPECTED_DOUBLE_RESULT);
+    expect(result.map((post) => post.slug)).toContain('react-hooks');
+    expect(result.map((post) => post.slug)).toContain('keiba');
   });
 
   it('タグがない記事はフィルタリングで除外される', () => {
     const result = filterPostsByTags(mockPosts, ['React']);
-    expect(result.map((p) => p.slug)).not.toContain('no-tags');
+    expect(result.map((post) => post.slug)).not.toContain('no-tags');
   });
 
   it('存在しないタグで検索すると空配列を返す', () => {
@@ -91,7 +96,7 @@ describe('filterPostsByTags', () => {
 
   it('全てのタグを指定するとタグを持つ全ての記事を返す', () => {
     const result = filterPostsByTags(mockPosts, ['React', 'TypeScript', 'Next.js', '競馬']);
-    expect(result).toHaveLength(3);
-    expect(result.map((p) => p.slug)).not.toContain('no-tags');
+    expect(result).toHaveLength(EXPECTED_TRIPLE_RESULT);
+    expect(result.map((post) => post.slug)).not.toContain('no-tags');
   });
 });

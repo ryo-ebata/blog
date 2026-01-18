@@ -7,7 +7,7 @@ interface NotesPostContainerProps {
   slug: string[];
 }
 
-export async function NotesPostContainer({ slug }: NotesPostContainerProps) {
+export const NotesPostContainer = async ({ slug }: NotesPostContainerProps) => {
   try {
     const note = await getNoteBySlug(slug);
 
@@ -23,8 +23,7 @@ export async function NotesPostContainer({ slug }: NotesPostContainerProps) {
         </article>
       </Container>
     );
-  } catch (error) {
-    console.error(`Failed to load note with slug "${slug.join('/')}":`, error);
+  } catch {
     notFound();
   }
-}
+};

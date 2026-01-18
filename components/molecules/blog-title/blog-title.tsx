@@ -4,6 +4,8 @@ interface BlogTitleProps {
   title?: string;
 }
 
-export function BlogTitle({ title = 'ブログ' }: BlogTitleProps) {
-  return <h1 className="text-4xl font-bold mb-8 text-foreground">{title}</h1>;
-}
+const DEFAULT_TITLE = 'ブログ';
+
+export const BlogTitle = ({ title = DEFAULT_TITLE }: BlogTitleProps) => (
+  <h1 className="text-4xl font-bold mb-8 text-foreground">{title}</h1>
+);

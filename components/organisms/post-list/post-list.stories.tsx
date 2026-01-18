@@ -55,8 +55,10 @@ export const Empty: Story = {
   },
 };
 
+const FIRST_POST_INDEX = 0;
+
 export const SinglePost: Story = {
   args: {
-    posts: [mockPosts[0]],
+    posts: [mockPosts[FIRST_POST_INDEX]],
   },
 };

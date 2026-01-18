@@ -17,10 +17,8 @@ const maxWidthClasses: Record<ContainerMaxWidth, string> = {
   xl: 'max-w-xl',
 } as const;
 
-export function Container({ children, maxWidth = '4xl' }: ContainerProps) {
-  return (
-    <div className="min-h-screen bg-background">
-      <div className={`${maxWidthClasses[maxWidth]} mx-auto py-8 px-4`}>{children}</div>
-    </div>
-  );
-}
+export const Container = ({ children, maxWidth = '4xl' }: ContainerProps) => (
+  <div className="min-h-screen bg-background">
+    <div className={`${maxWidthClasses[maxWidth]} mx-auto py-8 px-4`}>{children}</div>
+  </div>
+);

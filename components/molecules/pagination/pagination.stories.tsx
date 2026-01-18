@@ -3,17 +3,17 @@ import { Pagination } from './pagination';
 
 const meta = {
   argTypes: {
-    currentPage: {
-      control: { type: 'number', min: 1 },
-      description: '現在のページ番号',
-    },
-    totalPages: {
-      control: { type: 'number', min: 1 },
-      description: '総ページ数',
-    },
     basePath: {
       control: 'text',
       description: 'ベースパス',
+    },
+    currentPage: {
+      control: { min: 1, type: 'number' },
+      description: '現在のページ番号',
+    },
+    totalPages: {
+      control: { min: 1, type: 'number' },
+      description: '総ページ数',
     },
   },
   component: Pagination,

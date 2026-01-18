@@ -3,6 +3,9 @@
 import 'server-only';
 import { z } from 'zod';
 
+/* 定数 */
+const REVALIDATE_SECONDS = 3600;
+
 const zennUserSchema = z.object({
   avatar_small_url: z.string(),
   id: z.number(),
@@ -54,11 +57,18 @@ export type ZennPublication = z.infer<typeof zennPublicationSchema>;
 export type ZennArticle = z.infer<typeof zennArticleSchema>;
 export type ZennArticlesResponse = z.infer<typeof zennArticlesResponseSchema>;
 
-export async function getZennArticles(): Promise<ZennArticlesResponse> {
+const createEmptyResponse = (): ZennArticlesResponse => ({
+  articles: [],
+  next_page: null,
+  total_count: null,
+});
+
+export const getZennArticles = async (): Promise<ZennArticlesResponse> => {
   try {
     const response = await fetch('https://zenn.dev/api/articles?username=ebarinyo', {
       next: {
-        revalidate: 3600, // 1時間ごとに再検証
+        /* 1時間ごとに再検証 */
+        revalidate: REVALIDATE_SECONDS,
         tags: ['zenn-articles'],
       },
     });
@@ -69,12 +79,7 @@ export async function getZennArticles(): Promise<ZennArticlesResponse> {
 
     const data = await response.json();
     return zennArticlesResponseSchema.parse(data);
-  } catch (error) {
-    console.error('Failed to fetch Zenn articles:', error);
-    return {
-      articles: [],
-      next_page: null,
-      total_count: null,
-    };
+  } catch {
+    return createEmptyResponse();
   }
-}
+};

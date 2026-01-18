@@ -2,46 +2,65 @@ import type { BubbleConfig } from './types';
 
 /** テーマカラー定義 */
 const COLORS = {
-  bgGradient: { light: '#1e293b', dark: '#e2e8f0' },
-  selected: { light: '#3b82f6', dark: '#60a5fa' },
+  bgGradient: { dark: '#e2e8f0', light: '#1e293b' },
+  selected: { dark: '#60a5fa', light: '#3b82f6' },
   text: {
-    selected: { light: '#ffffff', dark: '#0d1117' },
-    unselected: { light: '#1e293b', dark: '#e2e8f0' },
+    selected: { dark: '#0d1117', light: '#ffffff' },
+    unselected: { dark: '#e2e8f0', light: '#1e293b' },
   },
-  unselected: { light: '#cbd5e1', dark: '#475569' },
+  unselected: { dark: '#475569', light: '#cbd5e1' },
 } as const;
 
 /** バブルの背景色を取得 */
-export const getBubbleColor = (isSelected: boolean, isDark: boolean): string =>
-  isSelected
-    ? isDark
-      ? COLORS.selected.dark
-      : COLORS.selected.light
-    : isDark
-      ? COLORS.unselected.dark
-      : COLORS.unselected.light;
+export const getBubbleColor = (isSelected: boolean, isDark: boolean): string => {
+  if (isSelected) {
+    if (isDark) {
+      return COLORS.selected.dark;
+    }
+    return COLORS.selected.light;
+  }
+  if (isDark) {
+    return COLORS.unselected.dark;
+  }
+  return COLORS.unselected.light;
+};
 
 /** バブルのテキスト色を取得 */
-export const getTextColor = (isSelected: boolean, isDark: boolean): string =>
-  isSelected
-    ? isDark
-      ? COLORS.text.selected.dark
-      : COLORS.text.selected.light
-    : isDark
-      ? COLORS.text.unselected.dark
-      : COLORS.text.unselected.light;
+export const getTextColor = (isSelected: boolean, isDark: boolean): string => {
+  if (isSelected) {
+    if (isDark) {
+      return COLORS.text.selected.dark;
+    }
+    return COLORS.text.selected.light;
+  }
+  if (isDark) {
+    return COLORS.text.unselected.dark;
+  }
+  return COLORS.text.unselected.light;
+};
 
 /** 背景グラデーションの中心色を取得 */
-export const getBgGradientColor = (isDark: boolean): string =>
-  isDark ? COLORS.bgGradient.dark : COLORS.bgGradient.light;
+export const getBgGradientColor = (isDark: boolean): string => {
+  if (isDark) {
+    return COLORS.bgGradient.dark;
+  }
+  return COLORS.bgGradient.light;
+};
 
-/** バブルの見た目設定 */
+/*
+ * バブルの見た目設定
+ * scaleFactor: スケール計算の基準距離
+ * baseRadiusY: バブルの縦半径
+ * charWidth: 文字幅（横半径計算用）
+ * paddingX: 横方向の余白
+ * paddingY: 縦方向の余白
+ */
 export const BUBBLE_CONFIG: BubbleConfig = {
-  scaleFactor: 250, // スケール計算の基準距離
-  baseRadiusY: 18, // バブルの縦半径
-  charWidth: 8, // 文字幅（横半径計算用）
-  paddingX: 6, // 横方向の余白
-  paddingY: 6, // 縦方向の余白
+  baseRadiusY: 18,
+  charWidth: 8,
+  paddingX: 6,
+  paddingY: 6,
+  scaleFactor: 250,
 };
 
 /** キャンバスの最大サイズ */

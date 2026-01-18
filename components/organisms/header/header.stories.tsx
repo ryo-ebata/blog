@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ThemeProvider } from '@/contexts/theme-provider';
 import { Header } from './header';
+import { ThemeProvider } from '@/contexts/theme-provider';
 
 const meta = {
   component: Header,

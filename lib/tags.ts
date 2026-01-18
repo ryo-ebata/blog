@@ -1,30 +1,40 @@
 import type { PostMetadata } from './posts';
 
+const INITIAL_COUNT = 0;
+const INCREMENT = 1;
+
 export interface TagCount {
-  tag: string;
   count: number;
+  tag: string;
 }
 
-export function aggregateTags(posts: PostMetadata[]): TagCount[] {
+const compareByCount = (itemA: TagCount, itemB: TagCount) => itemB.count - itemA.count;
+
+export const aggregateTags = (posts: PostMetadata[]): TagCount[] => {
   const tagMap = new Map<string, number>();
 
   for (const post of posts) {
-    if (!post.tags) {continue;}
-    for (const tag of post.tags) {
-      tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
+    if (post.tags) {
+      for (const tag of post.tags) {
+        tagMap.set(tag, (tagMap.get(tag) ?? INITIAL_COUNT) + INCREMENT);
+      }
     }
   }
 
   return Array.from(tagMap.entries())
     .map(([tag, count]) => ({ count, tag }))
-    .sort((a, b) => b.count - a.count);
-}
+    .sort(compareByCount);
+};
 
-export function filterPostsByTags(posts: PostMetadata[], tags: string[]): PostMetadata[] {
-  if (tags.length === 0) {return posts;}
+export const filterPostsByTags = (posts: PostMetadata[], tags: string[]): PostMetadata[] => {
+  if (tags.length === INITIAL_COUNT) {
+    return posts;
+  }
 
   return posts.filter((post) => {
-    if (!post.tags) {return false;}
+    if (!post.tags) {
+      return false;
+    }
     return tags.some((tag) => post.tags?.includes(tag));
   });
-}
+};

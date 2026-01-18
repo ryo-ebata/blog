@@ -1,8 +1,8 @@
 'use server';
 
 import 'server-only';
-import { z } from 'zod';
 import { envConfig } from '@/config/env';
+import { z } from 'zod';
 
 const qiitaTagSchema = z.object({
   name: z.string(),
@@ -61,9 +61,10 @@ export type QiitaArticlesResponse = z.infer<typeof qiitaArticlesResponseSchema>;
 /**
  * Qiitaの記事を取得
  */
-export async function getQiitaArticles(): Promise<QiitaArticlesResponse> {
+const REVALIDATE_INTERVAL_SECONDS = 3600;
+
+export const getQiitaArticles = async (): Promise<QiitaArticlesResponse> => {
   if (!envConfig.qiita.QIITA_API_ACCESS_TOKEN) {
-    console.warn('QIITA_API_ACCESS_TOKEN is not set. Returning empty array.');
     return [];
   }
 
@@ -73,7 +74,7 @@ export async function getQiitaArticles(): Promise<QiitaArticlesResponse> {
         Authorization: `Bearer ${envConfig.qiita.QIITA_API_ACCESS_TOKEN}`,
       },
       next: {
-        revalidate: 3600, // 1時間ごとに再検証
+        revalidate: REVALIDATE_INTERVAL_SECONDS,
         tags: ['qiita-articles'],
       },
     });
@@ -84,8 +85,7 @@ export async function getQiitaArticles(): Promise<QiitaArticlesResponse> {
 
     const data = await response.json();
     return qiitaArticlesResponseSchema.parse(data);
-  } catch (error) {
-    console.error('Failed to fetch Qiita articles:', error);
+  } catch {
     return [];
   }
-}
+};

@@ -1,101 +1,245 @@
 import type { TagCount } from '@/lib/tags';
-import { BUBBLE_CONFIG } from './constants';
-import { getScaleAt } from './drawing';
 import type { BubbleState, TagBubble } from './types';
 
-/** タグデータからバブル配列を生成（件数の多い順にソート） */
-export function createBubbles(tags: TagCount[]): TagBubble[] {
-  return [...tags]
-    .sort((a, b) => b.count - a.count)
-    .map((tag) => {
-      // 横幅はテキスト長に応じて動的に決定
-      const textLength = tag.tag.length + String(tag.count).length + 1;
-      const radiusX = Math.max(25, (textLength * BUBBLE_CONFIG.charWidth) / 2 + 12);
+import { getScaleAt } from './drawing';
+import { BUBBLE_CONFIG } from './constants';
 
-      return {
-        count: tag.count,
-        radiusX,
-        radiusY: BUBBLE_CONFIG.baseRadiusY,
-        tag: tag.tag,
-        x: 0,
-        y: 0,
-      };
-    });
+/* マジックナンバー定数 */
+const TEXT_LENGTH_OFFSET = 1;
+const MIN_RADIUS_X = 25;
+const RADIUS_X_DIVISOR = 2;
+const RADIUS_X_PADDING = 12;
+const GRID_MULTIPLIER = 2;
+const HALF_DIVISOR = 2;
+const POWER_EXPONENT = 2;
+const INITIAL_POSITION = 0;
+const REDUCE_INITIAL = 0;
+const ODD_ROW_REMAINDER = 1;
+const TILE_OFFSET = 1;
+
+/** タグからバブルデータを生成 */
+const createBubbleFromTag = (tag: TagCount): TagBubble => {
+  const textLength = tag.tag.length + String(tag.count).length + TEXT_LENGTH_OFFSET;
+  const radiusX = Math.max(
+    MIN_RADIUS_X,
+    (textLength * BUBBLE_CONFIG.charWidth) / RADIUS_X_DIVISOR + RADIUS_X_PADDING
+  );
+
+  return {
+    count: tag.count,
+    positionX: INITIAL_POSITION,
+    positionY: INITIAL_POSITION,
+    radiusX,
+    radiusY: BUBBLE_CONFIG.baseRadiusY,
+    tag: tag.tag,
+  };
+};
+
+/** タグデータからバブル配列を生成（件数の多い順にソート） */
+export const createBubbles = (tags: TagCount[]): TagBubble[] =>
+  [...tags].sort((first, second) => second.count - first.count).map(createBubbleFromTag);
+
+/** グリッドの行列数を計算 */
+const calculateGridDimensions = (
+  bubbleCount: number
+): { cols: number; rows: number; centerRow: number; centerCol: number } => {
+  const cols = Math.ceil(Math.sqrt(bubbleCount * GRID_MULTIPLIER));
+  const rows = Math.ceil(bubbleCount / cols);
+  const centerRow = Math.floor(rows / HALF_DIVISOR);
+  const centerCol = Math.floor(cols / HALF_DIVISOR);
+  return { centerCol, centerRow, cols, rows };
+};
+
+/** 位置リスト作成用パラメータ */
+interface SortedPositionsParams {
+  rows: number;
+  cols: number;
+  centerRow: number;
+  centerCol: number;
 }
 
-/** バブルをハニカム状に配置し、グリッドサイズを返す */
-export function layoutBubbles(bubbles: TagBubble[]): { gridWidth: number; gridHeight: number } {
-  // グリッドの行列数を計算
-  const cols = Math.ceil(Math.sqrt(bubbles.length * 2));
-  const rows = Math.ceil(bubbles.length / cols);
-  const centerRow = Math.floor(rows / 2);
-  const centerCol = Math.floor(cols / 2);
-
-  // 中心からの距離でソートした位置リストを作成
+/** 中心からの距離でソートした位置リストを作成 */
+const createSortedPositions = (
+  params: SortedPositionsParams
+): { row: number; col: number; dist: number }[] => {
+  const { rows, cols, centerRow, centerCol } = params;
   const positions: { row: number; col: number; dist: number }[] = [];
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       positions.push({
         col,
-        dist: Math.sqrt((row - centerRow) ** 2 + (col - centerCol) ** 2),
+        dist: Math.sqrt((row - centerRow) ** POWER_EXPONENT + (col - centerCol) ** POWER_EXPONENT),
         row,
       });
     }
   }
-  positions.sort((a, b) => a.dist - b.dist);
+  positions.sort((first, second) => first.dist - second.dist);
+  return positions;
+};
 
-  // セルサイズを計算
-  const avgRadiusX = bubbles.reduce((sum, b) => sum + b.radiusX, 0) / bubbles.length;
-  const cellWidth = avgRadiusX * 2 + BUBBLE_CONFIG.paddingX;
-  const cellHeight = BUBBLE_CONFIG.baseRadiusY * 2 + BUBBLE_CONFIG.paddingY;
+/** セルサイズを計算 */
+const calculateCellSize = (bubbles: TagBubble[]): { cellWidth: number; cellHeight: number } => {
+  const avgRadiusX =
+    bubbles.reduce((sum, bubble) => sum + bubble.radiusX, REDUCE_INITIAL) / bubbles.length;
+  const cellWidth = avgRadiusX * GRID_MULTIPLIER + BUBBLE_CONFIG.paddingX;
+  const cellHeight = BUBBLE_CONFIG.baseRadiusY * GRID_MULTIPLIER + BUBBLE_CONFIG.paddingY;
+  return { cellHeight, cellWidth };
+};
 
-  // バブルを配置（奇数行は半セル分ずらしてハニカム状に）
-  for (let i = 0; i < bubbles.length && i < positions.length; i++) {
-    const pos = positions[i];
-    const offsetForRow = pos.row % 2 === 1 ? cellWidth / 2 : 0;
-    bubbles[i].x = pos.col * cellWidth + offsetForRow;
-    bubbles[i].y = pos.row * cellHeight;
-  }
-
-  return { gridHeight: rows * cellHeight, gridWidth: cols * cellWidth };
+/** バブル配置用パラメータ */
+interface PlaceBubblesParams {
+  bubbles: TagBubble[];
+  positions: { row: number; col: number; dist: number }[];
+  cellWidth: number;
+  cellHeight: number;
 }
 
-/** 指定座標にあるバブルを探す（無限ループ対応） */
-export function findBubbleAtPosition(
-  clientX: number,
-  clientY: number,
-  canvas: HTMLCanvasElement,
+/** バブルを配置（奇数行は半セル分ずらしてハニカム状に） */
+const placeBubbles = (params: PlaceBubblesParams): void => {
+  const { bubbles, positions, cellWidth, cellHeight } = params;
+  for (let index = 0; index < bubbles.length && index < positions.length; index++) {
+    const pos = positions[index];
+    let offsetForRow = 0;
+    if (pos.row % HALF_DIVISOR === ODD_ROW_REMAINDER) {
+      offsetForRow = cellWidth / HALF_DIVISOR;
+    }
+    bubbles[index].positionX = pos.col * cellWidth + offsetForRow;
+    bubbles[index].positionY = pos.row * cellHeight;
+  }
+};
+
+/** バブルをハニカム状に配置し、グリッドサイズを返す */
+export const layoutBubbles = (
+  bubbles: TagBubble[]
+): {
+  gridWidth: number;
+  gridHeight: number;
+} => {
+  const { cols, rows, centerRow, centerCol } = calculateGridDimensions(bubbles.length);
+  const positions = createSortedPositions({ centerCol, centerRow, cols, rows });
+  const { cellWidth, cellHeight } = calculateCellSize(bubbles);
+  placeBubbles({ bubbles, cellHeight, cellWidth, positions });
+
+  return { gridHeight: rows * cellHeight, gridWidth: cols * cellWidth };
+};
+
+/** バブル探索用のパラメータ */
+interface FindBubbleParams {
+  clientX: number;
+  clientY: number;
+  canvas: HTMLCanvasElement;
+  state: BubbleState;
+}
+
+/** タイル範囲を計算 */
+const calculateTileRange = (
   state: BubbleState
-): TagBubble | null {
+): { tilesX: number; tilesY: number; startTileX: number; startTileY: number } => ({
+  startTileX: Math.floor(-state.offsetX / state.gridWidth),
+  startTileY: Math.floor(-state.offsetY / state.gridHeight),
+  tilesX: Math.ceil(state.width / state.gridWidth) + TILE_OFFSET,
+  tilesY: Math.ceil(state.height / state.gridHeight) + TILE_OFFSET,
+});
+
+/** ヒット判定用パラメータ */
+interface CheckHitParams {
+  bubble: TagBubble;
+  adjustedX: number;
+  adjustedY: number;
+  tileOffsetX: number;
+  tileOffsetY: number;
+  state: BubbleState;
+}
+
+/** バブルのヒット判定 */
+const checkBubbleHit = (params: CheckHitParams): boolean => {
+  const { bubble, adjustedX, adjustedY, tileOffsetX, tileOffsetY, state } = params;
+  const scale = getScaleAt({
+    bubbleX: bubble.positionX,
+    bubbleY: bubble.positionY,
+    state,
+    tileOffsetX,
+    tileOffsetY,
+  });
+  const radiusX = bubble.radiusX * scale;
+  const radiusY = bubble.radiusY * scale;
+  return (
+    Math.abs(adjustedX - (bubble.positionX + tileOffsetX)) <= radiusX &&
+    Math.abs(adjustedY - (bubble.positionY + tileOffsetY)) <= radiusY
+  );
+};
+
+/** 調整済み座標計算用パラメータ */
+interface AdjustedCoordsParams {
+  clientX: number;
+  clientY: number;
+  canvas: HTMLCanvasElement;
+  state: BubbleState;
+}
+
+/** 調整済み座標を計算 */
+const calculateAdjustedCoords = (
+  params: AdjustedCoordsParams
+): { adjustedX: number; adjustedY: number } => {
+  const { clientX, clientY, canvas, state } = params;
   const rect = canvas.getBoundingClientRect();
-  const adjustedX = clientX - rect.left - state.offsetX;
-  const adjustedY = clientY - rect.top - state.offsetY;
+  return {
+    adjustedX: clientX - rect.left - state.offsetX,
+    adjustedY: clientY - rect.top - state.offsetY,
+  };
+};
 
-  // 表示中のタイル範囲を計算
-  const tilesX = Math.ceil(state.width / state.gridWidth) + 1;
-  const tilesY = Math.ceil(state.height / state.gridHeight) + 1;
-  const startTileX = Math.floor(-state.offsetX / state.gridWidth);
-  const startTileY = Math.floor(-state.offsetY / state.gridHeight);
+/** タイル内検索用パラメータ */
+interface FindInTileParams {
+  bubbles: TagBubble[];
+  adjustedX: number;
+  adjustedY: number;
+  tileOffsetX: number;
+  tileOffsetY: number;
+  state: BubbleState;
+}
 
-  // 全タイルを走査してヒット判定
+/** タイル内のバブルを検索 */
+const findBubbleInTile = (params: FindInTileParams): TagBubble | null => {
+  const { bubbles, adjustedX, adjustedY, tileOffsetX, tileOffsetY, state } = params;
+  for (const bubble of bubbles) {
+    if (checkBubbleHit({ adjustedX, adjustedY, bubble, state, tileOffsetX, tileOffsetY })) {
+      return bubble;
+    }
+  }
+  return null;
+};
+
+/** 全タイルを走査してバブルを検索 */
+const searchBubblesInTiles = (
+  state: BubbleState,
+  adjustedX: number,
+  adjustedY: number
+): TagBubble | null => {
+  const { tilesX, tilesY, startTileX, startTileY } = calculateTileRange(state);
   for (let ty = 0; ty < tilesY; ty++) {
     for (let tx = 0; tx < tilesX; tx++) {
       const tileOffsetX = (startTileX + tx) * state.gridWidth;
       const tileOffsetY = (startTileY + ty) * state.gridHeight;
-
-      for (const bubble of state.bubbles) {
-        const scale = getScaleAt(bubble.x, bubble.y, tileOffsetX, tileOffsetY, state);
-        const radiusX = bubble.radiusX * scale;
-        const radiusY = bubble.radiusY * scale;
-
-        const isHit =
-          Math.abs(adjustedX - (bubble.x + tileOffsetX)) <= radiusX &&
-          Math.abs(adjustedY - (bubble.y + tileOffsetY)) <= radiusY;
-
-        if (isHit) {return bubble;}
+      const found = findBubbleInTile({
+        adjustedX,
+        adjustedY,
+        bubbles: state.bubbles,
+        state,
+        tileOffsetX,
+        tileOffsetY,
+      });
+      if (found) {
+        return found;
       }
     }
   }
-
   return null;
-}
+};
+
+/** 指定座標にあるバブルを探す（無限ループ対応） */
+export const findBubbleAtPosition = (params: FindBubbleParams): TagBubble | null => {
+  const { clientX, clientY, canvas, state } = params;
+  const { adjustedX, adjustedY } = calculateAdjustedCoords({ canvas, clientX, clientY, state });
+  return searchBubblesInTiles(state, adjustedX, adjustedY);
+};

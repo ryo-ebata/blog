@@ -12,11 +12,11 @@ interface NotesListContainerProps {
 
 const NOTES_PER_PAGE = 10;
 
-export async function NotesListContainer({
+export const NotesListContainer = async ({
   currentPage,
   searchQuery,
   selectedTags,
-}: NotesListContainerProps) {
+}: NotesListContainerProps) => {
   try {
     const allNotes = await getAllNotes();
     const allNotesMetadata = allNotes.map((note) => note.metadata);
@@ -28,25 +28,24 @@ export async function NotesListContainer({
 
     return (
       <NotesListPresenter
-        notes={notes}
-        totalPages={totalPages}
         currentPage={currentPage}
+        notes={notes}
         searchQuery={searchQuery}
         selectedTags={selectedTags}
         tagCounts={tagCounts}
+        totalPages={totalPages}
       />
     );
-  } catch (error) {
-    console.error('Failed to load notes:', error);
+  } catch {
     return (
       <NotesListPresenter
-        notes={[]}
-        totalPages={0}
         currentPage={currentPage}
+        notes={[]}
         searchQuery=""
         selectedTags={[]}
         tagCounts={[]}
+        totalPages={0}
       />
     );
   }
-}
+};

@@ -1,14 +1,14 @@
-import type { EvaluateOptions } from '@mdx-js/mdx';
-import { transformerNotationDiff, transformerNotationHighlight } from '@shikijs/transformers';
-import { Suspense } from 'react';
 import * as runtime from 'react/jsx-runtime';
+import type { EvaluateOptions } from '@mdx-js/mdx';
+import { Suspense } from 'react';
+import { transformerNotationDiff, transformerNotationHighlight } from '@shikijs/transformers';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
 import { remarkLinkCard } from '@/lib/mdx/remark-link-card';
 
-function ContentLinkCardLoading({ url }: { url: string }) {
+const ContentLinkCardLoading = ({ url }: { url: string }) => {
   const shortUrl = new URL(url).hostname;
   return (
     <div className="not-prose flex w-full items-center gap-3 rounded-lg border bg-card p-4 animate-pulse">
@@ -19,15 +19,13 @@ function ContentLinkCardLoading({ url }: { url: string }) {
       </div>
     </div>
   );
-}
+};
 
-function ContentLinkCard({ url }: { url: string }) {
-  return (
-    <Suspense fallback={<ContentLinkCardLoading url={url} />}>
-      <ContentLinkCardAsync url={url} />
-    </Suspense>
-  );
-}
+const ContentLinkCard = ({ url }: { url: string }) => (
+  <Suspense fallback={<ContentLinkCardLoading url={url} />}>
+    <ContentLinkCardAsync url={url} />
+  </Suspense>
+);
 
 const mdxComponents = {
   ContentLinkCard,
@@ -35,8 +33,6 @@ const mdxComponents = {
 
 export const mdxConfig: Readonly<EvaluateOptions> = {
   ...runtime,
-  useMDXComponents: () => mdxComponents,
-  remarkPlugins: [remarkGfm, remarkLinkCard],
   rehypePlugins: [
     rehypeSlug,
     [
@@ -48,4 +44,6 @@ export const mdxConfig: Readonly<EvaluateOptions> = {
       },
     ],
   ],
+  remarkPlugins: [remarkGfm, remarkLinkCard],
+  useMDXComponents: () => mdxComponents,
 };

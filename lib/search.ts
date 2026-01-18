@@ -1,6 +1,6 @@
 import type { PostMetadata } from './posts';
 
-export function filterPostsByTitle(posts: PostMetadata[], query: string): PostMetadata[] {
+export const filterPostsByTitle = (posts: PostMetadata[], query: string): PostMetadata[] => {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
@@ -10,4 +10,4 @@ export function filterPostsByTitle(posts: PostMetadata[], query: string): PostMe
   const lowerQuery = trimmedQuery.toLowerCase();
 
   return posts.filter((post) => post.title.toLowerCase().includes(lowerQuery));
-}
+};

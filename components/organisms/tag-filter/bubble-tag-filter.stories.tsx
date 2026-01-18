@@ -1,6 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { TagCount } from '@/lib/tags';
+
 import { BubbleTagFilter } from './bubble-tag-filter';
+
+/*
+ * マジックナンバー定数
+ */
+const SLICE_START = 0;
+const MIN_COUNT = 1;
+const COUNT_BASE = 100;
+const INDEX_OFFSET = 1;
+const MANY_TAGS_COUNT = 30;
+const HUNDRED_TAGS_COUNT = 100;
 
 const meta = {
   component: BubbleTagFilter,
@@ -118,8 +129,8 @@ const generateManyTags = (count: number): TagCount[] => {
     'コードレビュー',
   ];
 
-  return tagNames.slice(0, count).map((tag, index) => ({
-    count: Math.max(1, Math.floor(100 / (index + 1))),
+  return tagNames.slice(SLICE_START, count).map((tag, index) => ({
+    count: Math.max(MIN_COUNT, Math.floor(COUNT_BASE / (index + INDEX_OFFSET))),
     tag,
   }));
 };
@@ -132,9 +143,11 @@ const fewTags: TagCount[] = [
   { count: 2, tag: '雑記' },
 ];
 
+const noopTagToggle = () => {};
+
 export const Default: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: [],
     tags: fewTags,
   },
@@ -142,7 +155,7 @@ export const Default: Story = {
 
 export const WithSelectedTags: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: ['React', '競馬'],
     tags: fewTags,
   },
@@ -150,31 +163,31 @@ export const WithSelectedTags: Story = {
 
 export const ManyTags: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: [],
-    tags: generateManyTags(30),
+    tags: generateManyTags(MANY_TAGS_COUNT),
   },
 };
 
 export const HundredTags: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: [],
-    tags: generateManyTags(100),
+    tags: generateManyTags(HUNDRED_TAGS_COUNT),
   },
 };
 
 export const HundredTagsWithSelection: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: ['React', 'TypeScript', 'AI', '競馬'],
-    tags: generateManyTags(100),
+    tags: generateManyTags(HUNDRED_TAGS_COUNT),
   },
 };
 
 export const Empty: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: [],
     tags: [],
   },
@@ -182,8 +195,8 @@ export const Empty: Story = {
 
 export const SingleTag: Story = {
   args: {
-    onTagToggle: (tag: string) => console.log('Toggle:', tag),
+    onTagToggle: noopTagToggle,
     selectedTags: [],
-    tags: [{ tag: 'React', count: 10 }],
+    tags: [{ count: 10, tag: 'React' }],
   },
 };

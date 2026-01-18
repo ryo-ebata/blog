@@ -1,4 +1,8 @@
-export { ArticleCard, type ArticleCardProps, type ArticleCardIconType } from './article-card/article-card';
+export {
+  ArticleCard,
+  type ArticleCardProps,
+  type ArticleCardIconType,
+} from './article-card/article-card';
 export { Container } from './container';
 export { ContentLinkCard } from './content-link-card/content-link-card';
 export { Footer } from './footer/footer';

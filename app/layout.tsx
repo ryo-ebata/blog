@@ -1,14 +1,18 @@
-import type { Metadata } from 'next';
-import { BIZ_UDPGothic } from 'next/font/google';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { Suspense } from 'react';
-import { JsonLd } from '@/components/jsonld/jsonld';
+import './globals.css';
 import { Footer, Header } from '@/components/organisms';
-import { siteConfig } from '@/config/site';
+import { BIZ_UDPGothic } from 'next/font/google';
+import { JsonLd } from '@/components/jsonld/jsonld';
+import type { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { type ReactNode, Suspense } from 'react';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import { generateOrganizationJsonLd } from '@/lib/jsonld';
-import './globals.css';
+import { siteConfig } from '@/config/site';
 
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+
+// oxlint-disable-next-line new-cap -- BIZ_UDPGothic is exported from next/font/google
 const bizUDPGothic = BIZ_UDPGothic({
   adjustFontFallback: true,
   display: 'swap',
@@ -21,20 +25,20 @@ const bizUDPGothic = BIZ_UDPGothic({
 export const metadata: Metadata = {
   description: siteConfig.description,
   openGraph: {
-    type: 'website',
-    locale: 'ja_JP',
-    url: siteConfig.url,
-    title: siteConfig.name,
     description: siteConfig.description,
-    siteName: siteConfig.name,
     images: [
       {
-        url: `${siteConfig.url}${siteConfig.ogImage}`,
-        width: 1200,
-        height: 630,
         alt: siteConfig.name,
+        height: OG_IMAGE_HEIGHT,
+        url: `${siteConfig.url}${siteConfig.ogImage}`,
+        width: OG_IMAGE_WIDTH,
       },
     ],
+    locale: 'ja_JP',
+    siteName: siteConfig.name,
+    title: siteConfig.name,
+    type: 'website',
+    url: siteConfig.url,
   },
   title: {
     default: siteConfig.name,
@@ -42,37 +46,30 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.name,
     description: siteConfig.description,
     images: [`${siteConfig.url}${siteConfig.ogImage}`],
+    title: siteConfig.name,
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const organizationJsonLd = generateOrganizationJsonLd();
-
-  // ちらつきを防ぐためのインラインスクリプト
-  // URLクエリパラメータからテーマを読み取り、html要素にクラスを追加
-  // デフォルトはダークモード
-  // 参考: https://blog.stin.ink/articles/how-to-implement-a-perfect-dark-mode
-  const themeScript = `
+/**
+ * ちらつきを防ぐためのテーマ初期化スクリプトを生成する
+ * URLクエリパラメータからテーマを読み取り、html要素にクラスを追加
+ * デフォルトはダークモード
+ * 参考: https://blog.stin.ink/articles/how-to-implement-a-perfect-dark-mode
+ */
+const createThemeScript = (): string =>
+  `
     (function() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const themeFromUrl = urlParams.get('theme');
         const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        let colorMode;
+        let colorMode = 'dark';
         if (themeFromUrl === 'light') {
           colorMode = 'light';
         } else if (themeFromUrl === 'system') {
           colorMode = prefers;
-        } else {
-          // テーマが指定されていない場合はダークモードをデフォルトとする
-          colorMode = 'dark';
         }
         if (colorMode === 'dark') {
           document.documentElement.classList.add('dark');
@@ -80,13 +77,71 @@ export default function RootLayout({
           document.documentElement.classList.remove('dark');
         }
       } catch (e) {
-        // エラーが発生した場合はダークモードをデフォルトとする
         document.documentElement.classList.add('dark');
       }
     })();
   `
     .replace(/\s+/g, ' ')
     .trim();
+
+/**
+ * ページ構造をラップするコンポーネント
+ */
+const PageLayout = ({ children }: { children: ReactNode }) => (
+  <>
+    <Header />
+    <main>{children}</main>
+    <Footer />
+  </>
+);
+
+/**
+ * テーマプロバイダーとページレイアウトをラップするコンポーネント
+ */
+const ThemeWrapper = ({ children }: { children: ReactNode }) => (
+  <ThemeProvider>
+    <PageLayout>{children}</PageLayout>
+  </ThemeProvider>
+);
+
+/**
+ * Suspenseでラップするコンポーネント
+ */
+const SuspenseWrapper = ({ children }: { children: ReactNode }) => (
+  <Suspense fallback={null}>
+    <ThemeWrapper>{children}</ThemeWrapper>
+  </Suspense>
+);
+
+/**
+ * アプリケーションのプロバイダーとコンテンツをラップするコンポーネント
+ */
+const AppProviders = ({ children }: { children: ReactNode }) => (
+  <NuqsAdapter>
+    <SuspenseWrapper>{children}</SuspenseWrapper>
+  </NuqsAdapter>
+);
+
+/**
+ * Body要素の内容をラップするコンポーネント
+ */
+const BodyContent = ({ children }: { children: ReactNode }) => {
+  const organizationJsonLd = generateOrganizationJsonLd();
+
+  return (
+    <>
+      <JsonLd data={organizationJsonLd} />
+      <AppProviders>{children}</AppProviders>
+    </>
+  );
+};
+
+const RootLayout = ({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) => {
+  const themeScript = createThemeScript();
 
   return (
     <html lang="ja" className="dark" suppressHydrationWarning>
@@ -98,17 +153,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
-        <JsonLd data={organizationJsonLd} />
-        <NuqsAdapter>
-          <Suspense fallback={null}>
-            <ThemeProvider>
-              <Header />
-              <main>{children}</main>
-              <Footer />
-            </ThemeProvider>
-          </Suspense>
-        </NuqsAdapter>
+        <BodyContent>{children}</BodyContent>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

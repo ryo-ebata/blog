@@ -12,11 +12,11 @@ interface BlogListContainerProps {
 
 const POSTS_PER_PAGE = 10;
 
-export async function BlogListContainer({
+export const BlogListContainer = async ({
   currentPage,
   searchQuery,
   selectedTags,
-}: BlogListContainerProps) {
+}: BlogListContainerProps) => {
   try {
     const allPosts = await getAllPosts();
     const allPostsMetadata = allPosts.map((post) => post.metadata);
@@ -28,25 +28,24 @@ export async function BlogListContainer({
 
     return (
       <BlogListPresenter
-        posts={posts}
-        totalPages={totalPages}
         currentPage={currentPage}
+        posts={posts}
         searchQuery={searchQuery}
         selectedTags={selectedTags}
         tagCounts={tagCounts}
+        totalPages={totalPages}
       />
     );
-  } catch (error) {
-    console.error('Failed to load blog posts:', error);
+  } catch {
     return (
       <BlogListPresenter
-        posts={[]}
-        totalPages={0}
         currentPage={currentPage}
+        posts={[]}
         searchQuery=""
         selectedTags={[]}
         tagCounts={[]}
+        totalPages={0}
       />
     );
   }
-}
+};

@@ -1,17 +1,26 @@
 'use client';
 
-import { EmptyState } from '@/components/molecules/empty-state/empty-state';
 import { ArticleCard } from '@/components/organisms/article-card/article-card';
+import { EmptyState } from '@/components/molecules/empty-state/empty-state';
 import type { NoteMetadata } from '@/lib/notes';
 import type { PostMetadata } from '@/lib/posts';
 
+const EMPTY_LENGTH = 0;
+
 interface PostListProps {
-  posts: (PostMetadata | NoteMetadata)[];
   basePath?: string;
+  posts: (NoteMetadata | PostMetadata)[];
 }
 
-export function PostList({ posts, basePath = '/blog' }: PostListProps) {
-  if (posts.length === 0) {
+const getIcon = (icon?: string) => {
+  if (icon) {
+    return { name: icon, type: 'icon' as const };
+  }
+  return undefined;
+};
+
+export const PostList = ({ basePath = '/blog', posts }: PostListProps) => {
+  if (posts.length === EMPTY_LENGTH) {
     return <EmptyState />;
   }
 
@@ -25,10 +34,10 @@ export function PostList({ posts, basePath = '/blog' }: PostListProps) {
           date={post.createdAt}
           tags={post.tags}
           description={post.description}
-          icon={post.icon ? { name: post.icon, type: 'icon' } : undefined}
+          icon={getIcon(post.icon)}
           isExternal={false}
         />
       ))}
     </div>
   );
-}
+};
