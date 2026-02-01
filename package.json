@@ -35,7 +35,7 @@
     "isomorphic-dompurify": "^2.33.0",
     "lucide-react": "^0.555.0",
     "metadata-scraper": "^0.2.61",
-    "next": "16.0.10",
+    "next": "16.1.5",
     "next-themes": "^0.4.6",
     "nuqs": "^2.8.3",
     "open-graph-scraper": "^6.11.0",
