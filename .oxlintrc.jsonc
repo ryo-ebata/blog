@@ -7,21 +7,21 @@
     "perf": "warn",
     "style": "warn",
     "restriction": "off",
-    "nursery": "off"
+    "nursery": "off",
   },
   "plugins": ["react", "typescript", "jsx-a11y", "nextjs"],
   "rules": {
     "no-console": "warn",
     "react/react-in-jsx-scope": "off",
     "nextjs/no-html-link-for-pages": "off",
-    "sort-imports": ["warn", { "ignoreDeclarationSort": true }]
+    "sort-imports": ["warn", { "ignoreDeclarationSort": true }],
   },
   "overrides": [
     {
       "files": ["components/blog/post-content.tsx", "app/layout.tsx"],
       "rules": {
-        "react/no-danger": "off"
-      }
+        "react/no-danger": "off",
+      },
     },
     {
       "files": ["**/*.test.tsx", "**/*.test.ts"],
@@ -30,53 +30,53 @@
         "max-lines-per-function": "off",
         "new-cap": "off",
         "arrow-body-style": "off",
-        "react/jsx-props-no-spreading": "off"
-      }
+        "react/jsx-props-no-spreading": "off",
+      },
     },
     {
       "files": ["**/*.stories.tsx", "**/*.stories.ts"],
       "rules": {
-        "max-lines-per-function": "off"
-      }
+        "max-lines-per-function": "off",
+      },
     },
     {
       "files": [".storybook/**/*.ts", ".storybook/**/*.tsx"],
       "rules": {
         "max-lines-per-function": "off",
-        "max-statements": "off"
-      }
+        "max-statements": "off",
+      },
     },
     {
       "files": [
         "components/atoms/empty.tsx",
         "components/atoms/table.tsx",
         "components/atoms/button.tsx",
-        "components/organisms/article-card/article-card.tsx"
+        "components/organisms/article-card/article-card.tsx",
       ],
       "rules": {
-        "react/jsx-props-no-spreading": "off"
-      }
+        "react/jsx-props-no-spreading": "off",
+      },
     },
     {
       "files": ["lib/content.ts"],
       "rules": {
         "no-ternary": "off",
         "max-statements": "off",
-        "max-lines": "off"
-      }
+        "max-lines": "off",
+      },
     },
     {
       "files": ["app/**/container.tsx"],
       "rules": {
-        "react/jsx-max-depth": "off"
-      }
+        "react/jsx-max-depth": "off",
+      },
     },
     {
       "files": ["components/organisms/content-link-card/content-link-card.tsx"],
       "rules": {
-        "max-statements": "off"
-      }
-    }
+        "max-statements": "off",
+      },
+    },
   ],
-  "ignorePatterns": ["node_modules", ".next", "out", "storybook-static", "coverage"]
+  "ignorePatterns": ["node_modules", ".next", "out", "storybook-static", "coverage"],
 }
