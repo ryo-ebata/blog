@@ -1,0 +1,9 @@
+[     415ms] ShikiError: Language `tsv` not found, you may need to load it first
+    at fn (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:1903:24)
+    at fn (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:1903:24)
+    at fn (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:1903:24)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:1882:148)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:2390:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:2349:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:2459:98)
+    at progress (http://localhost:3000/_next/static/chunks/9a850_next_dist_compiled_react-server-dom-turbopack_23eefcf5._.js:2628:13)
