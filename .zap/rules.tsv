@@ -1,3 +1,4 @@
 # ZAP Baseline Scan Rules
 # Format: <alert_id>	<action>	<description>
 # Actions: IGNORE, WARN, FAIL
+10038	WARN	(Sub Resource Integrity Attribute Missing - BuyMeACoffee外部スクリプトのため対応不可)
