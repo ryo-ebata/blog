@@ -28,3 +28,6 @@ jobs:
 
   lighthouse:
     uses: ./.github/workflows/job-lighthouse.yaml
+
+  zap-scan:
+    uses: ./.github/workflows/job-zap-scan.yaml

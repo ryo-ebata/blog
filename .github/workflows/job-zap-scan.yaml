@@ -1,0 +1,188 @@
+name: Reusable OWASP ZAP Baseline Scan
+
+on:
+  workflow_call:
+    inputs:
+      target_url:
+        description: 'URL to scan with OWASP ZAP'
+        required: false
+        type: string
+        default: 'http://localhost:3000'
+
+jobs:
+  zap-scan:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build
+        run: pnpm run build
+
+      - name: 🚀 Start server
+        run: pnpm run start &
+
+      - name: ⏳ Wait for server to be ready
+        run: |
+          echo "Waiting for server at ${{ inputs.target_url }}..."
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null -w "%{http_code}" "${{ inputs.target_url }}" | grep -q "200"; then
+              echo "Server is ready!"
+              exit 0
+            fi
+            echo "Attempt $i/30 - waiting 2 seconds..."
+            sleep 2
+          done
+          echo "Server did not start in time"
+          exit 1
+
+      - name: 🔒 Run OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          target: ${{ inputs.target_url }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-j'
+          fail_action: false
+          allow_issue_writing: false
+
+      - name: 📤 Upload ZAP Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: report_html.html
+          retention-days: 14
+
+      - name: 📊 Comment PR with ZAP results
+        if: always() && github.event.pull_request.number != null
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            let comment = '## 🔒 OWASP ZAP Baseline Scan Results\n\n';
+
+            try {
+                if (fs.existsSync('report_json.json')) {
+                    const report = JSON.parse(fs.readFileSync('report_json.json', 'utf8'));
+                    const sites = report.site || [];
+
+                    let high = 0, medium = 0, low = 0, info = 0;
+                    const alerts = [];
+
+                    for (const site of sites) {
+                        for (const alert of (site.alerts || [])) {
+                            const riskCode = parseInt(alert.riskcode, 10);
+                            const count = parseInt(alert.count, 10) || 1;
+
+                            switch (riskCode) {
+                                case 3: high += count; break;
+                                case 2: medium += count; break;
+                                case 1: low += count; break;
+                                default: info += count; break;
+                            }
+
+                            alerts.push({
+                                name: alert.name,
+                                riskCode,
+                                riskDesc: alert.riskdesc,
+                                desc: alert.desc,
+                                solution: alert.solution,
+                                cweid: alert.cweid,
+                                count
+                            });
+                        }
+                    }
+
+                    comment += '### Alert Summary\n\n';
+                    comment += '| Risk Level | Count |\n';
+                    comment += '|------------|-------|\n';
+                    comment += `| 🔴 High | ${high} |\n`;
+                    comment += `| 🟠 Medium | ${medium} |\n`;
+                    comment += `| 🟡 Low | ${low} |\n`;
+                    comment += `| 🔵 Informational | ${info} |\n\n`;
+
+                    const highMediumAlerts = alerts.filter(a => a.riskCode >= 2);
+                    if (highMediumAlerts.length > 0) {
+                        comment += '### High / Medium Alerts\n\n';
+                        for (const alert of highMediumAlerts) {
+                            comment += `<details>\n<summary>${alert.riskDesc} - ${alert.name}</summary>\n\n`;
+                            comment += `- **Description**: ${alert.desc.replace(/<[^>]*>/g, '')}\n`;
+                            comment += `- **Solution**: ${alert.solution.replace(/<[^>]*>/g, '')}\n`;
+                            if (alert.cweid && alert.cweid !== '-1') {
+                                comment += `- **CWE ID**: [CWE-${alert.cweid}](https://cwe.mitre.org/data/definitions/${alert.cweid}.html)\n`;
+                            }
+                            comment += `\n</details>\n\n`;
+                        }
+                    }
+
+                    const lowAlerts = alerts.filter(a => a.riskCode === 1);
+                    if (lowAlerts.length > 0) {
+                        comment += '<details>\n<summary>🟡 Low Risk Alerts</summary>\n\n';
+                        for (const alert of lowAlerts) {
+                            comment += `- ${alert.name} (${alert.count} instances)\n`;
+                        }
+                        comment += '\n</details>\n\n';
+                    }
+                } else {
+                    comment += '⚠️ ZAP JSON report not found.\n';
+                }
+            } catch (error) {
+                comment += `⚠️ Error reading ZAP results: ${error.message}\n`;
+            }
+
+            comment += '\n> 📄 詳細なHTMLレポートはArtifactsからダウンロードできます。\n';
+
+            const prNumber = context.payload.pull_request?.number || context.issue?.number;
+
+            if (!prNumber) {
+                console.log('PR number not found, skipping comment');
+                return;
+            }
+
+            console.log(`Posting comment to PR #${prNumber}`);
+
+            const issueComments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+            });
+
+            const existingComment = issueComments.data.find(
+                c => c.user.type === 'Bot' && c.body.includes('## 🔒 OWASP ZAP Baseline Scan Results')
+            );
+
+            if (existingComment) {
+                console.log(`Updating existing comment #${existingComment.id}`);
+                await github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: existingComment.id,
+                    body: comment
+                });
+            } else {
+                console.log(`Creating new comment on PR #${prNumber}`);
+                await github.rest.issues.createComment({
+                    issue_number: prNumber,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: comment
+                });
+            }
