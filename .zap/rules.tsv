@@ -1,0 +1,3 @@
+# ZAP Baseline Scan Rules
+# Format: <alert_id>	<action>	<description>
+# Actions: IGNORE, WARN, FAIL
