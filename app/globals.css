@@ -225,3 +225,82 @@
     content: none;
   }
 }
+
+/* ==============================================
+   Components レイヤー: 記事カード
+   ============================================== */
+@layer components {
+  .article-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.3s ease;
+  }
+
+  .article-card:hover {
+    transform: translateY(-4px);
+    border-color: oklch(0.6 0.12 250 / 0.3);
+    box-shadow: 0 8px 24px oklch(0 0 0 / 0.12);
+  }
+
+  .dark .article-card:hover {
+    box-shadow: 0 12px 32px oklch(0 0 0 / 0.4);
+  }
+
+  .article-card-body {
+    position: relative;
+    background: var(--card);
+  }
+
+  /* 下向きカーブ: テキスト上端に凹型マスクで画像が下に湾曲して見える */
+  .article-card-body::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 1.5rem;
+    background: var(--card);
+    mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
+    -webkit-mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ホバー: カーブを非表示にする */
+  .article-card:hover .article-card-body::before {
+    opacity: 0;
+  }
+
+  /* ブラーした画像をテキスト背景に: デフォルト非表示、ホバーで出現 */
+  .article-card-blur {
+    position: absolute;
+    inset: 0;
+    transform: scale(2);
+    filter: blur(60px) saturate(1.5);
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .article-card:hover .article-card-blur {
+    opacity: 1;
+  }
+
+  /* ホバー時: ブラー背景の輝度に合わせたテキスト色 */
+  .article-card .article-card-body h2,
+  .article-card .article-card-body p {
+    transition: color 0.3s ease;
+  }
+
+  .article-card:hover .article-card-body h2 {
+    color: var(--blur-heading, var(--primary));
+  }
+
+  .article-card:hover .article-card-body p {
+    color: var(--blur-text, var(--muted-foreground));
+  }
+}

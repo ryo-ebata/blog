@@ -26,6 +26,9 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: 🌐 Run E2E tests
+        env:
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
         run: pnpm run test:e2e --project=chromium
 
       - name: 📤 Upload test results

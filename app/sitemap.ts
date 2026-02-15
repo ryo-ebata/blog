@@ -10,9 +10,9 @@
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
  */
 
-import type { ContentMetadataWithFile } from '@/lib/content';
+import type { BaseContentMetadata } from '@/lib/content';
 import type { MetadataRoute } from 'next';
-import { getAllPostsMetadata } from '@/lib/posts';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { siteConfig } from '@/config/site';
 
 /* 優先度定数 */
@@ -50,12 +50,12 @@ const createStaticPages = (): MetadataRoute.Sitemap => {
 /**
  * ブログ記事のサイトマップエントリを生成する
  */
-const createBlogPostEntries = (posts: ContentMetadataWithFile[]): MetadataRoute.Sitemap =>
-  posts.map((post: ContentMetadataWithFile) => ({
+const createBlogPostEntries = (posts: BaseContentMetadata[]): MetadataRoute.Sitemap =>
+  posts.map((post) => ({
     changeFrequency: 'weekly',
-    lastModified: new Date(post.metadata.updatedAt || post.metadata.createdAt),
+    lastModified: new Date(post.updatedAt || post.createdAt),
     priority: PRIORITY_MEDIUM,
-    url: `${siteConfig.url}/blog/${post.metadata.slug}`,
+    url: `${siteConfig.url}/blog/${post.slug}`,
   }));
 
 /**

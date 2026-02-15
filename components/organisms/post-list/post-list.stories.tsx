@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 import { PostList } from './post-list';
 
 const meta = {
@@ -14,11 +14,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockPosts: PostMetadata[] = [
+const mockPosts: BaseContentMetadata[] = [
   {
     createdAt: '2024-01-15',
     description: 'これは最初のサンプル記事の説明文です。',
-    icon: 'FileText',
+    eyecatch: { url: 'https://images.microcms-assets.io/example1.png', height: 630, width: 1200 },
     slug: 'example-post-1',
     tags: ['nextjs', 'typescript'],
     title: 'サンプル記事1',
@@ -27,7 +27,7 @@ const mockPosts: PostMetadata[] = [
   {
     createdAt: '2024-01-10',
     description: 'これは2番目のサンプル記事の説明文です。',
-    icon: 'Code',
+    eyecatch: { url: 'https://images.microcms-assets.io/example2.png', height: 630, width: 1200 },
     slug: 'example-post-2',
     tags: ['react', 'tailwindcss'],
     title: 'サンプル記事2',

@@ -1,24 +1,22 @@
 import { type QiitaArticle, getQiitaArticles } from '@/lib/external/qiita';
 import { type ZennArticle, getZennArticles } from '@/lib/external/zenn';
 import { HomePresenter } from './presenter';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 
 type ArticleItem =
   | { article: ZennArticle; type: 'zenn' }
   | { article: QiitaArticle; type: 'qiita' };
 
-interface ArticleWithLikes {
-  article: ZennArticle | QiitaArticle;
-  likesCount: number;
-  type: 'zenn' | 'qiita';
-}
+type ArticleWithLikes =
+  | { article: ZennArticle; likesCount: number; type: 'zenn' }
+  | { article: QiitaArticle; likesCount: number; type: 'qiita' };
 
 const SLICE_START_INDEX = 0;
 const MAX_EXTERNAL_ARTICLES = 5;
 
 export const HomeContainer = async () => {
   const [posts, zennArticlesResponse, qiitaArticles] = await Promise.all([
-    getAllPosts(),
+    getAllPostsMetadata(),
     getZennArticles(),
     getQiitaArticles(),
   ]);
@@ -44,10 +42,10 @@ export const HomeContainer = async () => {
     .slice(SLICE_START_INDEX, MAX_EXTERNAL_ARTICLES)
     .map(({ article, type }): ArticleItem => {
       if (type === 'zenn') {
-        return { article: article as ZennArticle, type: 'zenn' };
+        return { article, type: 'zenn' };
       }
-      return { article: article as QiitaArticle, type: 'qiita' };
+      return { article, type: 'qiita' };
     });
 
-  return <HomePresenter articles={allArticles} posts={posts.map((post) => post.metadata)} />;
+  return <HomePresenter articles={allArticles} posts={posts} />;
 };

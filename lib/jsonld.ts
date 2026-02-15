@@ -1,4 +1,4 @@
-import type { PostMetadata } from './posts';
+import type { BaseContentMetadata } from './content';
 import { siteConfig } from '@/config/site';
 
 const EMPTY_LENGTH = 0;
@@ -7,7 +7,7 @@ const EMPTY_LENGTH = 0;
  * ブログ記事用のJSON-LDスキーマを生成
  */
 export const generateArticleJsonLd = (
-  metadata: PostMetadata,
+  metadata: BaseContentMetadata,
   url: string
 ): Record<string, unknown> => {
   const jsonLd: Record<string, unknown> = {
@@ -15,7 +15,7 @@ export const generateArticleJsonLd = (
     '@type': 'BlogPosting',
     author: {
       '@type': 'Person',
-      name: metadata.author || 'Author',
+      name: siteConfig.name,
     },
     dateModified: metadata.updatedAt || metadata.createdAt,
     datePublished: metadata.createdAt,
@@ -28,6 +28,10 @@ export const generateArticleJsonLd = (
     },
     url,
   };
+
+  if (metadata.eyecatch) {
+    jsonLd.image = metadata.eyecatch.url;
+  }
 
   /* タグがある場合はkeywordsに追加 */
   if (metadata.tags && metadata.tags.length > EMPTY_LENGTH) {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PostHeader } from './post-header';
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 
 const meta = {
   component: PostHeader,
@@ -14,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockPost: PostMetadata = {
+const mockPost: BaseContentMetadata = {
   createdAt: '2024-01-15',
   description: 'これはサンプル記事の説明文です。',
   slug: 'example-post',
@@ -53,6 +53,19 @@ export const ManyTags: Story = {
     metadata: {
       ...mockPost,
       tags: ['nextjs', 'typescript', 'react', 'tailwindcss', 'mdx', 'blog'],
+    },
+  },
+};
+
+export const WithEyecatch: Story = {
+  args: {
+    metadata: {
+      ...mockPost,
+      eyecatch: {
+        url: 'https://images.microcms-assets.io/example-eyecatch.png',
+        height: 630,
+        width: 1200,
+      },
     },
   },
 };

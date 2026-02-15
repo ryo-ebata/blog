@@ -7,9 +7,6 @@ interface BlogPageProps {
   searchParams: Promise<{ page?: string; search?: string; tags?: string }>;
 }
 
-/* 1時間ごとに再検証 */
-export const revalidate = 3600;
-
 const DEFAULT_PAGE = 1;
 const BASE_RADIX = 10;
 

@@ -1,5 +1,6 @@
+import { logger } from '@/lib/logger';
 import { paginateItems } from '@/lib/pagination';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { filterPostsByTitle } from '@/lib/search';
 import { aggregateTags, filterPostsByTags } from '@/lib/tags';
 import { BlogListPresenter } from './presenter';
@@ -18,8 +19,7 @@ export const BlogListContainer = async ({
   selectedTags,
 }: BlogListContainerProps) => {
   try {
-    const allPosts = await getAllPosts();
-    const allPostsMetadata = allPosts.map((post) => post.metadata);
+    const allPostsMetadata = await getAllPostsMetadata();
 
     const tagCounts = aggregateTags(allPostsMetadata);
     const filteredByTags = filterPostsByTags(allPostsMetadata, selectedTags);
@@ -36,7 +36,8 @@ export const BlogListContainer = async ({
         totalPages={totalPages}
       />
     );
-  } catch {
+  } catch (error) {
+    logger.error('ブログ記事一覧の取得に失敗しました', { source: 'blog-list' }, error);
     return (
       <BlogListPresenter
         currentPage={currentPage}

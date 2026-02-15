@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { PostMetadata } from './posts';
+import type { BaseContentMetadata } from './content';
 import { filterPostsByTitle } from './search';
 
 /*
@@ -11,7 +11,7 @@ const EXPECTED_DOUBLE_RESULT = 2;
 const EXPECTED_NO_RESULT = 0;
 const FIRST_INDEX = 0;
 
-const mockPosts: PostMetadata[] = [
+const mockPosts: BaseContentMetadata[] = [
   {
     createdAt: '2024-01-01',
     description: 'Reactの基本的なフックについて解説',
@@ -70,7 +70,7 @@ describe('filterPostsByTitle', () => {
   });
 
   it('複数の記事にマッチする場合すべてを返す', () => {
-    const postsWithSharedWord: PostMetadata[] = [
+    const postsWithSharedWord: BaseContentMetadata[] = [
       ...mockPosts,
       {
         createdAt: '2024-01-05',

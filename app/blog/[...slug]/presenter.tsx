@@ -2,10 +2,10 @@
 
 import { BackLink } from '@/components/atoms';
 import { PostHeader } from '@/components/organisms';
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 
 interface BlogPostPresenterProps {
-  metadata: PostMetadata;
+  metadata: BaseContentMetadata;
 }
 
 export const BlogPostPresenter = ({ metadata }: BlogPostPresenterProps) => (

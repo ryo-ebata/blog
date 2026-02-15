@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { aggregateTags, filterPostsByTags } from './tags';
-import type { PostMetadata } from './posts';
+import type { BaseContentMetadata } from './content';
 
 /* テスト用定数 */
 const EXPECTED_DOUBLE_RESULT = 2;
 const EXPECTED_TRIPLE_RESULT = 3;
 const EXPECTED_SINGLE_TAG_COUNT = 1;
 
-const mockPosts: PostMetadata[] = [
+const mockPosts: BaseContentMetadata[] = [
   {
     createdAt: '2024-01-01',
     slug: 'react-hooks',

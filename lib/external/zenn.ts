@@ -1,6 +1,7 @@
 'use server';
 
 import 'server-only';
+import { logger } from '@/lib/logger';
 import { z } from 'zod';
 
 /* 定数 */
@@ -79,7 +80,8 @@ export const getZennArticles = async (): Promise<ZennArticlesResponse> => {
 
     const data = await response.json();
     return zennArticlesResponseSchema.parse(data);
-  } catch {
+  } catch (error) {
+    logger.error('Zenn記事の取得に失敗しました', { source: 'zenn' }, error);
     return createEmptyResponse();
   }
 };

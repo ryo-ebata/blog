@@ -33,6 +33,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 🏗️ Build
+        env:
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
         run: pnpm run build
 
       - name: 🚀 Start server

@@ -1,6 +1,9 @@
-import type { PostMetadata } from './posts';
+import type { BaseContentMetadata } from './content';
 
-export const filterPostsByTitle = (posts: PostMetadata[], query: string): PostMetadata[] => {
+export const filterPostsByTitle = (
+  posts: BaseContentMetadata[],
+  query: string
+): BaseContentMetadata[] => {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {

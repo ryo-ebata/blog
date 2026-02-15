@@ -3,7 +3,8 @@ import { Container } from '@/components/organisms';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd } from '@/lib/jsonld';
-import { getPostBySlug } from '@/lib/posts';
+import { getPostBySlug } from '@/lib/micro-cms/blog';
+import { renderMicroCMSContent } from '@/lib/micro-cms/content-renderer';
 import { BlogPostPresenter } from './presenter';
 
 interface BlogPostContainerProps {
@@ -20,15 +21,14 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
 
     const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
     const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl);
+    const content = await renderMicroCMSContent(post.contentHtml);
 
     return (
       <>
         <JsonLd data={articleJsonLd} />
         <Container maxWidth="3xl">
           <BlogPostPresenter metadata={post.metadata} />
-          <article className="prose prose-neutral dark:prose-invert max-w-none">
-            <post.Content />
-          </article>
+          <article className="prose prose-neutral dark:prose-invert max-w-none">{content}</article>
         </Container>
       </>
     );
