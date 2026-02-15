@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isFuturePost } from './posts';
+import { isFuturePost } from './content';
 
 describe('isFuturePost', () => {
   const today = new Date('2025-01-06T12:00:00');

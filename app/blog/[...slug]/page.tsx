@@ -1,5 +1,6 @@
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
+import type { MicroCMSContentData } from '@/lib/micro-cms/types';
 import { siteConfig } from '@/config/site';
 
 import type { Metadata } from 'next';
@@ -10,30 +11,17 @@ interface Props {
   params: Promise<{ slug: string[] }>;
 }
 
-/* ISR設定: 1時間ごとに再検証 */
-export const revalidate = 3600;
-
-/* 新しい記事をオンデマンド生成 */
-export const dynamicParams = true;
+/* ビルド時に全ページ生成（SSG） */
+export const dynamicParams = false;
 
 /*
  * 静的パラメータ生成
  */
 export const generateStaticParams = async () => {
-  const posts = await getAllPosts();
+  const posts = await getAllPostsMetadata();
   return posts.map((post) => ({
-    slug: post.metadata.slug.split('/'),
+    slug: post.slug.split('/'),
   }));
-};
-
-/*
- * 著者情報を取得するヘルパー関数
- */
-const getAuthors = (author: string | undefined): string[] | undefined => {
-  if (author) {
-    return [author];
-  }
-  return undefined;
 };
 
 /*
@@ -49,14 +37,13 @@ const getDescription = (description: string | undefined): string => {
 /*
  * メタデータを生成するヘルパー関数
  */
-const buildMetadata = (post: Awaited<ReturnType<typeof getPostBySlug>>): Metadata => {
+const buildMetadata = (post: MicroCMSContentData): Metadata => {
   const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
-  const authors = getAuthors(post.metadata.author);
   const description = getDescription(post.metadata.description);
 
   return generatePageMetadata({
-    authors,
     description,
+    image: post.metadata.eyecatch?.url,
     imageAlt: post.metadata.title,
     modifiedTime: post.metadata.updatedAt,
     publishedTime: post.metadata.createdAt,

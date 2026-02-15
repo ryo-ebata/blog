@@ -1,4 +1,4 @@
-import type { PostMetadata } from './posts';
+import type { BaseContentMetadata } from './content';
 
 const INITIAL_COUNT = 0;
 const INCREMENT = 1;
@@ -10,7 +10,7 @@ export interface TagCount {
 
 const compareByCount = (itemA: TagCount, itemB: TagCount) => itemB.count - itemA.count;
 
-export const aggregateTags = (posts: PostMetadata[]): TagCount[] => {
+export const aggregateTags = (posts: BaseContentMetadata[]): TagCount[] => {
   const tagMap = new Map<string, number>();
 
   for (const post of posts) {
@@ -26,7 +26,10 @@ export const aggregateTags = (posts: PostMetadata[]): TagCount[] => {
     .sort(compareByCount);
 };
 
-export const filterPostsByTags = (posts: PostMetadata[], tags: string[]): PostMetadata[] => {
+export const filterPostsByTags = (
+  posts: BaseContentMetadata[],
+  tags: string[]
+): BaseContentMetadata[] => {
   if (tags.length === INITIAL_COUNT) {
     return posts;
   }

@@ -3,7 +3,7 @@
 import { ArticleCard, Container } from '@/components/organisms';
 import { BackLink } from '@/components/atoms';
 
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 import type { QiitaArticle } from '@/lib/external/qiita';
 import type { ZennArticle } from '@/lib/external/zenn';
 
@@ -13,7 +13,7 @@ type ArticleItem =
 
 interface HomePresenterProps {
   articles: ArticleItem[];
-  posts: PostMetadata[];
+  posts: BaseContentMetadata[];
 }
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
@@ -72,15 +72,8 @@ const renderQiitaArticle = (
 };
 
 interface PostsSectionProps {
-  posts: PostMetadata[];
+  posts: BaseContentMetadata[];
 }
-
-const getPostIcon = (icon: string | undefined): { name: string; type: 'icon' } | undefined => {
-  if (icon) {
-    return { name: icon, type: 'icon' };
-  }
-  return undefined;
-};
 
 const PostsSection = ({ posts }: PostsSectionProps) => (
   <div className="space-y-4">
@@ -93,8 +86,8 @@ const PostsSection = ({ posts }: PostsSectionProps) => (
           key={post.slug}
           date={post.createdAt}
           description={post.description}
+          eyecatch={post.eyecatch}
           href={`/blog/${post.slug}`}
-          icon={getPostIcon(post.icon)}
           isExternal={false}
           tags={post.tags}
           title={post.title}

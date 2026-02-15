@@ -1,5 +1,5 @@
-import type { ContentMetadataWithFile } from '@/lib/content';
-import { getAllPostsMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { siteConfig } from '@/config/site';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -47,16 +47,16 @@ export const GET = async () => {
  <language>ja</language>
  <lastBuildDate>${formatRFC822(new Date())}</lastBuildDate>
  ${posts
-   .map((post: ContentMetadataWithFile) => {
-     const postUrl = `${siteUrl}/blog/${post.metadata.slug}`;
-     const pubDate = formatRFC822(new Date(post.metadata.createdAt));
+   .map((post: BaseContentMetadata) => {
+     const postUrl = `${siteUrl}/blog/${post.slug}`;
+     const pubDate = formatRFC822(new Date(post.createdAt));
      let description = '';
-     if (post.metadata.description) {
-       description = escapeXml(post.metadata.description);
+     if (post.description) {
+       description = escapeXml(post.description);
      }
 
      return `<item>
-  <title>${escapeXml(post.metadata.title)}</title>
+  <title>${escapeXml(post.title)}</title>
   <description>${description}</description>
   <link>${postUrl}</link>
   <guid isPermaLink="true">${postUrl}</guid>

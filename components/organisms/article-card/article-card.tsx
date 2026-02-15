@@ -1,24 +1,23 @@
 'use client';
 
-import { type LucideIcon, icons } from 'lucide-react';
 import { TagList } from '@/components/molecules/tag-list';
 import { Time } from '@/components/atoms/time/time';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const ICON_SIZE = 36;
-const ICON_CONTAINER_CLASS_WIDTH = 6;
-const ICON_CONTAINER_CLASS_HEIGHT = 6;
+const EYECATCH_SIZE = 48;
 const EMPTY_TAGS_LENGTH = 0;
+const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
 
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
-  | { alt: string; src: string; type: 'image' }
-  | { name: string; type: 'icon' };
+  | { alt: string; src: string; type: 'image' };
 
 export interface ArticleCardProps {
   date: string;
   description?: string;
+  eyecatch?: { url: string; height?: number; width?: number };
   href: string;
   icon?: ArticleCardIconType;
   isExternal?: boolean;
@@ -27,12 +26,29 @@ export interface ArticleCardProps {
   title: string;
 }
 
-const getIconComponent = (iconName: string): LucideIcon | null => {
-  const Icon = icons[iconName as keyof typeof icons];
-  if (Icon) {
-    return Icon;
-  }
-  return null;
+const ArticleEyecatch = ({
+  eyecatch,
+  priority = false,
+}: {
+  eyecatch?: { url: string; height?: number; width?: number };
+  priority?: boolean;
+}) => {
+  const src = eyecatch?.url ?? DEFAULT_EYECATCH_PATH;
+
+  return (
+    <div className="shrink-0 mt-1">
+      <div className="w-12 h-12 rounded-lg overflow-hidden border">
+        <Image
+          src={src}
+          alt=""
+          width={EYECATCH_SIZE}
+          height={EYECATCH_SIZE}
+          className="w-full h-full object-cover"
+          priority={priority}
+        />
+      </div>
+    </div>
+  );
 };
 
 const ArticleIcon = ({
@@ -43,17 +59,6 @@ const ArticleIcon = ({
   priority?: boolean;
 }) => {
   const renderIconContent = () => {
-    if (icon.type === 'icon') {
-      const IconComponent = getIconComponent(icon.name);
-      if (!IconComponent) {
-        return null;
-      }
-      return (
-        <IconComponent
-          className={`w-${ICON_CONTAINER_CLASS_WIDTH} h-${ICON_CONTAINER_CLASS_HEIGHT} text-muted-foreground`}
-        />
-      );
-    }
     if (icon.type === 'emoji') {
       return <span className="text-2xl">{icon.emoji}</span>;
     }
@@ -152,9 +157,25 @@ const ArticleContent = ({
   </div>
 );
 
+const ArticleThumbnail = ({
+  eyecatch,
+  icon,
+  priority = false,
+}: {
+  eyecatch?: { url: string; height?: number; width?: number };
+  icon?: ArticleCardIconType;
+  priority?: boolean;
+}) => {
+  if (icon) {
+    return <ArticleIcon icon={icon} priority={priority} />;
+  }
+  return <ArticleEyecatch eyecatch={eyecatch} priority={priority} />;
+};
+
 export const ArticleCard = ({
   date,
   description,
+  eyecatch,
   href,
   icon,
   isExternal = false,
@@ -164,7 +185,7 @@ export const ArticleCard = ({
 }: ArticleCardProps) => (
   <article className="bg-card border rounded-lg p-6 transition-all duration-300 hover:shadow-md">
     <div className="flex items-start gap-4">
-      {icon && <ArticleIcon icon={icon} priority={priority} />}
+      <ArticleThumbnail eyecatch={eyecatch} icon={icon} priority={priority} />
       <ArticleContent
         date={date}
         description={description}

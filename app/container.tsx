@@ -1,7 +1,7 @@
 import { type QiitaArticle, getQiitaArticles } from '@/lib/external/qiita';
 import { type ZennArticle, getZennArticles } from '@/lib/external/zenn';
 import { HomePresenter } from './presenter';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 
 type ArticleItem =
   | { article: ZennArticle; type: 'zenn' }
@@ -18,7 +18,7 @@ const MAX_EXTERNAL_ARTICLES = 5;
 
 export const HomeContainer = async () => {
   const [posts, zennArticlesResponse, qiitaArticles] = await Promise.all([
-    getAllPosts(),
+    getAllPostsMetadata(),
     getZennArticles(),
     getQiitaArticles(),
   ]);
@@ -49,5 +49,5 @@ export const HomeContainer = async () => {
       return { article: article as QiitaArticle, type: 'qiita' };
     });
 
-  return <HomePresenter articles={allArticles} posts={posts.map((post) => post.metadata)} />;
+  return <HomePresenter articles={allArticles} posts={posts} />;
 };

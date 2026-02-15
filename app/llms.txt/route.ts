@@ -1,5 +1,5 @@
-import type { ContentMetadataWithFile } from '@/lib/content';
-import { getAllPostsMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
+import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { siteConfig } from '@/config/site';
 
 const formatTags = (tags?: string[]): string => {
@@ -35,13 +35,13 @@ ${Object.entries(siteConfig.links)
 
 ## Posts
 ${posts
-  .map((post: ContentMetadataWithFile) => {
-    const postUrl = `${siteUrl}/blog/${post.metadata.slug}`;
-    const tags = formatTags(post.metadata.tags);
-    return `- ${post.metadata.title}${tags}
+  .map((post: BaseContentMetadata) => {
+    const postUrl = `${siteUrl}/blog/${post.slug}`;
+    const tags = formatTags(post.tags);
+    return `- ${post.title}${tags}
   URL: ${postUrl}
-  Created: ${post.metadata.createdAt}
-  ${formatDescription(post.metadata.description)}`;
+  Created: ${post.createdAt}
+  ${formatDescription(post.description)}`;
   })
   .join('\n')}
 `;

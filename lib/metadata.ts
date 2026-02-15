@@ -14,7 +14,6 @@ interface BaseMetadataParams {
 }
 
 interface ArticleMetadataParams extends BaseMetadataParams {
-  authors?: string[];
   modifiedTime?: string;
   publishedTime?: string;
   tags?: string[];
@@ -28,6 +27,9 @@ type MetadataParams = ArticleMetadataParams | BaseMetadataParams;
  */
 const getOgImageUrl = (image?: string): string => {
   if (image) {
+    if (image.startsWith('http')) {
+      return image;
+    }
     return `${siteConfig.url}${image}`;
   }
   return `${siteConfig.url}${siteConfig.ogImage}`;
@@ -86,7 +88,6 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
     const articleParams = params as ArticleMetadataParams;
     baseMetadata.openGraph = {
       ...baseMetadata.openGraph,
-      authors: articleParams.authors,
       modifiedTime: articleParams.modifiedTime,
       publishedTime: articleParams.publishedTime,
       tags: articleParams.tags,

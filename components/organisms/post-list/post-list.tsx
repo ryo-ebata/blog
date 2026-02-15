@@ -2,22 +2,14 @@
 
 import { ArticleCard } from '@/components/organisms/article-card/article-card';
 import { EmptyState } from '@/components/molecules/empty-state/empty-state';
-import type { NoteMetadata } from '@/lib/notes';
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 
 const EMPTY_LENGTH = 0;
 
 interface PostListProps {
   basePath?: string;
-  posts: (NoteMetadata | PostMetadata)[];
+  posts: BaseContentMetadata[];
 }
-
-const getIcon = (icon?: string) => {
-  if (icon) {
-    return { name: icon, type: 'icon' as const };
-  }
-  return undefined;
-};
 
 export const PostList = ({ basePath = '/blog', posts }: PostListProps) => {
   if (posts.length === EMPTY_LENGTH) {
@@ -34,7 +26,7 @@ export const PostList = ({ basePath = '/blog', posts }: PostListProps) => {
           date={post.createdAt}
           tags={post.tags}
           description={post.description}
-          icon={getIcon(post.icon)}
+          eyecatch={post.eyecatch}
           isExternal={false}
         />
       ))}

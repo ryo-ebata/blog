@@ -53,6 +53,15 @@ const nextConfig: NextConfig = {
   },
   /* パフォーマンス最適化 */
   compress: true,
+  /* 画像最適化設定 */
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'images.microcms-assets.io',
+        protocol: 'https',
+      },
+    ],
+  },
   /* X-Powered-By ヘッダーを無効化 */
   poweredByHeader: false,
   /* 実験的な機能 */

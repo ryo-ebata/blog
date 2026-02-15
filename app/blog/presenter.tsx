@@ -6,12 +6,12 @@ import { SearchInput } from '@/components/atoms';
 import { Pagination } from '@/components/molecules';
 import { BubbleTagFilter, Container, PostList } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
-import type { PostMetadata } from '@/lib/posts';
+import type { BaseContentMetadata } from '@/lib/content';
 import type { TagCount } from '@/lib/tags';
 
 interface BlogListPresenterProps {
   currentPage: number;
-  posts: PostMetadata[];
+  posts: BaseContentMetadata[];
   searchQuery: string;
   selectedTags: string[];
   tagCounts: TagCount[];
@@ -86,7 +86,7 @@ interface FilterSectionProps {
   isEmpty: boolean;
   onSearchChange: (value: string) => void;
   onTagToggle: (tag: string) => void;
-  posts: PostMetadata[];
+  posts: BaseContentMetadata[];
   searchQuery: string;
   selectedTags: string[];
   tagCounts: TagCount[];
