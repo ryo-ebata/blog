@@ -5,8 +5,8 @@ import { Time } from '@/components/atoms/time/time';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const ICON_SIZE = 40;
-const EMPTY_TAGS_LENGTH = 0;
+const ICON_SIZE = 48;
+const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
 
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
@@ -24,62 +24,74 @@ export interface ArticleCardProps {
   title: string;
 }
 
-const getExternalLinkProps = (isExternal: boolean): { rel?: string; target?: string } => {
+function getExternalLinkProps(isExternal: boolean): { rel?: string; target?: string } {
   if (isExternal) {
     return { rel: 'noopener noreferrer', target: '_blank' };
   }
   return {};
-};
+}
 
-const CardIcon = ({
+function GradientCover({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="aspect-[16/9] overflow-hidden bg-gradient-to-br from-secondary to-muted flex items-center justify-center">
+      {children}
+    </div>
+  );
+}
+
+function CardCover({
+  eyecatch,
   icon,
   priority = false,
-}: {
-  icon: ArticleCardIconType;
-  priority?: boolean;
-}) => {
-  if (icon.type === 'emoji') {
+}: Pick<ArticleCardProps, 'eyecatch' | 'icon' | 'priority'>) {
+  if (eyecatch?.url) {
     return (
-      <div className="w-10 h-10 rounded-lg bg-muted border flex items-center justify-center shrink-0">
-        <span className="text-xl">{icon.emoji}</span>
+      <div className="aspect-[16/9] overflow-hidden">
+        <Image
+          src={eyecatch.url}
+          alt=""
+          width={640}
+          height={360}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          priority={priority}
+        />
       </div>
     );
   }
+
+  if (icon) {
+    return (
+      <GradientCover>
+        {icon.type === 'emoji' ? (
+          <span className="text-5xl">{icon.emoji}</span>
+        ) : (
+          <Image
+            src={icon.src}
+            alt={icon.alt}
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            priority={priority}
+          />
+        )}
+      </GradientCover>
+    );
+  }
+
   return (
-    <div className="w-10 h-10 rounded-lg bg-muted border flex items-center justify-center shrink-0 overflow-hidden">
+    <GradientCover>
       <Image
-        src={icon.src}
-        alt={icon.alt}
-        width={ICON_SIZE}
-        height={ICON_SIZE}
-        priority={priority}
-      />
-    </div>
-  );
-};
-
-const CardEyecatch = ({
-  eyecatch,
-  priority = false,
-}: {
-  eyecatch: { url: string; height?: number; width?: number };
-  priority?: boolean;
-}) => (
-  <div className="hidden sm:flex shrink-0 items-center">
-    <div className="w-[160px] h-[100px] rounded-lg overflow-hidden border border-border/50">
-      <Image
-        src={eyecatch.url}
+        src={DEFAULT_EYECATCH_PATH}
         alt=""
-        width={160}
-        height={100}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        width={80}
+        height={80}
+        className="opacity-30"
         priority={priority}
       />
-    </div>
-  </div>
-);
+    </GradientCover>
+  );
+}
 
-export const ArticleCard = ({
+export function ArticleCard({
   date,
   description,
   eyecatch,
@@ -89,7 +101,7 @@ export const ArticleCard = ({
   priority = false,
   tags,
   title,
-}: ArticleCardProps) => {
+}: ArticleCardProps) {
   const linkProps = getExternalLinkProps(isExternal);
 
   return (
@@ -102,12 +114,12 @@ export const ArticleCard = ({
         {...linkProps}
       />
 
-      <div className="relative z-10 flex items-start gap-4 p-5 sm:p-6">
-        {icon && <CardIcon icon={icon} priority={priority} />}
+      <div className="relative z-10">
+        <CardCover eyecatch={eyecatch} icon={icon} priority={priority} />
 
-        <div className="flex-1 min-w-0">
+        <div className="p-5">
           <Link href={href} {...linkProps} className="block">
-            <h2 className="font-bold text-lg text-foreground leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
+            <h2 className="font-bold text-base text-foreground leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
               {title}
             </h2>
           </Link>
@@ -118,8 +130,8 @@ export const ArticleCard = ({
             </p>
           )}
 
-          <div className="mt-3 flex items-center gap-4 flex-wrap">
-            {tags && tags.length > EMPTY_TAGS_LENGTH && (
+          <div className="mt-3 flex items-center gap-3 flex-wrap">
+            {tags && tags.length > 0 && (
               <div className="relative z-20">
                 <TagList tags={tags} />
               </div>
@@ -127,9 +139,7 @@ export const ArticleCard = ({
             <Time date={date} />
           </div>
         </div>
-
-        {!icon && eyecatch?.url && <CardEyecatch eyecatch={eyecatch} priority={priority} />}
       </div>
     </article>
   );
-};
+}

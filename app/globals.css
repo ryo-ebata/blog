@@ -242,31 +242,13 @@
       border-color 0.3s ease;
   }
 
-  .article-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #58a6ff, #7b6cf6, #58a6ff);
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-  }
-
   .article-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     border-color: oklch(0.6 0.12 250 / 0.3);
-    box-shadow: 0 4px 20px oklch(0 0 0 / 0.08);
+    box-shadow: 0 8px 24px oklch(0 0 0 / 0.12);
   }
 
   .dark .article-card:hover {
-    box-shadow:
-      0 8px 30px oklch(0.6 0.15 250 / 0.1),
-      0 4px 12px oklch(0.55 0.12 280 / 0.06);
-  }
-
-  .article-card:hover::before {
-    opacity: 1;
+    box-shadow: 0 12px 32px oklch(0 0 0 / 0.4);
   }
 }

@@ -2,27 +2,32 @@ import type { Root, Element, Text } from 'hast';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 
-const isExternalUrl = (href: string): boolean =>
-  href.startsWith('http://') || href.startsWith('https://');
+function isExternalUrl(href: string): boolean {
+  return href.startsWith('http://') || href.startsWith('https://');
+}
 
-const getTextContent = (node: Element): string => {
+function isTextNode(node: Element['children'][number]): node is Text {
+  return node.type === 'text';
+}
+
+function getTextContent(node: Element): string {
   const texts: string[] = [];
   for (const child of node.children) {
-    if (child.type === 'text') {
-      texts.push((child as Text).value);
+    if (isTextNode(child)) {
+      texts.push(child.value);
     }
   }
   return texts.join('');
-};
+}
 
-const isNonWhitespaceText = (node: Element['children'][number]): boolean => {
-  if (node.type === 'text') {
-    return (node as Text).value.trim().length > 0;
+function isNonWhitespaceText(node: Element['children'][number]): boolean {
+  if (isTextNode(node)) {
+    return node.value.trim().length > 0;
   }
   return node.type === 'element';
-};
+}
 
-const isStandaloneLinkParagraph = (node: Element): { href: string } | null => {
+function isStandaloneLinkParagraph(node: Element): { href: string } | null {
   if (node.tagName !== 'p') {
     return null;
   }
@@ -51,9 +56,9 @@ const isStandaloneLinkParagraph = (node: Element): { href: string } | null => {
   }
 
   return { href };
-};
+}
 
-const isIframelyEmbed = (node: Element): { href: string } | null => {
+function isIframelyEmbed(node: Element): { href: string } | null {
   if (node.tagName !== 'div') {
     return null;
   }
@@ -76,10 +81,11 @@ const isIframelyEmbed = (node: Element): { href: string } | null => {
   }
 
   return { href };
-};
+}
 
-const detectLinkCard = (node: Element): { href: string } | null =>
-  isStandaloneLinkParagraph(node) ?? isIframelyEmbed(node);
+function detectLinkCard(node: Element): { href: string } | null {
+  return isStandaloneLinkParagraph(node) ?? isIframelyEmbed(node);
+}
 
 export const rehypeLinkCard: Plugin<[], Root> = () => {
   return (tree: Root) => {
