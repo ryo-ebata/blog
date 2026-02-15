@@ -23,9 +23,24 @@ describe('PostHeader', () => {
     expect(screen.getByText('TypeScript')).toBeInTheDocument();
   });
 
-  it('文字数を表示する', () => {
+  it('文字数をカンマ区切りで表示する', () => {
     render(<PostHeader metadata={createMockMetadata({ characterCount: 1500 })} />);
-    expect(screen.getByText('1500 文字')).toBeInTheDocument();
+    expect(screen.getByText('1,500 文字')).toBeInTheDocument();
+  });
+
+  it('999以下の文字数はカンマなしで表示する', () => {
+    render(<PostHeader metadata={createMockMetadata({ characterCount: 999 })} />);
+    expect(screen.getByText('999 文字')).toBeInTheDocument();
+  });
+
+  it('10000以上の文字数にカンマを入れて表示する', () => {
+    render(<PostHeader metadata={createMockMetadata({ characterCount: 10000 })} />);
+    expect(screen.getByText('10,000 文字')).toBeInTheDocument();
+  });
+
+  it('1000000以上の文字数に適切にカンマを入れて表示する', () => {
+    render(<PostHeader metadata={createMockMetadata({ characterCount: 1000000 })} />);
+    expect(screen.getByText('1,000,000 文字')).toBeInTheDocument();
   });
 
   it('説明文がある場合に概要セクションを表示する', () => {

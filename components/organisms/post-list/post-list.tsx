@@ -21,6 +21,7 @@ export function PostList({ basePath = '/blog', posts }: PostListProps) {
           key={post.slug}
           title={post.title}
           href={`${basePath}/${post.slug}`}
+          slug={post.slug}
           date={post.createdAt}
           tags={post.tags}
           description={post.description}

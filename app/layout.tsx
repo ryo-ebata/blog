@@ -4,6 +4,7 @@ import { BIZ_UDPGothic } from 'next/font/google';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { ViewTransitions } from 'next-view-transitions';
 import { type ReactNode, Suspense } from 'react';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import { generateOrganizationJsonLd } from '@/lib/jsonld';
@@ -84,9 +85,6 @@ const createThemeScript = (): string =>
     .replace(/\s+/g, ' ')
     .trim();
 
-/**
- * ページ構造をラップするコンポーネント
- */
 const PageLayout = ({ children }: { children: ReactNode }) => (
   <>
     <Header />
@@ -95,36 +93,24 @@ const PageLayout = ({ children }: { children: ReactNode }) => (
   </>
 );
 
-/**
- * テーマプロバイダーとページレイアウトをラップするコンポーネント
- */
 const ThemeWrapper = ({ children }: { children: ReactNode }) => (
   <ThemeProvider>
     <PageLayout>{children}</PageLayout>
   </ThemeProvider>
 );
 
-/**
- * Suspenseでラップするコンポーネント
- */
 const SuspenseWrapper = ({ children }: { children: ReactNode }) => (
   <Suspense fallback={null}>
     <ThemeWrapper>{children}</ThemeWrapper>
   </Suspense>
 );
 
-/**
- * アプリケーションのプロバイダーとコンテンツをラップするコンポーネント
- */
 const AppProviders = ({ children }: { children: ReactNode }) => (
   <NuqsAdapter>
     <SuspenseWrapper>{children}</SuspenseWrapper>
   </NuqsAdapter>
 );
 
-/**
- * Body要素の内容をラップするコンポーネント
- */
 const BodyContent = ({ children }: { children: ReactNode }) => {
   const organizationJsonLd = generateOrganizationJsonLd();
 
@@ -144,18 +130,20 @@ const RootLayout = ({
   const themeScript = createThemeScript();
 
   return (
-    <html lang="ja" className="dark" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: themeScript,
-          }}
-        />
-      </head>
-      <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
-        <BodyContent>{children}</BodyContent>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="ja" className="dark" suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: themeScript,
+            }}
+          />
+        </head>
+        <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
+          <BodyContent>{children}</BodyContent>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 };
 

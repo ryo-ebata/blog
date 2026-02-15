@@ -79,6 +79,7 @@ function PostsSection({ posts }: PostsSectionProps) {
             description={post.description}
             eyecatch={post.eyecatch}
             href={`/blog/${post.slug}`}
+            slug={post.slug}
             isExternal={false}
             tags={post.tags}
             title={post.title}

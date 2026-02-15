@@ -8,5 +8,6 @@ export const siteConfig = {
   },
   name: 'ebaryo.dev',
   ogImage: '/og-image.jpg',
+  repo: 'ryo-ebata/ebaryo.dev',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://example.com',
 };

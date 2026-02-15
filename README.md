@@ -1,30 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ebaryo.dev
 
-## Getting Started
+技術的な学びや日々の気づきを共有する技術ブログです。
 
-First, run the development server:
+## 技術スタック
+
+| カテゴリ       | 技術                                           |
+| -------------- | ---------------------------------------------- |
+| フレームワーク | [Next.js](https://nextjs.org) 16 (App Router)  |
+| UI ライブラリ  | [React](https://react.dev) 19                  |
+| 言語           | [TypeScript](https://www.typescriptlang.org) 5 |
+| スタイリング   | [Tailwind CSS](https://tailwindcss.com) 4      |
+| CMS            | [microCMS](https://microcms.io)                |
+
+## 開発ツール
+
+| ツール                                             | 用途           |
+| -------------------------------------------------- | -------------- |
+| [oxlint](https://oxc.rs/docs/guide/usage/linter)   | リンター       |
+| [oxfmt](https://oxc.rs/docs/guide/usage/formatter) | フォーマッター |
+| [Vitest](https://vitest.dev)                       | ユニットテスト |
+| [Playwright](https://playwright.dev)               | E2Eテスト      |
+| [Storybook](https://storybook.js.org)              | UIカタログ     |
+
+## セットアップ
 
 ```bash
+# 依存関係のインストール
+pnpm install
+
+# 環境変数の設定
+cp .env.example .env.local
+# .env.local に必要な環境変数を設定
+
+# 開発サーバーの起動
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いて確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## スクリプト
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| コマンド             | 説明                          |
+| -------------------- | ----------------------------- |
+| `pnpm dev`           | 開発サーバーを起動            |
+| `pnpm build`         | プロダクションビルド          |
+| `pnpm start`         | プロダクションサーバーを起動  |
+| `pnpm lint`          | oxlint でリント実行           |
+| `pnpm lint:fix`      | oxlint で自動修正             |
+| `pnpm format`        | oxfmt でフォーマット          |
+| `pnpm format:check`  | フォーマットチェック          |
+| `pnpm check`         | リント + フォーマットチェック |
+| `pnpm test`          | Vitest でテスト実行           |
+| `pnpm test:unit`     | ユニットテストのみ実行        |
+| `pnpm test:e2e`      | Playwright で E2E テスト実行  |
+| `pnpm test:coverage` | テストカバレッジ計測          |
+| `pnpm storybook`     | Storybook を起動              |
 
-## Learn More
+## ディレクトリ構造
 
-To learn more about Next.js, take a look at the following resources:
+```
+├── app/                # Next.js App Router ページ
+├── components/
+│   ├── atoms/          # 最小単位のUIコンポーネント
+│   ├── molecules/      # 複合コンポーネント
+│   └── organisms/      # 複雑なUIコンポーネント
+├── config/             # 設定ファイル
+└── lib/                # ユーティリティ・ロジック
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## アーキテクチャ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Container/Presenter パターンを採用しています。
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **page.tsx** - ルーティング・メタデータ定義
+- **container.tsx** - データ取得・ロジック
+- **presenter.tsx** - UI の描画

@@ -3,7 +3,7 @@
 import { TagList } from '@/components/molecules/tag-list';
 import { Time } from '@/components/atoms/time/time';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import { type CSSProperties, type SyntheticEvent, useState } from 'react';
 
 const ICON_SIZE = 48;
@@ -22,6 +22,7 @@ export interface ArticleCardProps {
   icon?: ArticleCardIconType;
   isExternal?: boolean;
   priority?: boolean;
+  slug?: string;
   tags?: string[];
   title: string;
 }
@@ -95,6 +96,7 @@ export function ArticleCard({
   icon,
   isExternal = false,
   priority = false,
+  slug,
   tags,
   title,
 }: ArticleCardProps) {
@@ -128,7 +130,10 @@ export function ArticleCard({
       />
 
       <div className="relative z-10 flex flex-col">
-        <div className="relative aspect-[16/9] overflow-hidden">
+        <div
+          className="relative aspect-[16/9] overflow-hidden"
+          style={slug ? ({ viewTransitionName: `eyecatch-${slug}` } as CSSProperties) : undefined}
+        >
           <CardBackground eyecatch={eyecatch} priority={priority} onLoad={handleEyecatchLoad} />
           <div className="absolute inset-0 flex items-center justify-center">
             {icon && <CardIcon icon={icon} priority={priority} />}
