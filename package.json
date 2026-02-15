@@ -34,6 +34,7 @@
     "microcms-js-sdk": "^3.3.0",
     "next": "16.1.5",
     "next-themes": "^0.4.6",
+    "next-view-transitions": "^0.3.5",
     "nuqs": "^2.8.3",
     "open-graph-scraper": "^6.11.0",
     "react": "19.2.1",

@@ -67,6 +67,7 @@ const nextConfig: NextConfig = {
   /* 実験的な機能 */
   experimental: {
     optimizePackageImports: ['lucide-react', '@tabler/icons-react'],
+    viewTransition: true,
   },
   /* セキュリティヘッダー */
   async headers() {
