@@ -4,9 +4,11 @@ import { TagList } from '@/components/molecules/tag-list';
 import { Time } from '@/components/atoms/time/time';
 import Image from 'next/image';
 import Link from 'next/link';
+import { type CSSProperties, type SyntheticEvent, useState } from 'react';
 
 const ICON_SIZE = 48;
 const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
+const SAMPLE_SIZE = 4;
 
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
@@ -24,6 +26,25 @@ export interface ArticleCardProps {
   title: string;
 }
 
+type BlurLuminance = 'light' | 'dark';
+
+/** 画像の下半分の平均輝度を計算し、明暗を判定する */
+function calculateLuminance(img: HTMLImageElement): BlurLuminance {
+  const canvas = document.createElement('canvas');
+  canvas.width = SAMPLE_SIZE;
+  canvas.height = SAMPLE_SIZE;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return 'dark';
+  ctx.drawImage(img, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
+  const { data } = ctx.getImageData(0, SAMPLE_SIZE / 2, SAMPLE_SIZE, SAMPLE_SIZE / 2);
+  let totalLuminance = 0;
+  const pixelCount = data.length / 4;
+  for (let i = 0; i < data.length; i += 4) {
+    totalLuminance += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+  }
+  return totalLuminance / pixelCount / 255 > 0.5 ? 'light' : 'dark';
+}
+
 function getExternalLinkProps(isExternal: boolean): { rel?: string; target?: string } {
   if (isExternal) {
     return { rel: 'noopener noreferrer', target: '_blank' };
@@ -33,8 +54,11 @@ function getExternalLinkProps(isExternal: boolean): { rel?: string; target?: str
 
 function CardBackground({
   eyecatch,
+  onLoad,
   priority = false,
-}: Pick<ArticleCardProps, 'eyecatch' | 'priority'>) {
+}: Pick<ArticleCardProps, 'eyecatch' | 'priority'> & {
+  onLoad?: (e: SyntheticEvent<HTMLImageElement>) => void;
+}) {
   if (eyecatch?.url) {
     return (
       <Image
@@ -43,6 +67,7 @@ function CardBackground({
         fill
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         priority={priority}
+        onLoad={onLoad}
       />
     );
   }
@@ -75,13 +100,25 @@ export function ArticleCard({
 }: ArticleCardProps) {
   const linkProps = getExternalLinkProps(isExternal);
   const showDefaultIcon = !eyecatch?.url && !icon;
+  const [blurLuminance, setBlurLuminance] = useState<BlurLuminance | null>(null);
+
+  const handleEyecatchLoad = (event: SyntheticEvent<HTMLImageElement>) => {
+    try {
+      setBlurLuminance(calculateLuminance(event.currentTarget));
+    } catch {
+      // tainted canvas - fall back to default theme colors
+    }
+  };
+
+  const blurStyle: CSSProperties | undefined = blurLuminance
+    ? ({
+        '--blur-heading': blurLuminance === 'light' ? 'oklch(0.2 0 0)' : 'oklch(0.95 0 0)',
+        '--blur-text': blurLuminance === 'light' ? 'oklch(0.35 0 0)' : 'oklch(0.8 0 0)',
+      } as CSSProperties)
+    : undefined;
 
   return (
-    <article className="article-card group">
-      <div className="absolute inset-0 overflow-hidden">
-        <CardBackground eyecatch={eyecatch} priority={priority} />
-      </div>
-
+    <article className="article-card group" style={blurStyle}>
       <Link
         href={href}
         className="absolute inset-0 z-0"
@@ -91,24 +128,32 @@ export function ArticleCard({
       />
 
       <div className="relative z-10 flex flex-col">
-        <div className="relative aspect-[16/9] flex items-center justify-center">
-          {icon && <CardIcon icon={icon} priority={priority} />}
-          {showDefaultIcon && (
-            <Image
-              src={DEFAULT_EYECATCH_PATH}
-              alt=""
-              width={80}
-              height={80}
-              className="opacity-30"
-              priority={priority}
-            />
-          )}
+        <div className="relative aspect-[16/9] overflow-hidden">
+          <CardBackground eyecatch={eyecatch} priority={priority} onLoad={handleEyecatchLoad} />
+          <div className="absolute inset-0 flex items-center justify-center">
+            {icon && <CardIcon icon={icon} priority={priority} />}
+            {showDefaultIcon && (
+              <Image
+                src={DEFAULT_EYECATCH_PATH}
+                alt=""
+                width={80}
+                height={80}
+                className="opacity-30"
+                priority={priority}
+              />
+            )}
+          </div>
         </div>
 
         <div className="article-card-body">
-          <div className="p-5">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="article-card-blur" aria-hidden="true">
+              <CardBackground eyecatch={eyecatch} priority={false} />
+            </div>
+          </div>
+          <div className="p-5 relative z-10">
             <Link href={href} {...linkProps} className="block">
-              <h2 className="font-bold text-base text-foreground leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
+              <h2 className="font-bold text-base text-foreground leading-snug line-clamp-2">
                 {title}
               </h2>
             </Link>

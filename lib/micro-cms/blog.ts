@@ -27,8 +27,8 @@ const fetchAllBlogs = async (): Promise<MicroCMSBlog[]> => {
 };
 
 const sortByDateDescending = (a: BaseContentMetadata, b: BaseContentMetadata): number => {
-  const dateA = new Date(a.updatedAt || a.createdAt).getTime();
-  const dateB = new Date(b.updatedAt || b.createdAt).getTime();
+  const dateA = new Date(a.createdAt).getTime();
+  const dateB = new Date(b.createdAt).getTime();
   return dateB - dateA;
 };
 

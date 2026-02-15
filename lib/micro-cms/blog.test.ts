@@ -85,22 +85,22 @@ describe('blog', () => {
       expect(mockGetList).toHaveBeenCalledTimes(2);
     });
 
-    it('日付降順でソートされる', async () => {
-      const older = createMockBlog({
-        id: 'older',
-        slug: 'older',
+    it('publishedAtの降順でソートされる', async () => {
+      const olderPublished = createMockBlog({
+        id: 'older-published',
+        slug: 'older-published',
         publishedAt: '2025-01-01T00:00:00.000Z',
-        updatedAt: '2025-01-01T00:00:00.000Z',
+        updatedAt: '2025-01-20T00:00:00.000Z',
       });
-      const newer = createMockBlog({
-        id: 'newer',
-        slug: 'newer',
+      const newerPublished = createMockBlog({
+        id: 'newer-published',
+        slug: 'newer-published',
         publishedAt: '2025-01-10T00:00:00.000Z',
-        updatedAt: '2025-01-10T00:00:00.000Z',
+        updatedAt: '2025-01-05T00:00:00.000Z',
       });
 
       mockGetList.mockResolvedValueOnce({
-        contents: [older, newer],
+        contents: [olderPublished, newerPublished],
         totalCount: 2,
         offset: 0,
         limit: 100,
@@ -109,8 +109,8 @@ describe('blog', () => {
       const { getAllPostsMetadata } = await import('./blog');
       const result = await getAllPostsMetadata();
 
-      expect(result[0].slug).toBe('newer');
-      expect(result[1].slug).toBe('older');
+      expect(result[0].slug).toBe('newer-published');
+      expect(result[1].slug).toBe('older-published');
     });
 
     it('publishedAtがない場合はcreatedAtをcreatedAtとして使用する', async () => {
