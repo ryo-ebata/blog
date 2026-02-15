@@ -22,6 +22,9 @@ interface ArticleMetadataParams extends BaseMetadataParams {
 
 type MetadataParams = ArticleMetadataParams | BaseMetadataParams;
 
+const isArticleMetadata = (params: MetadataParams): params is ArticleMetadataParams =>
+  params.type === 'article';
+
 /**
  * OGP画像のURLを生成
  */
@@ -84,15 +87,15 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
   };
 
   /* 記事タイプの場合は追加のメタデータを設定 */
-  if (type === 'article' && 'publishedTime' in params) {
-    const articleParams = params as ArticleMetadataParams;
-    baseMetadata.openGraph = {
+  if (isArticleMetadata(params)) {
+    const openGraph: NonNullable<Metadata['openGraph']> = {
       ...baseMetadata.openGraph,
-      modifiedTime: articleParams.modifiedTime,
-      publishedTime: articleParams.publishedTime,
-      tags: articleParams.tags,
+      modifiedTime: params.modifiedTime,
+      publishedTime: params.publishedTime,
+      tags: params.tags,
       type: 'article',
-    } as Metadata['openGraph'];
+    };
+    baseMetadata.openGraph = openGraph;
   }
 
   return baseMetadata;

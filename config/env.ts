@@ -5,6 +5,7 @@ const envSchema = z.object({
   MICROCMS_SERVICE_DOMAIN: z.string(),
   QIITA_API_ACCESS_TOKEN: z.string().optional(),
   QIITA_API_URL: z.string().url().default('https://qiita.com/api/v2'),
+  REVALIDATE_SECRET: z.string().optional(),
 });
 
 const parseResult = envSchema.safeParse({
@@ -12,6 +13,7 @@ const parseResult = envSchema.safeParse({
   MICROCMS_SERVICE_DOMAIN: process.env.MICROCMS_SERVICE_DOMAIN,
   QIITA_API_ACCESS_TOKEN: process.env.QIITA_API_ACCESS_TOKEN,
   QIITA_API_URL: process.env.QIITA_API_URL,
+  REVALIDATE_SECRET: process.env.REVALIDATE_SECRET,
 });
 
 if (!parseResult.success) {
@@ -28,5 +30,8 @@ export const envConfig = {
   qiita: {
     QIITA_API_ACCESS_TOKEN: env.QIITA_API_ACCESS_TOKEN,
     QIITA_API_URL: env.QIITA_API_URL,
+  },
+  revalidate: {
+    REVALIDATE_SECRET: env.REVALIDATE_SECRET,
   },
 } as const;

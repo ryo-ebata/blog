@@ -251,4 +251,46 @@
   .dark .article-card:hover {
     box-shadow: 0 12px 32px oklch(0 0 0 / 0.4);
   }
+
+  .article-card-body {
+    position: relative;
+    background: var(--card);
+    backdrop-filter: blur(20px) saturate(1.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 下向きカーブ: テキスト上端に凹型マスクで画像が下に湾曲して見える */
+  .article-card-body::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 1.5rem;
+    background: var(--card);
+    backdrop-filter: blur(20px) saturate(1.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
+    -webkit-mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ライトモード: グラスモーフィズム */
+  .article-card:hover .article-card-body {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .article-card:hover .article-card-body::before {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* ダークモード: グラスモーフィズム */
+  .dark .article-card:hover .article-card-body {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .dark .article-card:hover .article-card-body::before {
+    background: rgba(255, 255, 255, 0.08);
+  }
 }

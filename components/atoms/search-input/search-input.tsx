@@ -9,21 +9,14 @@ interface SearchInputProps {
   value: string;
 }
 
-const handleCompositionStart = (isComposingRef: React.RefObject<boolean | null>) => () => {
-  if (isComposingRef.current !== null) {
-    (isComposingRef as React.MutableRefObject<boolean>).current = true;
-  }
+const handleCompositionStart = (isComposingRef: React.RefObject<boolean>) => () => {
+  isComposingRef.current = true;
 };
 
 const createHandleCompositionEnd =
-  (
-    isComposingRef: React.RefObject<boolean | null>,
-    onChange: (value: string) => void | Promise<void>
-  ) =>
+  (isComposingRef: React.RefObject<boolean>, onChange: (value: string) => void | Promise<void>) =>
   (event: React.CompositionEvent<HTMLInputElement>) => {
-    if (isComposingRef.current !== null) {
-      (isComposingRef as React.MutableRefObject<boolean>).current = false;
-    }
+    isComposingRef.current = false;
     onChange(event.currentTarget.value);
   };
 

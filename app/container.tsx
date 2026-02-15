@@ -7,11 +7,9 @@ type ArticleItem =
   | { article: ZennArticle; type: 'zenn' }
   | { article: QiitaArticle; type: 'qiita' };
 
-interface ArticleWithLikes {
-  article: ZennArticle | QiitaArticle;
-  likesCount: number;
-  type: 'zenn' | 'qiita';
-}
+type ArticleWithLikes =
+  | { article: ZennArticle; likesCount: number; type: 'zenn' }
+  | { article: QiitaArticle; likesCount: number; type: 'qiita' };
 
 const SLICE_START_INDEX = 0;
 const MAX_EXTERNAL_ARTICLES = 5;
@@ -44,9 +42,9 @@ export const HomeContainer = async () => {
     .slice(SLICE_START_INDEX, MAX_EXTERNAL_ARTICLES)
     .map(({ article, type }): ArticleItem => {
       if (type === 'zenn') {
-        return { article: article as ZennArticle, type: 'zenn' };
+        return { article, type: 'zenn' };
       }
-      return { article: article as QiitaArticle, type: 'qiita' };
+      return { article, type: 'qiita' };
     });
 
   return <HomePresenter articles={allArticles} posts={posts} />;

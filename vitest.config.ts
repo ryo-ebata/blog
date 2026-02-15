@@ -18,6 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(dirname),
+      'server-only': path.resolve(dirname, 'vitest.server-only-mock.ts'),
     },
   },
   test: {

@@ -2,6 +2,7 @@
 
 import 'server-only';
 import { envConfig } from '@/config/env';
+import { logger } from '@/lib/logger';
 import { z } from 'zod';
 
 const qiitaTagSchema = z.object({
@@ -85,7 +86,8 @@ export const getQiitaArticles = async (): Promise<QiitaArticlesResponse> => {
 
     const data = await response.json();
     return qiitaArticlesResponseSchema.parse(data);
-  } catch {
+  } catch (error) {
+    logger.error('Qiita記事の取得に失敗しました', { source: 'qiita' }, error);
     return [];
   }
 };

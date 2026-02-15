@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { paginateItems } from '@/lib/pagination';
 import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { filterPostsByTitle } from '@/lib/search';
@@ -35,7 +36,8 @@ export const BlogListContainer = async ({
         totalPages={totalPages}
       />
     );
-  } catch {
+  } catch (error) {
+    logger.error('ブログ記事一覧の取得に失敗しました', { source: 'blog-list' }, error);
     return (
       <BlogListPresenter
         currentPage={currentPage}

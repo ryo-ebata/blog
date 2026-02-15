@@ -1,0 +1,113 @@
+import { describe, expect, it } from 'vitest';
+import type { BaseContentMetadata } from './content';
+import { generateArticleJsonLd, generateOrganizationJsonLd, generateWebSiteJsonLd } from './jsonld';
+
+const createMockMetadata = (overrides: Partial<BaseContentMetadata> = {}): BaseContentMetadata => ({
+  slug: 'test-slug',
+  title: 'テスト記事',
+  createdAt: '2025-01-01T00:00:00Z',
+  updatedAt: '2025-01-02T00:00:00Z',
+  ...overrides,
+});
+
+describe('generateArticleJsonLd', () => {
+  it('BlogPosting型のJSON-LDを生成する', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result['@context']).toBe('https://schema.org');
+    expect(result['@type']).toBe('BlogPosting');
+    expect(result.headline).toBe('テスト記事');
+    expect(result.url).toBe('https://example.com/blog/test');
+  });
+
+  it('datePublishedとdateModifiedを含む', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.datePublished).toBe('2025-01-01T00:00:00Z');
+    expect(result.dateModified).toBe('2025-01-02T00:00:00Z');
+  });
+
+  it('eyecatchがある場合imageを含む', () => {
+    const metadata = createMockMetadata({
+      eyecatch: { url: 'https://example.com/image.jpg' },
+    });
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.image).toBe('https://example.com/image.jpg');
+  });
+
+  it('eyecatchがない場合imageを含まない', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.image).toBeUndefined();
+  });
+
+  it('tagsがある場合keywordsを含む', () => {
+    const metadata = createMockMetadata({ tags: ['React', 'TypeScript'] });
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.keywords).toBe('React, TypeScript');
+  });
+
+  it('tagsがない場合keywordsを含まない', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.keywords).toBeUndefined();
+  });
+
+  it('authorとpublisherを含む', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.author).toEqual({
+      '@type': 'Person',
+      name: expect.any(String),
+    });
+    expect(result.publisher).toEqual({
+      '@type': 'Organization',
+      name: expect.any(String),
+      url: expect.any(String),
+    });
+  });
+});
+
+describe('generateWebSiteJsonLd', () => {
+  it('WebSite型のJSON-LDを生成する', () => {
+    const result = generateWebSiteJsonLd();
+
+    expect(result['@context']).toBe('https://schema.org');
+    expect(result['@type']).toBe('WebSite');
+    expect(result.name).toBeDefined();
+    expect(result.url).toBeDefined();
+  });
+
+  it('SearchActionを含む', () => {
+    const result = generateWebSiteJsonLd();
+
+    expect(result.potentialAction).toBeDefined();
+    const action = result.potentialAction as Record<string, unknown>;
+    expect(action['@type']).toBe('SearchAction');
+  });
+});
+
+describe('generateOrganizationJsonLd', () => {
+  it('Organization型のJSON-LDを生成する', () => {
+    const result = generateOrganizationJsonLd();
+
+    expect(result['@context']).toBe('https://schema.org');
+    expect(result['@type']).toBe('Organization');
+    expect(result.name).toBeDefined();
+    expect(result.url).toBeDefined();
+  });
+
+  it('sameAsにソーシャルリンクを含む', () => {
+    const result = generateOrganizationJsonLd();
+
+    expect(result.sameAs).toBeDefined();
+    expect(Array.isArray(result.sameAs)).toBe(true);
+  });
+});
