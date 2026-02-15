@@ -106,7 +106,7 @@ describe('rehypeLinkCard', () => {
       const iframelyDivs = divs.filter(
         (d) =>
           Array.isArray(d.properties?.className) &&
-          (d.properties.className as string[]).includes('iframely-responsive'),
+          (d.properties.className as string[]).includes('iframely-responsive')
       );
       expect(iframelyDivs).toHaveLength(0);
     });

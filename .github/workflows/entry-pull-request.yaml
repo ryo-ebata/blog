@@ -19,15 +19,19 @@ jobs:
 
   e2e-test:
     uses: ./.github/workflows/job-e2e-test.yaml
+    secrets: inherit
 
   build-check:
     uses: ./.github/workflows/job-build-check.yaml
+    secrets: inherit
 
   build-storybook:
     uses: ./.github/workflows/job-build-storybook.yaml
 
   lighthouse:
     uses: ./.github/workflows/job-lighthouse.yaml
+    secrets: inherit
 
   zap-scan:
     uses: ./.github/workflows/job-zap-scan.yaml
+    secrets: inherit

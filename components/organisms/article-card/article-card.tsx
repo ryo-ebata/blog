@@ -5,10 +5,8 @@ import { Time } from '@/components/atoms/time/time';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const ICON_SIZE = 36;
-const EYECATCH_SIZE = 48;
+const ICON_SIZE = 40;
 const EMPTY_TAGS_LENGTH = 0;
-const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
 
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
@@ -26,71 +24,6 @@ export interface ArticleCardProps {
   title: string;
 }
 
-const ArticleEyecatch = ({
-  eyecatch,
-  priority = false,
-}: {
-  eyecatch?: { url: string; height?: number; width?: number };
-  priority?: boolean;
-}) => {
-  const src = eyecatch?.url ?? DEFAULT_EYECATCH_PATH;
-
-  return (
-    <div className="shrink-0 mt-1">
-      <div className="w-12 h-12 rounded-lg overflow-hidden border">
-        <Image
-          src={src}
-          alt=""
-          width={EYECATCH_SIZE}
-          height={EYECATCH_SIZE}
-          className="w-full h-full object-cover"
-          priority={priority}
-        />
-      </div>
-    </div>
-  );
-};
-
-const ArticleIcon = ({
-  icon,
-  priority = false,
-}: {
-  icon: ArticleCardIconType;
-  priority?: boolean;
-}) => {
-  const renderIconContent = () => {
-    if (icon.type === 'emoji') {
-      return <span className="text-2xl">{icon.emoji}</span>;
-    }
-    if (icon.type === 'image') {
-      return (
-        <Image
-          src={icon.src}
-          alt={icon.alt}
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          priority={priority}
-        />
-      );
-    }
-    return null;
-  };
-
-  return (
-    <div className="shrink-0 mt-1">
-      <div className="w-12 h-12 rounded-lg bg-muted border flex items-center justify-center">
-        {renderIconContent()}
-      </div>
-    </div>
-  );
-};
-
-interface ArticleTitleLinkProps {
-  href: string;
-  isExternal: boolean;
-  title: string;
-}
-
 const getExternalLinkProps = (isExternal: boolean): { rel?: string; target?: string } => {
   if (isExternal) {
     return { rel: 'noopener noreferrer', target: '_blank' };
@@ -98,79 +31,53 @@ const getExternalLinkProps = (isExternal: boolean): { rel?: string; target?: str
   return {};
 };
 
-const ArticleTitleLink = ({ href, isExternal, title }: ArticleTitleLinkProps) => {
-  const linkProps = getExternalLinkProps(isExternal);
-
-  return (
-    <Link href={href} className="group mb-2 block" {...linkProps}>
-      <h2 className="font-bold text-foreground scroll-m-20 text-xl group-hover:text-primary transition-colors duration-200">
-        {title}
-      </h2>
-    </Link>
-  );
-};
-
-interface ArticleMetaProps {
-  date: string;
-  tags?: string[];
-}
-
-const ArticleMeta = ({ date, tags }: ArticleMetaProps) => (
-  <div className="flex items-center gap-4 mt-2">
-    {tags && tags.length > EMPTY_TAGS_LENGTH && <TagList tags={tags} />}
-    <Time date={date} />
-  </div>
-);
-
-interface ArticleDescriptionProps {
-  description?: string;
-}
-
-const ArticleDescription = ({ description }: ArticleDescriptionProps) => {
-  if (!description) {
-    return null;
-  }
-  return <p className="mt-3 text-muted-foreground leading-relaxed line-clamp-2">{description}</p>;
-};
-
-interface ArticleContentProps {
-  date: string;
-  description?: string;
-  href: string;
-  isExternal: boolean;
-  tags?: string[];
-  title: string;
-}
-
-const ArticleContent = ({
-  date,
-  description,
-  href,
-  isExternal,
-  tags,
-  title,
-}: ArticleContentProps) => (
-  <div className="flex-1">
-    <ArticleTitleLink href={href} isExternal={isExternal} title={title} />
-    <ArticleMeta date={date} tags={tags} />
-    <ArticleDescription description={description} />
-  </div>
-);
-
-const ArticleThumbnail = ({
-  eyecatch,
+const CardIcon = ({
   icon,
   priority = false,
 }: {
-  eyecatch?: { url: string; height?: number; width?: number };
-  icon?: ArticleCardIconType;
+  icon: ArticleCardIconType;
   priority?: boolean;
 }) => {
-  if (icon) {
-    return <ArticleIcon icon={icon} priority={priority} />;
+  if (icon.type === 'emoji') {
+    return (
+      <div className="w-10 h-10 rounded-lg bg-muted border flex items-center justify-center shrink-0">
+        <span className="text-xl">{icon.emoji}</span>
+      </div>
+    );
   }
-  return <ArticleEyecatch eyecatch={eyecatch} priority={priority} />;
+  return (
+    <div className="w-10 h-10 rounded-lg bg-muted border flex items-center justify-center shrink-0 overflow-hidden">
+      <Image
+        src={icon.src}
+        alt={icon.alt}
+        width={ICON_SIZE}
+        height={ICON_SIZE}
+        priority={priority}
+      />
+    </div>
+  );
 };
+
+const CardEyecatch = ({
+  eyecatch,
+  priority = false,
+}: {
+  eyecatch: { url: string; height?: number; width?: number };
+  priority?: boolean;
+}) => (
+  <div className="hidden sm:flex shrink-0 items-center">
+    <div className="w-[160px] h-[100px] rounded-lg overflow-hidden border border-border/50">
+      <Image
+        src={eyecatch.url}
+        alt=""
+        width={160}
+        height={100}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        priority={priority}
+      />
+    </div>
+  </div>
+);
 
 export const ArticleCard = ({
   date,
@@ -182,18 +89,47 @@ export const ArticleCard = ({
   priority = false,
   tags,
   title,
-}: ArticleCardProps) => (
-  <article className="bg-card border rounded-lg p-6 transition-all duration-300 hover:shadow-md">
-    <div className="flex items-start gap-4">
-      <ArticleThumbnail eyecatch={eyecatch} icon={icon} priority={priority} />
-      <ArticleContent
-        date={date}
-        description={description}
+}: ArticleCardProps) => {
+  const linkProps = getExternalLinkProps(isExternal);
+
+  return (
+    <article className="article-card group">
+      <Link
         href={href}
-        isExternal={isExternal}
-        tags={tags}
-        title={title}
+        className="absolute inset-0 z-0"
+        aria-hidden="true"
+        tabIndex={-1}
+        {...linkProps}
       />
-    </div>
-  </article>
-);
+
+      <div className="relative z-10 flex items-start gap-4 p-5 sm:p-6">
+        {icon && <CardIcon icon={icon} priority={priority} />}
+
+        <div className="flex-1 min-w-0">
+          <Link href={href} {...linkProps} className="block">
+            <h2 className="font-bold text-lg text-foreground leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
+              {title}
+            </h2>
+          </Link>
+
+          {description && (
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-2">
+              {description}
+            </p>
+          )}
+
+          <div className="mt-3 flex items-center gap-4 flex-wrap">
+            {tags && tags.length > EMPTY_TAGS_LENGTH && (
+              <div className="relative z-20">
+                <TagList tags={tags} />
+              </div>
+            )}
+            <Time date={date} />
+          </div>
+        </div>
+
+        {!icon && eyecatch?.url && <CardEyecatch eyecatch={eyecatch} priority={priority} />}
+      </div>
+    </article>
+  );
+};

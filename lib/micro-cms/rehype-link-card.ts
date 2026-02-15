@@ -59,16 +59,12 @@ const isIframelyEmbed = (node: Element): { href: string } | null => {
   }
 
   const classNames = node.properties?.className;
-  if (
-    !Array.isArray(classNames) ||
-    !classNames.includes('iframely-responsive')
-  ) {
+  if (!Array.isArray(classNames) || !classNames.includes('iframely-responsive')) {
     return null;
   }
 
   const anchor = node.children.find(
-    (child): child is Element =>
-      child.type === 'element' && child.tagName === 'a',
+    (child): child is Element => child.type === 'element' && child.tagName === 'a'
   );
   if (!anchor) {
     return null;
