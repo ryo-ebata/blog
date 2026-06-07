@@ -1,7 +1,9 @@
 import './globals.css';
 import { Footer, Header } from '@/components/organisms';
 import { BIZ_UDPGothic } from 'next/font/google';
+import Script from 'next/script';
 import { JsonLd } from '@/components/jsonld/jsonld';
+import { adsConfig } from '@/config/ads';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ViewTransitions } from 'next-view-transitions';
@@ -9,9 +11,6 @@ import { type ReactNode, Suspense } from 'react';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import { siteConfig } from '@/config/site';
-
-const OG_IMAGE_WIDTH = 1200;
-const OG_IMAGE_HEIGHT = 630;
 
 // oxlint-disable-next-line new-cap -- BIZ_UDPGothic is exported from next/font/google
 const bizUDPGothic = BIZ_UDPGothic({
@@ -27,14 +26,6 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   openGraph: {
     description: siteConfig.description,
-    images: [
-      {
-        alt: siteConfig.name,
-        height: OG_IMAGE_HEIGHT,
-        url: `${siteConfig.url}${siteConfig.ogImage}`,
-        width: OG_IMAGE_WIDTH,
-      },
-    ],
     locale: 'ja_JP',
     siteName: siteConfig.name,
     title: siteConfig.name,
@@ -48,7 +39,6 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     description: siteConfig.description,
-    images: [`${siteConfig.url}${siteConfig.ogImage}`],
     title: siteConfig.name,
   },
 };
@@ -66,9 +56,9 @@ const createThemeScript = (): string =>
         const urlParams = new URLSearchParams(window.location.search);
         const themeFromUrl = urlParams.get('theme');
         const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        let colorMode = 'dark';
-        if (themeFromUrl === 'light') {
-          colorMode = 'light';
+        let colorMode = 'light';
+        if (themeFromUrl === 'dark') {
+          colorMode = 'dark';
         } else if (themeFromUrl === 'system') {
           colorMode = prefers;
         }
@@ -78,7 +68,7 @@ const createThemeScript = (): string =>
           document.documentElement.classList.remove('dark');
         }
       } catch (e) {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('dark');
       }
     })();
   `
@@ -131,13 +121,22 @@ const RootLayout = ({
 
   return (
     <ViewTransitions>
-      <html lang="ja" className="dark" suppressHydrationWarning>
+      <html lang="ja" suppressHydrationWarning>
         <head>
           <script
             dangerouslySetInnerHTML={{
               __html: themeScript,
             }}
           />
+          {adsConfig.adsense.clientId && (
+            <Script
+              id="google-adsense"
+              async
+              strategy="afterInteractive"
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.adsense.clientId}`}
+              crossOrigin="anonymous"
+            />
+          )}
         </head>
         <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
           <BodyContent>{children}</BodyContent>

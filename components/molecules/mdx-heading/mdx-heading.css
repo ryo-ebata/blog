@@ -3,6 +3,10 @@
 @layer components {
   .mdx-heading {
     @apply relative flex items-center gap-2 scroll-mt-20;
+
+    /* 日本語プロポーショナル詰め: 全角約物の間延びを解消 */
+    font-feature-settings: 'palt';
+    letter-spacing: 0.01em;
   }
 
   .mdx-heading-hash {

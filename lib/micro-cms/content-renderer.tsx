@@ -9,6 +9,7 @@ import type { Root } from 'hast';
 import { MdxBlockquote } from '@/components/molecules/mdx-blockquote';
 import { MdxH1, MdxH2, MdxH3, MdxH4, MdxH5, MdxH6 } from '@/components/molecules/mdx-heading';
 import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
+import { ProductLink } from '@/components/organisms/product-link/product-link';
 
 import { applyShikiHighlight } from './rehype-shiki';
 import { rehypeLinkCard } from './rehype-link-card';
@@ -34,6 +35,7 @@ const ContentLinkCard = ({ url }: { url: string }) => (
 
 const components = {
   'link-card': ContentLinkCard,
+  'product-link': ProductLink,
   blockquote: MdxBlockquote,
   h1: MdxH1,
   h2: MdxH2,

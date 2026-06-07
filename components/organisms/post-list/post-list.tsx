@@ -1,8 +1,13 @@
 'use client';
 
+import { Fragment } from 'react';
 import { ArticleCard } from '@/components/organisms/article-card/article-card';
 import { EmptyState } from '@/components/molecules/empty-state/empty-state';
+import { PromoCard } from '@/components/organisms/promo-card/promo-card';
 import type { BaseContentMetadata } from '@/lib/content';
+
+/** 何件ごとに広告カードを挟むか */
+const AD_INTERVAL = 6;
 
 interface PostListProps {
   basePath?: string;
@@ -16,19 +21,24 @@ export function PostList({ basePath = '/blog', posts }: PostListProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      {posts.map((post) => (
-        <ArticleCard
-          key={post.slug}
-          title={post.title}
-          href={`${basePath}/${post.slug}`}
-          slug={post.slug}
-          date={post.createdAt}
-          tags={post.tags}
-          description={post.description}
-          eyecatch={post.eyecatch}
-          isExternal={false}
-        />
-      ))}
+      {posts.map((post, index) => {
+        const showAd = (index + 1) % AD_INTERVAL === 0 && index + 1 < posts.length;
+        return (
+          <Fragment key={post.slug}>
+            <ArticleCard
+              title={post.title}
+              href={`${basePath}/${post.slug}`}
+              slug={post.slug}
+              date={post.createdAt}
+              tags={post.tags}
+              description={post.description}
+              eyecatch={post.eyecatch}
+              isExternal={false}
+            />
+            {showAd && <PromoCard seed={Math.floor(index / AD_INTERVAL)} />}
+          </Fragment>
+        );
+      })}
     </div>
   );
 }

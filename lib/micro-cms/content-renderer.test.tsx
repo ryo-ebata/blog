@@ -53,4 +53,27 @@ describe('renderMicroCMSContent', () => {
 
     expect(markup).toBeDefined();
   });
+
+  it('product-linkタグが各ストアの検索リンクカードに変換される', async () => {
+    const html = '<product-link name="テスト商品"></product-link>';
+    const result = await renderMicroCMSContent(html);
+    const markup = renderToStaticMarkup(result);
+
+    // 商品名が表示される（propsが渡っている）
+    expect(markup).toContain('テスト商品');
+    // Amazon / 楽天 / Yahoo の検索リンクが生成される
+    expect(markup).toContain('amazon.co.jp/s?k=');
+    expect(markup).toContain('search.rakuten.co.jp');
+    expect(markup).toContain('shopping.yahoo.co.jp');
+    // アフィリエイトリンクの rel が付与される
+    expect(markup).toContain('sponsored');
+  });
+
+  it('product-linkにasin指定でAmazonが直リンクになる', async () => {
+    const html = '<product-link name="商品" asin="B000000000"></product-link>';
+    const result = await renderMicroCMSContent(html);
+    const markup = renderToStaticMarkup(result);
+
+    expect(markup).toContain('amazon.co.jp/dp/B000000000');
+  });
 });

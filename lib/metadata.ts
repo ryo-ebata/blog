@@ -27,15 +27,16 @@ const isArticleMetadata = (params: MetadataParams): params is ArticleMetadataPar
 
 /**
  * OGP画像のURLを生成
+ * image未指定時はundefinedを返し、opengraph-image.tsxにフォールバックさせる
  */
-const getOgImageUrl = (image?: string): string => {
+const getOgImageUrl = (image?: string): string | undefined => {
   if (image) {
     if (image.startsWith('http')) {
       return image;
     }
     return `${siteConfig.url}${image}`;
   }
-  return `${siteConfig.url}${siteConfig.ogImage}`;
+  return undefined;
 };
 
 /**
@@ -63,14 +64,11 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
     description,
     openGraph: {
       description,
-      images: [
-        {
-          alt: imageAltText,
-          height: OG_IMAGE_HEIGHT,
-          url: ogImageUrl,
-          width: OG_IMAGE_WIDTH,
-        },
-      ],
+      ...(ogImageUrl && {
+        images: [
+          { alt: imageAltText, height: OG_IMAGE_HEIGHT, url: ogImageUrl, width: OG_IMAGE_WIDTH },
+        ],
+      }),
       locale: 'ja_JP',
       siteName: siteConfig.name,
       title: ogTitle,
@@ -81,7 +79,7 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
     twitter: {
       card: 'summary_large_image',
       description,
-      images: [ogImageUrl],
+      ...(ogImageUrl && { images: [ogImageUrl] }),
       title: ogTitle,
     },
   };

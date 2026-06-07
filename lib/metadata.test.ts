@@ -79,15 +79,24 @@ describe('generateMetadata', () => {
   });
 
   describe('OGP画像', () => {
-    it('画像指定なしの場合デフォルトOG画像を使用する', () => {
+    it('画像指定なしの場合openGraphにimagesプロパティが存在しない', () => {
       const result = generateMetadata({
         title: 'テスト',
         description: 'テスト',
       });
 
-      const images =
-        result.openGraph && 'images' in result.openGraph ? result.openGraph.images : [];
-      expect(images).toBeDefined();
+      expect(result.openGraph).toBeDefined();
+      expect(result.openGraph).not.toHaveProperty('images');
+    });
+
+    it('画像指定なしの場合twitterにimagesプロパティが存在しない', () => {
+      const result = generateMetadata({
+        title: 'テスト',
+        description: 'テスト',
+      });
+
+      expect(result.twitter).toBeDefined();
+      expect(result.twitter).not.toHaveProperty('images');
     });
 
     it('絶対URLの画像をそのまま使用する', () => {

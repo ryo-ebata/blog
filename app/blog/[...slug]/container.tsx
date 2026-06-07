@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/organisms';
+import { PromoBlock } from '@/components/organisms/promo-block/promo-block';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
@@ -38,7 +39,11 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
         <Container maxWidth="3xl">
           <BlogPostPresenter metadata={post.metadata} />
           <SuggestEditSection slug={postSlug} title={postTitle} />
-          <article className="prose prose-neutral dark:prose-invert max-w-none">{content}</article>
+          <PromoBlock placement="article-top" />
+          <article className="prose prose-neutral dark:prose-invert mx-auto max-w-[42rem]">
+            {content}
+          </article>
+          <PromoBlock placement="article-bottom" />
           <SuggestEditSection slug={postSlug} title={postTitle} />
         </Container>
       </>

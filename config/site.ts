@@ -7,7 +7,6 @@ export const siteConfig = {
     zenn: 'https://zenn.dev/ebarinyo',
   },
   name: 'ebaryo.dev',
-  ogImage: '/og-image.jpg',
   repo: 'ryo-ebata/ebaryo.dev',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://example.com',
 };
