@@ -1,14 +1,14 @@
 import type { BubbleConfig } from './types';
 
-/** テーマカラー定義 */
+/** テーマカラー定義（暖色基調: テラコッタ + 生成り/チャコール） */
 const COLORS = {
-  bgGradient: { dark: '#e2e8f0', light: '#1e293b' },
-  selected: { dark: '#60a5fa', light: '#3b82f6' },
+  bgGradient: { dark: '#e8e3da', light: '#3a3733' },
+  selected: { dark: '#d98b6a', light: '#b5613f' },
   text: {
-    selected: { dark: '#0d1117', light: '#ffffff' },
-    unselected: { dark: '#e2e8f0', light: '#1e293b' },
+    selected: { dark: '#1c1a17', light: '#faf8f4' },
+    unselected: { dark: '#e8e3da', light: '#3a3733' },
   },
-  unselected: { dark: '#475569', light: '#cbd5e1' },
+  unselected: { dark: '#5a544b', light: '#d8cfc0' },
 } as const;
 
 /** バブルの背景色を取得 */

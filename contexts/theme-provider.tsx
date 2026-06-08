@@ -21,7 +21,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const themeParser = parseAsString.withDefault('dark').withOptions({
+const themeParser = parseAsString.withDefault('light').withOptions({
   clearOnDefault: true,
 });
 
@@ -53,7 +53,7 @@ const resolveThemeFromQuery = (queryTheme: string | null): Theme => {
   if (queryTheme === 'light' || queryTheme === 'dark' || queryTheme === 'system') {
     return queryTheme;
   }
-  return 'dark';
+  return 'light';
 };
 
 const usePreferColorScheme = (queryTheme: string | null) => {
@@ -91,7 +91,7 @@ const useThemeState = () => {
   const preferColorSchemeIsDark = usePreferColorScheme(queryTheme);
 
   const actualTheme = useMemo(() => {
-    const currentTheme = queryTheme ?? 'dark';
+    const currentTheme = queryTheme ?? 'light';
     /* Theme === 'system' の場合はOS設定を反映 */
     return resolveActualTheme(currentTheme as Theme, preferColorSchemeIsDark);
   }, [queryTheme, preferColorSchemeIsDark]);
@@ -104,7 +104,7 @@ const useThemeState = () => {
     (newTheme: Theme) => {
       if (newTheme === 'system') {
         setQueryTheme('system');
-      } else if (newTheme === 'dark') {
+      } else if (newTheme === 'light') {
         /* デフォルト値なのでクエリパラメータをクリア */
         setQueryTheme(null);
       } else {

@@ -6,13 +6,14 @@ import { HeadingAnchor } from './heading-anchor';
 
 import './mdx-heading.css';
 
+// 近接の原理: 見出しは「上に広く・下に狭く」して後続の本文と結びつける
 const HEADING_STYLES: Record<HeadingLevel, string> = {
-  1: 'text-3xl font-bold mt-8 mb-4 border-b pb-2 border-dashed',
-  2: 'text-2xl font-bold mt-8 mb-3 border-b pb-2 border-dashed',
-  3: 'text-xl font-semibold mt-6 mb-2',
-  4: 'text-lg font-semibold mt-4 mb-2',
-  5: 'text-base font-semibold mt-4 mb-1',
-  6: 'text-sm font-semibold mt-4 mb-1 text-muted-foreground',
+  1: 'text-3xl font-bold mt-10 mb-4',
+  2: 'text-2xl font-bold mt-12 mb-4 border-b border-border pb-2',
+  3: 'text-xl font-semibold mt-8 mb-3',
+  4: 'text-lg font-semibold mt-6 mb-2',
+  5: 'text-base font-semibold mt-5 mb-1',
+  6: 'text-sm font-semibold mt-5 mb-1 text-muted-foreground',
 };
 
 export const MdxHeading = ({ children, id, level }: MdxHeadingProps): ReactElement => {

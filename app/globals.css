@@ -118,72 +118,74 @@
    ============================================== */
 @layer base {
   :root {
+    /* ライト = 生成り基調の暖色テーマ */
     --radius: 0.625rem;
-    --background: #fdfdfd;
-    --foreground: oklch(0.145 0 0);
-    --card: #fdfdfd;
-    --card-foreground: oklch(0.145 0 0);
-    --popover: #fdfdfd;
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --background: #faf8f4;
+    --foreground: #3a3733;
+    --card: #ffffff;
+    --card-foreground: #3a3733;
+    --popover: #ffffff;
+    --popover-foreground: #3a3733;
+    --primary: #b5613f;
+    --primary-foreground: #faf8f4;
+    --secondary: #f0ebe3;
+    --secondary-foreground: #3a3733;
+    --muted: #f0ebe3;
+    --muted-foreground: #8a8276;
+    --accent: #ede6da;
+    --accent-foreground: #3a3733;
+    --destructive: oklch(0.55 0.18 28);
+    --border: #e7e0d4;
+    --input: #e7e0d4;
+    --ring: #c4704f;
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar: #faf8f4;
+    --sidebar-foreground: #3a3733;
+    --sidebar-primary: #b5613f;
+    --sidebar-primary-foreground: #faf8f4;
+    --sidebar-accent: #ede6da;
+    --sidebar-accent-foreground: #3a3733;
+    --sidebar-border: #e7e0d4;
+    --sidebar-ring: #c4704f;
   }
 
   .dark {
-    --background: #0d1117;
-    --foreground: #c9d1d9;
-    --card: #161b22;
-    --card-foreground: #c9d1d9;
-    --popover: #161b22;
-    --popover-foreground: #c9d1d9;
-    --primary: #58a6ff;
-    --primary-foreground: #0d1117;
-    --secondary: #21262d;
-    --secondary-foreground: #c9d1d9;
-    --muted: #21262d;
-    --muted-foreground: #8b949e;
-    --accent: #1f6feb;
-    --accent-foreground: #c9d1d9;
-    --destructive: #f85149;
-    --border: #30363d;
-    --input: #21262d;
-    --ring: #58a6ff;
+    /* ダーク = 温かチャコール基調の暖色テーマ */
+    --background: #1c1a17;
+    --foreground: #e8e3da;
+    --card: #26231f;
+    --card-foreground: #e8e3da;
+    --popover: #26231f;
+    --popover-foreground: #e8e3da;
+    --primary: #d98b6a;
+    --primary-foreground: #1c1a17;
+    --secondary: #2e2a25;
+    --secondary-foreground: #e8e3da;
+    --muted: #2e2a25;
+    --muted-foreground: #a39c90;
+    --accent: #34302a;
+    --accent-foreground: #e8e3da;
+    --destructive: #e06b5a;
+    --border: #3a352e;
+    --input: #2e2a25;
+    --ring: #d98b6a;
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: #161b22;
-    --sidebar-foreground: #c9d1d9;
-    --sidebar-primary: #58a6ff;
-    --sidebar-primary-foreground: #0d1117;
-    --sidebar-accent: #21262d;
-    --sidebar-accent-foreground: #c9d1d9;
-    --sidebar-border: #30363d;
-    --sidebar-ring: #58a6ff;
+    --sidebar: #26231f;
+    --sidebar-foreground: #e8e3da;
+    --sidebar-primary: #d98b6a;
+    --sidebar-primary-foreground: #1c1a17;
+    --sidebar-accent: #34302a;
+    --sidebar-accent-foreground: #e8e3da;
+    --sidebar-border: #3a352e;
+    --sidebar-ring: #d98b6a;
   }
 
   * {
@@ -191,7 +193,7 @@
   }
 
   html {
-    @apply bg-white dark:bg-[#0d1117];
+    @apply bg-[#faf8f4] dark:bg-[#1c1a17];
   }
 
   body {
@@ -213,6 +215,21 @@
    Vendor レイヤー: サードパーティライブラリのスタイル
    ============================================== */
 @layer vendor {
+  /* ------------------------------------------
+     Tailwind Typography: 本文の字組み（日本語長文の可読性）
+     17px / 行間1.9 / 微字間。読み幅は記事側の max-w-[42rem] で全角約40字に制限。
+     ------------------------------------------ */
+  .prose {
+    font-size: 1.0625rem;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+  }
+
+  /* 行送りを上げた分、段落の分離も連動して確保する */
+  .prose :where(p):not(:where([class~='not-prose'] *)) {
+    margin-block: 1.5em;
+  }
+
   /* ------------------------------------------
      Tailwind Typography: インラインコード
      ------------------------------------------ */
@@ -236,71 +253,20 @@
     border-radius: 0.75rem;
     border: 1px solid var(--border);
     background: var(--card);
-    transition:
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
 
+  /* ホバー: 影がわずかに濃くなるだけの穏やかな演出 */
   .article-card:hover {
-    transform: translateY(-4px);
-    border-color: oklch(0.6 0.12 250 / 0.3);
-    box-shadow: 0 8px 24px oklch(0 0 0 / 0.12);
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.08);
   }
 
   .dark .article-card:hover {
-    box-shadow: 0 12px 32px oklch(0 0 0 / 0.4);
+    box-shadow: 0 6px 20px oklch(0 0 0 / 0.3);
   }
 
   .article-card-body {
     position: relative;
     background: var(--card);
-  }
-
-  /* 下向きカーブ: テキスト上端に凹型マスクで画像が下に湾曲して見える */
-  .article-card-body::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    height: 1.5rem;
-    background: var(--card);
-    mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
-    -webkit-mask-image: radial-gradient(ellipse 55% 100% at 50% 0%, transparent 97%, black 100%);
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* ホバー: カーブを非表示にする */
-  .article-card:hover .article-card-body::before {
-    opacity: 0;
-  }
-
-  /* ブラーした画像をテキスト背景に: デフォルト非表示、ホバーで出現 */
-  .article-card-blur {
-    position: absolute;
-    inset: 0;
-    transform: scale(2);
-    filter: blur(60px) saturate(1.5);
-    opacity: 0;
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .article-card:hover .article-card-blur {
-    opacity: 1;
-  }
-
-  /* ホバー時: ブラー背景の輝度に合わせたテキスト色 */
-  .article-card .article-card-body h2,
-  .article-card .article-card-body p {
-    transition: color 0.3s ease;
-  }
-
-  .article-card:hover .article-card-body h2 {
-    color: var(--blur-heading, var(--primary));
-  }
-
-  .article-card:hover .article-card-body p {
-    color: var(--blur-text, var(--muted-foreground));
   }
 }
