@@ -61,6 +61,9 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
   const imageAltText = imageAlt || title;
 
   const baseMetadata: Metadata = {
+    alternates: {
+      canonical: pageUrl,
+    },
     description,
     openGraph: {
       description,
