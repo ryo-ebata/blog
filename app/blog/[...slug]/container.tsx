@@ -7,6 +7,7 @@ import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
 import { ReadingProgress } from '@/components/molecules/reading-progress/reading-progress';
 import { ShareButtons } from '@/components/molecules/share-buttons/share-buttons';
 import { GiscusComments } from '@/components/organisms/comments/giscus-comments';
+import { AuthorBio } from '@/components/organisms/author-bio/author-bio';
 import { NewsletterForm } from '@/components/molecules/newsletter-form/newsletter-form';
 import { isNewsletterEnabled } from '@/config/newsletter';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
@@ -76,6 +77,9 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
           </article>
           <div className="mx-auto mt-6 max-w-[42rem]">
             <ShareButtons url={postUrl} title={postTitle} />
+          </div>
+          <div className="mx-auto mt-8 max-w-[42rem]">
+            <AuthorBio />
           </div>
           <PromoBlock placement="article-bottom" />
           {relatedPosts.length > 0 && (

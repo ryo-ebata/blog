@@ -16,6 +16,8 @@ export const generateArticleJsonLd = (
     author: {
       '@type': 'Person',
       name: siteConfig.name,
+      url: `${siteConfig.url}/about`,
+      sameAs: collectSocialLinks(),
     },
     dateModified: metadata.updatedAt || metadata.createdAt,
     datePublished: metadata.createdAt,

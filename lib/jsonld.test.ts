@@ -71,6 +71,8 @@ describe('generateArticleJsonLd', () => {
     expect(result.author).toEqual({
       '@type': 'Person',
       name: expect.any(String),
+      url: expect.any(String),
+      sameAs: expect.any(Array),
     });
     expect(result.publisher).toEqual({
       '@type': 'Organization',
