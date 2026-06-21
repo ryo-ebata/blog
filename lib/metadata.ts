@@ -63,6 +63,9 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
   const baseMetadata: Metadata = {
     alternates: {
       canonical: pageUrl,
+      types: {
+        'application/rss+xml': `${siteConfig.url}/rss.xml`,
+      },
     },
     description,
     openGraph: {
