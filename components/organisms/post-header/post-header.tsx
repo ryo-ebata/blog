@@ -2,6 +2,7 @@
 
 import type { BaseContentMetadata } from '@/lib/content';
 import { TagList } from '@/components/molecules/tag-list';
+import { Separator } from '@/components/atoms/separator';
 import { Time } from '@/components/atoms/time/time';
 import { Pen } from 'lucide-react';
 import Image from 'next/image';
@@ -16,8 +17,8 @@ interface PostHeaderProps {
 }
 
 const CharacterCount = ({ count }: { count?: number }) => (
-  <span className="text-muted-foreground flex items-center">
-    <Pen className="w-4 h-4 mr-1" />
+  <span className="flex items-center gap-1 text-sm text-muted-foreground">
+    <Pen className="size-4" />
     {count?.toLocaleString()} 文字
   </span>
 );
@@ -40,7 +41,7 @@ const PostEyecatch = ({
         alt=""
         width={width}
         height={height}
-        className="w-full rounded-lg"
+        className="w-full rounded-xl shadow-xs ring-1 ring-foreground/10"
         priority
       />
     </div>
@@ -48,9 +49,9 @@ const PostEyecatch = ({
 };
 
 export const PostHeader = ({ metadata }: PostHeaderProps) => (
-  <div className="mb-8 space-y-4 p-6 border-b">
-    <h1 className="font-bold scroll-m-20 text-3xl text-foreground">{metadata.title}</h1>
-    <div className="flex items-center gap-4">
+  <div className="mb-8 space-y-4 p-6">
+    <h1 className="scroll-m-20 text-3xl font-bold text-foreground">{metadata.title}</h1>
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
       {metadata.tags && <TagList tags={metadata.tags} />}
       <Time date={metadata.createdAt} />
       <CharacterCount count={metadata.characterCount} />
@@ -58,8 +59,9 @@ export const PostHeader = ({ metadata }: PostHeaderProps) => (
     <PostEyecatch eyecatch={metadata.eyecatch} slug={metadata.slug} />
     {metadata.description && (
       <>
-        <h2 className="font-bold scroll-m-20 text-xl border-b pb-2 text-foreground">概要</h2>
-        <p className="leading-7 text-muted-foreground">{metadata.description}</p>
+        <Separator />
+        <h2 className="scroll-m-20 text-xl font-semibold text-foreground">概要</h2>
+        <p className="text-sm leading-7 text-muted-foreground">{metadata.description}</p>
       </>
     )}
   </div>

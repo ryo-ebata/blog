@@ -2,6 +2,7 @@
 
 import { ThemeToggle } from '@/components/atoms/theme-toggle/theme-toggle';
 import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -11,13 +12,11 @@ const navigationItems = [
   { href: '/blog', label: 'Blog' },
 ] as const;
 
-const getLinkClassName = (isActive: boolean): string => {
-  const baseClasses = 'text-base transition-colors duration-200';
-  if (isActive) {
-    return `${baseClasses} text-primary font-semibold`;
-  }
-  return `${baseClasses} text-muted-foreground hover:text-foreground`;
-};
+const getLinkClassName = (isActive: boolean): string =>
+  cn(
+    'text-sm transition-colors',
+    isActive ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'
+  );
 
 interface NavLinkProps {
   href: string;
@@ -50,10 +49,7 @@ const Navigation = ({ pathname }: NavigationProps) => (
 );
 
 const SiteLogo = () => (
-  <Link
-    href="/"
-    className="text-xl font-bold text-foreground hover:text-primary transition-colors duration-200"
-  >
+  <Link href="/" className="text-xl font-bold text-foreground hover:text-primary transition-colors">
     {siteConfig.name}
   </Link>
 );
@@ -61,7 +57,7 @@ const SiteLogo = () => (
 export const Header = () => {
   const pathname = usePathname();
   return (
-    <header className="border-b bg-background">
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur ring-1 ring-foreground/10">
       <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
         <SiteLogo />
         <Navigation pathname={pathname} />

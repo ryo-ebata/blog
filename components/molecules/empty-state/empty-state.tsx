@@ -14,7 +14,10 @@ import { IconFolderCode } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const EmptyMediaIcon = () => (
-  <EmptyMedia variant="icon">
+  <EmptyMedia
+    variant="icon"
+    className="size-12 rounded-full text-muted-foreground ring-1 ring-foreground/10"
+  >
     <IconFolderCode />
   </EmptyMedia>
 );

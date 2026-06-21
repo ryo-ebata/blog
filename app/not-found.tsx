@@ -1,17 +1,24 @@
-import { BackLink } from '@/components/atoms';
+import { Link } from 'next-view-transitions';
+
+import { Button } from '@/components/atoms/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/atoms';
 import { Container } from '@/components/organisms';
 
 export default function NotFound() {
   return (
     <Container maxWidth="2xl">
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
-        <h1 className="font-bold scroll-m-20 text-6xl text-foreground">404</h1>
-        <p className="text-xl text-muted-foreground">ページが見つかりません</p>
-        <p className="text-muted-foreground">
-          お探しのページは存在しないか、移動した可能性があります。
-        </p>
-        <BackLink href="/" label="ホームに戻る" />
-      </div>
+      <Empty className="min-h-[60vh]">
+        <EmptyHeader>
+          <p className="text-6xl font-bold tracking-tight text-foreground">404</p>
+          <EmptyTitle className="text-xl text-muted-foreground">ページが見つかりません</EmptyTitle>
+          <EmptyDescription>
+            お探しのページは存在しないか、移動した可能性があります。
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button render={<Link href="/" />}>ホームに戻る</Button>
+        </EmptyContent>
+      </Empty>
     </Container>
   );
 }

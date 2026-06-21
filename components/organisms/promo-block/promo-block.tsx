@@ -23,7 +23,7 @@ export function PromoBlock({ placement }: PromoBlockProps) {
   }
 
   return (
-    <div className="not-prose my-6">
+    <div className="not-prose my-6 flex flex-col gap-6">
       <AdUnit slot={adsConfig.adsense.slots.articleBottom} />
       <AffiliateRecommend />
       <BannerAd />

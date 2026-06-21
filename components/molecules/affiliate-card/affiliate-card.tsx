@@ -28,13 +28,16 @@ export function AffiliateCard({ item }: { item: AffiliateItem }) {
             src={item.imageUrl}
             alt={item.title}
             loading="lazy"
-            className="h-20 w-20 shrink-0 rounded-md object-contain"
+            className="size-20 shrink-0 rounded-lg bg-muted object-contain ring-1 ring-foreground/10"
           />
         )}
         <div className="min-w-0 flex-1">
-          <p className="line-clamp-2 text-sm font-bold text-foreground">{item.title}</p>
+          <p className="line-clamp-2 text-sm font-semibold text-card-foreground">{item.title}</p>
+          {item.price && (
+            <p className="mt-1 text-sm font-bold text-foreground tabular-nums">{item.price}</p>
+          )}
           {item.description && (
-            <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{item.description}</p>
+            <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
           )}
         </div>
       </div>

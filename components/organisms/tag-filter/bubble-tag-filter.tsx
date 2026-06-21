@@ -311,7 +311,7 @@ export const BubbleTagFilter = ({ tags, selectedTags, onTagToggle }: BubbleTagFi
   return (
     <div
       ref={containerRefCallback}
-      className="w-full flex justify-center overflow-hidden rounded-lg"
+      className="w-full flex justify-center overflow-hidden rounded-xl"
     >
       <CanvasElement canvasRef={refs.canvasRef} pointerHandlers={pointerHandlers} />
     </div>

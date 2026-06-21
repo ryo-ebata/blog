@@ -1,6 +1,7 @@
 'use client';
 
 import { Calendar } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { formatDate } from '@/lib/date';
 
 interface TimeProps {
@@ -8,8 +9,8 @@ interface TimeProps {
 }
 
 export const Time = ({ date }: TimeProps) => (
-  <time className="text-muted-foreground text-sm flex items-center">
-    <Calendar className="w-4 h-4 mr-1" />
+  <time className={cn('inline-flex items-center gap-1.5 text-sm text-muted-foreground')}>
+    <Calendar className="size-4 shrink-0" />
     {formatDate(date)}
   </time>
 );

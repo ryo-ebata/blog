@@ -47,6 +47,13 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -135,6 +142,14 @@
     --accent: #ede6da;
     --accent-foreground: #3a3733;
     --destructive: oklch(0.55 0.18 28);
+    --destructive-foreground: #faf8f4;
+    /* semantic tokens（暖色と調和させた light 値） */
+    --success: oklch(0.52 0.12 150);
+    --success-foreground: oklch(0.98 0.01 95);
+    --warning: oklch(0.62 0.14 65);
+    --warning-foreground: oklch(0.26 0.05 60);
+    --info: oklch(0.54 0.11 235);
+    --info-foreground: oklch(0.98 0.01 95);
     --border: #e7e0d4;
     --input: #e7e0d4;
     --ring: #c4704f;
@@ -170,6 +185,14 @@
     --accent: #34302a;
     --accent-foreground: #e8e3da;
     --destructive: #e06b5a;
+    --destructive-foreground: #1c1a17;
+    /* semantic tokens（ダーク = 明度を上げた暖色調和値） */
+    --success: oklch(0.72 0.14 155);
+    --success-foreground: oklch(0.18 0.02 150);
+    --warning: oklch(0.78 0.14 70);
+    --warning-foreground: oklch(0.22 0.04 60);
+    --info: oklch(0.7 0.12 235);
+    --info-foreground: oklch(0.18 0.02 235);
     --border: #3a352e;
     --input: #2e2a25;
     --ring: #d98b6a;
@@ -247,22 +270,31 @@
    Components レイヤー: 記事カード
    ============================================== */
 @layer components {
+  /* ReUI カード規約: border ではなく ring(1px)+shadow-xs、rounded-xl */
   .article-card {
     position: relative;
     overflow: hidden;
     border-radius: 0.75rem;
-    border: 1px solid var(--border);
     background: var(--card);
-    transition: box-shadow 0.3s ease;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent),
+      0 1px 2px oklch(0 0 0 / 0.05);
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
   }
 
-  /* ホバー: 影がわずかに濃くなるだけの穏やかな演出 */
+  /* ホバー: ring を少し強め + 浮き上がる穏やかな演出 */
   .article-card:hover {
-    box-shadow: 0 4px 16px oklch(0 0 0 / 0.08);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--foreground) 14%, transparent),
+      0 6px 20px oklch(0 0 0 / 0.08);
   }
 
   .dark .article-card:hover {
-    box-shadow: 0 6px 20px oklch(0 0 0 / 0.3);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--foreground) 20%, transparent),
+      0 8px 24px oklch(0 0 0 / 0.32);
   }
 
   .article-card-body {

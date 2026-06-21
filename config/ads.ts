@@ -36,6 +36,8 @@ export interface AffiliateItem {
   id: string;
   title: string;
   description?: string;
+  /** 表示用の価格文字列（例: '¥1,280'）。任意。設定時のみカードに表示。 */
+  price?: string;
   /** 商品画像URL（任意） */
   imageUrl?: string;
   /** Amazon商品のASIN。amazonTagを付与してリンク生成。 */

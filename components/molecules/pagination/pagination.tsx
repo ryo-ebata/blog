@@ -1,6 +1,8 @@
 'use client';
 
 import { Button } from '@/components/atoms/button';
+import { cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const FIRST_PAGE = 1;
@@ -31,11 +33,11 @@ const shouldShowPage = (page: number, currentPage: number, totalPages: number): 
 const shouldShowEllipsis = (page: number, currentPage: number): boolean =>
   page === currentPage - ELLIPSIS_OFFSET || page === currentPage + ELLIPSIS_OFFSET;
 
-const getPageVariant = (currentPage: number, page: number): 'default' | 'outline' => {
+const getPageVariant = (currentPage: number, page: number): 'default' | 'ghost' => {
   if (currentPage === page) {
     return 'default';
   }
-  return 'outline';
+  return 'ghost';
 };
 
 interface PageButtonProps {
@@ -47,6 +49,8 @@ interface PageButtonProps {
 const PageButton = ({ basePath, currentPage, page }: PageButtonProps) => (
   <Button
     variant={getPageVariant(currentPage, page)}
+    size="icon-sm"
+    aria-current={currentPage === page ? 'page' : undefined}
     render={<Link href={getPageUrl(basePath, page)} />}
   >
     {page}
@@ -65,7 +69,15 @@ const PaginationItem = ({ basePath, currentPage, page, totalPages }: PaginationI
     return <PageButton key={page} basePath={basePath} currentPage={currentPage} page={page} />;
   }
   if (shouldShowEllipsis(page, currentPage)) {
-    return <span key={page}>...</span>;
+    return (
+      <span
+        key={page}
+        aria-hidden="true"
+        className="flex size-8 items-center justify-center text-sm text-muted-foreground"
+      >
+        ...
+      </span>
+    );
   }
   return null;
 };
@@ -78,12 +90,17 @@ export const Pagination = ({ basePath, currentPage, totalPages }: PaginationProp
   const pages = Array.from({ length: totalPages }, (_unused, index) => index + PAGE_OFFSET);
 
   return (
-    <nav className="flex items-center justify-center gap-2 mt-8" aria-label="ページネーション">
+    <nav
+      className={cn('mt-8 flex items-center justify-center gap-2')}
+      aria-label="ページネーション"
+    >
       {currentPage > FIRST_PAGE && (
         <Button
           variant="outline"
+          size="sm"
           render={<Link href={getPageUrl(basePath, currentPage - PAGE_OFFSET)} />}
         >
+          <ChevronLeft />
           前へ
         </Button>
       )}
@@ -103,9 +120,11 @@ export const Pagination = ({ basePath, currentPage, totalPages }: PaginationProp
       {currentPage < totalPages && (
         <Button
           variant="outline"
+          size="sm"
           render={<Link href={getPageUrl(basePath, currentPage + PAGE_OFFSET)} />}
         >
           次へ
+          <ChevronRight />
         </Button>
       )}
     </nav>

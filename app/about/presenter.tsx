@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { BackLink } from '@/components/atoms';
+import { Card } from '@/components/atoms/card';
+import { Separator } from '@/components/atoms/separator';
 import { BuyMeACoffee } from '@/components/molecules';
 import { Container } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
@@ -12,9 +14,10 @@ import { siteConfig } from '@/config/site';
 const IMAGE_SIZE = 20;
 
 const SectionHeading = ({ children }: { children: ReactNode }) => (
-  <h2 className="font-bold scroll-m-20 border-b pb-2 text-xl tracking-tight text-foreground">
-    {children}
-  </h2>
+  <div className="space-y-2">
+    <h2 className="font-semibold scroll-m-20 text-lg tracking-tight text-foreground">{children}</h2>
+    <Separator />
+  </div>
 );
 
 const SocialLink = ({ href, label }: { href: string; label: string }) => (
@@ -37,7 +40,7 @@ const SocialLinkItem = ({
   href: string;
   label: string;
 }) => (
-  <div className="flex items-center gap-2 text-muted-foreground">
+  <div className="flex items-center gap-2 text-sm text-muted-foreground">
     {icon}
     <SocialLink href={href} label={label} />
   </div>
@@ -51,16 +54,16 @@ const AboutHeader = () => (
 );
 
 const AboutBlogSection = () => (
-  <div className="bg-card border rounded-lg p-6">
+  <Card className="gap-0 p-6">
     <SectionHeading>About Blog</SectionHeading>
-    <div className="mt-4 space-y-4 text-muted-foreground">
+    <div className="mt-4 space-y-4 text-sm text-muted-foreground">
       <p className="leading-7">
         単なる情報（Information）ではなく、
         知識（Knowledge）・意見（Opinion）・気付き（Insight）を書きます。
         技術的な内容も含め、思考のメモなどを残していきます。
       </p>
     </div>
-  </div>
+  </Card>
 );
 
 const AboutMeDescription = () => (
@@ -73,12 +76,12 @@ Hobbies: Anime, Basketball, Mahjong, Travel, etc.`}
 );
 
 const AboutMeSection = () => (
-  <div className="bg-card border rounded-lg p-6">
+  <Card className="gap-0 p-6">
     <SectionHeading>About Me</SectionHeading>
-    <div className="mt-4 space-y-4 text-muted-foreground">
+    <div className="mt-4 space-y-4 text-sm text-muted-foreground">
       <AboutMeDescription />
     </div>
-  </div>
+  </Card>
 );
 
 const TwitterIcon = () => <IconBrandX className="h-5 w-5" />;
@@ -160,10 +163,10 @@ const SocialLinksList = () => (
 );
 
 const SocialLinksSection = () => (
-  <div className="bg-card border rounded-lg p-6">
+  <Card className="gap-0 p-6">
     <SectionHeading>Social Links</SectionHeading>
     <SocialLinksList />
-  </div>
+  </Card>
 );
 
 const AboutContent = () => (

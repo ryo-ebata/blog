@@ -1,4 +1,5 @@
 import { AffiliateCard } from '@/components/molecules/affiliate-card/affiliate-card';
+import { Separator } from '@/components/atoms/separator';
 import { recommendedItems } from '@/config/ads';
 
 interface AffiliateRecommendProps {
@@ -16,7 +17,8 @@ export function AffiliateRecommend({ heading = 'この記事のおすすめ' }: 
 
   return (
     <aside className="not-prose my-8">
-      <p className="mb-3 text-sm font-medium text-muted-foreground">{heading}</p>
+      <h2 className="text-base font-semibold text-foreground">{heading}</h2>
+      <Separator className="my-4" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {recommendedItems.map((item) => (
           <AffiliateCard key={item.id} item={item} />
