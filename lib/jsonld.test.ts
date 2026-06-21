@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { BaseContentMetadata } from './content';
-import { generateArticleJsonLd, generateOrganizationJsonLd, generateWebSiteJsonLd } from './jsonld';
+import {
+  generateArticleJsonLd,
+  generateBreadcrumbJsonLd,
+  generateOrganizationJsonLd,
+  generateWebSiteJsonLd,
+} from './jsonld';
 
 const createMockMetadata = (overrides: Partial<BaseContentMetadata> = {}): BaseContentMetadata => ({
   slug: 'test-slug',
@@ -109,5 +114,27 @@ describe('generateOrganizationJsonLd', () => {
 
     expect(result.sameAs).toBeDefined();
     expect(Array.isArray(result.sameAs)).toBe(true);
+  });
+});
+
+describe('generateBreadcrumbJsonLd', () => {
+  it('BreadcrumbList を position 付き itemListElement で生成する', () => {
+    const result = generateBreadcrumbJsonLd([
+      { name: 'Home', url: 'https://ebaryo.dev' },
+      { name: 'ブログ', url: 'https://ebaryo.dev/blog' },
+      { name: 'テスト記事', url: 'https://ebaryo.dev/blog/test' },
+    ]);
+
+    expect(result['@type']).toBe('BreadcrumbList');
+    expect(result.itemListElement).toEqual([
+      { '@type': 'ListItem', item: 'https://ebaryo.dev', name: 'Home', position: 1 },
+      { '@type': 'ListItem', item: 'https://ebaryo.dev/blog', name: 'ブログ', position: 2 },
+      {
+        '@type': 'ListItem',
+        item: 'https://ebaryo.dev/blog/test',
+        name: 'テスト記事',
+        position: 3,
+      },
+    ]);
   });
 });
