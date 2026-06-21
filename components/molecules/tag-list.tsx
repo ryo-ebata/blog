@@ -9,8 +9,8 @@ interface TagListProps {
 }
 
 const Tag = ({ tag }: { tag: string }) => {
-  /* Nuqsの形式に合わせて、tagsパラメータをカンマ区切りで設定 */
-  const tagUrl = `/blog?tags=${encodeURIComponent(tag)}`;
+  /* タグ専用一覧ページ(SSG)へのリンク。内部リンク網を強化する */
+  const tagUrl = `/blog/tag/${encodeURIComponent(tag)}`;
 
   return (
     <Link href={tagUrl} className={badgeVariants({ variant: 'secondary' })}>

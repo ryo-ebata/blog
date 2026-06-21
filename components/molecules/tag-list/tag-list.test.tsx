@@ -12,7 +12,7 @@ describe('TagList', () => {
   it('各タグがリンクとしてレンダリングされる', () => {
     render(<TagList tags={['React']} />);
     const link = screen.getByRole('link', { name: 'React' });
-    expect(link).toHaveAttribute('href', '/blog?tags=React');
+    expect(link).toHaveAttribute('href', '/blog/tag/React');
   });
 
   it('空配列の場合何もレンダリングしない', () => {
@@ -23,6 +23,6 @@ describe('TagList', () => {
   it('タグ名をURLエンコードする', () => {
     render(<TagList tags={['C++']} />);
     const link = screen.getByRole('link', { name: 'C++' });
-    expect(link).toHaveAttribute('href', '/blog?tags=C%2B%2B');
+    expect(link).toHaveAttribute('href', '/blog/tag/C%2B%2B');
   });
 });

@@ -1,6 +1,7 @@
 import type { BaseContentMetadata } from '@/lib/content';
 import type { MetadataRoute } from 'next';
 import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { aggregateTags } from '@/lib/tags';
 import { siteConfig } from '@/config/site';
 
 /* 優先度定数 */
@@ -46,12 +47,21 @@ const createBlogPostEntries = (posts: BaseContentMetadata[]): MetadataRoute.Site
     url: `${siteConfig.url}/blog/${post.slug}`,
   }));
 
+const createTagEntries = (posts: BaseContentMetadata[]): MetadataRoute.Sitemap =>
+  aggregateTags(posts).map(({ tag }) => ({
+    changeFrequency: 'weekly',
+    lastModified: new Date(),
+    priority: PRIORITY_MEDIUM,
+    url: `${siteConfig.url}/blog/tag/${encodeURIComponent(tag)}`,
+  }));
+
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const posts = await getAllPostsMetadata();
   const staticPages = createStaticPages();
   const blogPosts = createBlogPostEntries(posts);
+  const tagPages = createTagEntries(posts);
 
-  return [...staticPages, ...blogPosts];
+  return [...staticPages, ...blogPosts, ...tagPages];
 };
 
 export default sitemap;
