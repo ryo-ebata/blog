@@ -215,6 +215,14 @@
     @apply border-border outline-ring/50;
   }
 
+  /* リンク等の統一フォーカスインジケータ (WCAG 2.4.7 / 2.4.11)。
+     button/input 等の atom は focus-visible:ring 済みのため、ここでは素の <a> を補う。 */
+  a:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
   html {
     @apply bg-[#faf8f4] dark:bg-[#1c1a17];
   }
