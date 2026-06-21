@@ -2,7 +2,7 @@ import type { BaseContentMetadata } from '@/lib/content';
 import type { MicroCMSBlog, MicroCMSContentData, MicroCMSListResponse } from './types';
 import { toBaseContentMetadata } from './types';
 import { microCmsClient } from './client';
-import { countHtmlCharacters } from './count-characters';
+import { countHtmlCharacters, extractPlainText } from './count-characters';
 
 const MICROCMS_LIST_LIMIT = 100;
 const ENDPOINT = 'blog';
@@ -36,7 +36,10 @@ export const getAllPostsMetadata = async (): Promise<BaseContentMetadata[]> => {
   const blogs = await fetchAllBlogs();
 
   return blogs
-    .map((blog) => toBaseContentMetadata(blog, countHtmlCharacters(blog.content)))
+    .map((blog) => ({
+      ...toBaseContentMetadata(blog, countHtmlCharacters(blog.content)),
+      searchText: extractPlainText(blog.content),
+    }))
     .sort(sortByDateDescending);
 };
 

@@ -27,6 +27,8 @@ export interface BaseContentMetadata {
   description?: string;
   draft?: boolean;
   eyecatch?: { url: string; height?: number; width?: number };
+  /** 検索用の本文プレーンテキスト(一覧取得時のみ付与)。 */
+  searchText?: string;
   slug: string;
   tags?: string[];
   title: string;

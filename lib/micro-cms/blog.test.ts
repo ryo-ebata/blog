@@ -11,6 +11,7 @@ vi.mock('./client', () => ({
 
 vi.mock('./count-characters', () => ({
   countHtmlCharacters: vi.fn(() => 100),
+  extractPlainText: vi.fn(() => 'テスト本文'),
 }));
 
 const createMockBlog = (overrides: Partial<MicroCMSBlog> = {}): MicroCMSBlog => ({

@@ -26,7 +26,7 @@ const createHandleCompositionEnd =
 
 export const SearchInput = ({
   onChange,
-  placeholder = 'タイトルで検索...',
+  placeholder = '本文・タグも検索...',
   value,
 }: SearchInputProps) => {
   const [inputValue, setInputValue] = useState(value);
