@@ -96,3 +96,19 @@ export const generateOrganizationJsonLd = (): Record<string, unknown> => {
 
   return organization;
 };
+
+/**
+ * パンくず（BreadcrumbList）用のJSON-LDスキーマを生成
+ */
+export const generateBreadcrumbJsonLd = (
+  items: { name: string; url: string }[]
+): Record<string, unknown> => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    item: item.url,
+    name: item.name,
+    position: index + 1,
+  })),
+});

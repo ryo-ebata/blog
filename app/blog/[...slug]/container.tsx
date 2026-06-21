@@ -3,9 +3,10 @@ import { Separator } from '@/components/atoms/separator';
 import { Container } from '@/components/organisms';
 import { PromoBlock } from '@/components/organisms/promo-block/promo-block';
 import { JsonLd } from '@/components/jsonld/jsonld';
+import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
-import { generateArticleJsonLd } from '@/lib/jsonld';
+import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
 import { getPostBySlug } from '@/lib/micro-cms/blog';
 import { renderMicroCMSContent } from '@/lib/micro-cms/content-renderer';
 import { extractToc } from '@/lib/micro-cms/extract-toc';
@@ -37,10 +38,23 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
 
     const { slug: postSlug, title: postTitle } = post.metadata;
 
+    const breadcrumbItems = [
+      { name: 'Home', href: '/' },
+      { name: 'ブログ', href: '/blog' },
+      { name: postTitle },
+    ];
+    const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+      { name: 'Home', url: siteConfig.url },
+      { name: 'ブログ', url: `${siteConfig.url}/blog` },
+      { name: postTitle, url: postUrl },
+    ]);
+
     return (
       <>
         <JsonLd data={articleJsonLd} />
+        <JsonLd data={breadcrumbJsonLd} />
         <Container maxWidth="3xl">
+          <Breadcrumb items={breadcrumbItems} />
           <BlogPostPresenter metadata={post.metadata} />
           <SuggestEditSection slug={postSlug} title={postTitle} />
           <Separator />
