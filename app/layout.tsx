@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     canonical: siteConfig.url,
     types: {
       'application/rss+xml': `${siteConfig.url}/rss.xml`,
+      'application/feed+json': `${siteConfig.url}/feed.json`,
     },
   },
   description: siteConfig.description,
