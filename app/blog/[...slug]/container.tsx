@@ -7,6 +7,8 @@ import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
 import { ReadingProgress } from '@/components/molecules/reading-progress/reading-progress';
 import { ShareButtons } from '@/components/molecules/share-buttons/share-buttons';
 import { GiscusComments } from '@/components/organisms/comments/giscus-comments';
+import { NewsletterForm } from '@/components/molecules/newsletter-form/newsletter-form';
+import { isNewsletterEnabled } from '@/config/newsletter';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
@@ -81,6 +83,11 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
               <h2 className="mb-5 text-lg font-semibold text-foreground">関連記事</h2>
               <PostList posts={relatedPosts} />
             </section>
+          )}
+          {isNewsletterEnabled && (
+            <div className="mx-auto mt-12 max-w-[42rem]">
+              <NewsletterForm />
+            </div>
           )}
           <Separator />
           <SuggestEditSection slug={postSlug} title={postTitle} />
