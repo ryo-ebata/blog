@@ -302,3 +302,25 @@
     background: var(--card);
   }
 }
+
+/* ==============================================
+   prefers-reduced-motion: モーション低減 (WCAG 2.3.3)
+   OSの「視差効果/モーションを減らす」設定時、CSS由来の演出を実質無効化する。
+   ============================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* View Transitions のページ遷移演出を無効化 */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
