@@ -65,6 +65,7 @@ export const generateMetadata = (params: MetadataParams): Metadata => {
       canonical: pageUrl,
       types: {
         'application/rss+xml': `${siteConfig.url}/rss.xml`,
+        'application/feed+json': `${siteConfig.url}/feed.json`,
       },
     },
     description,
