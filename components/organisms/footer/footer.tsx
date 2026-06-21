@@ -10,6 +10,14 @@ const footerLinks = [
   { href: siteConfig.links.twitter, label: 'X' },
 ];
 
+/** サイト開設年。これ以降は現在年までのレンジで著作権表記する。 */
+const FOUNDING_YEAR = 2025;
+
+const getCopyrightYears = (): string => {
+  const currentYear = new Date().getFullYear();
+  return currentYear > FOUNDING_YEAR ? `${FOUNDING_YEAR}–${currentYear}` : `${FOUNDING_YEAR}`;
+};
+
 export const Footer = () => (
   <footer className="bg-background">
     <Separator />
@@ -27,8 +35,8 @@ export const Footer = () => (
           </a>
         ))}
       </nav>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        © 2025 {siteConfig.name}. All rights reserved.
+      <p className="mt-6 text-center text-sm text-muted-foreground" suppressHydrationWarning>
+        © {getCopyrightYears()} {siteConfig.name}. All rights reserved.
       </p>
     </div>
   </footer>
