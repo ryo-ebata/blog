@@ -8,5 +8,5 @@ export const siteConfig = {
   },
   name: 'ebaryo.dev',
   repo: 'ryo-ebata/ebaryo.dev',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://example.com',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://ebaryo.dev',
 };
