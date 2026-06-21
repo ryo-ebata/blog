@@ -41,9 +41,14 @@ const buildMetadata = (post: MicroCMSContentData): Metadata => {
   const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
   const description = getDescription(post.metadata.description);
 
+  /* eyecatch があればそれを OG に、無ければ記事タイトル焼き込みの動的 OG を使う */
+  const ogImage =
+    post.metadata.eyecatch?.url ??
+    `${siteConfig.url}/og?title=${encodeURIComponent(post.metadata.title)}`;
+
   return generatePageMetadata({
     description,
-    image: post.metadata.eyecatch?.url,
+    image: ogImage,
     imageAlt: post.metadata.title,
     modifiedTime: post.metadata.updatedAt,
     publishedTime: post.metadata.createdAt,
