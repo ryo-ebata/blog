@@ -4,7 +4,8 @@ import type { BaseContentMetadata } from '@/lib/content';
 import { TagList } from '@/components/molecules/tag-list';
 import { Separator } from '@/components/atoms/separator';
 import { Time } from '@/components/atoms/time/time';
-import { Pen } from 'lucide-react';
+import { getReadingTimeMinutes } from '@/lib/reading-time';
+import { Clock, Pen } from 'lucide-react';
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 
@@ -22,6 +23,17 @@ const CharacterCount = ({ count }: { count?: number }) => (
     {count?.toLocaleString()} 文字
   </span>
 );
+
+const ReadingTime = ({ count }: { count?: number }) => {
+  if (count === undefined) {
+    return null;
+  }
+  return (
+    <span className="flex items-center gap-1 text-sm text-muted-foreground">
+      <Clock className="size-4" />約{getReadingTimeMinutes(count)}分で読める
+    </span>
+  );
+};
 
 const PostEyecatch = ({
   eyecatch,
@@ -55,6 +67,7 @@ export const PostHeader = ({ metadata }: PostHeaderProps) => (
       {metadata.tags && <TagList tags={metadata.tags} />}
       <Time date={metadata.createdAt} />
       <CharacterCount count={metadata.characterCount} />
+      <ReadingTime count={metadata.characterCount} />
     </div>
     <PostEyecatch eyecatch={metadata.eyecatch} slug={metadata.slug} />
     {metadata.description && (
