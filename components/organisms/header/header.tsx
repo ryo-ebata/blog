@@ -25,7 +25,11 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, isActive, label }: NavLinkProps) => (
-  <Link href={href} className={getLinkClassName(isActive)}>
+  <Link
+    href={href}
+    aria-current={isActive ? 'page' : undefined}
+    className={getLinkClassName(isActive)}
+  >
     {label}
   </Link>
 );

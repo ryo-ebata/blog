@@ -20,7 +20,13 @@ export const ThemeToggle = () => {
   };
 
   return (
-    <Button variant="ghost" size="icon" className="cursor-pointer" onClick={handleClick}>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="cursor-pointer"
+      aria-pressed={theme === 'dark'}
+      onClick={handleClick}
+    >
       <Sun
         className={cn('size-4 rotate-0 scale-100 transition-all', 'dark:-rotate-90 dark:scale-0')}
       />
