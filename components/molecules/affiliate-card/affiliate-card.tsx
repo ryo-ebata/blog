@@ -1,3 +1,4 @@
+import { Badge } from '@/components/atoms/badge';
 import { StoreButtons } from '@/components/molecules/store-buttons/store-buttons';
 import type { AffiliateItem } from '@/config/ads';
 import { resolveStoreLinks } from '@/config/ads';
@@ -32,6 +33,9 @@ export function AffiliateCard({ item }: { item: AffiliateItem }) {
           />
         )}
         <div className="min-w-0 flex-1">
+          <Badge variant="outline" className="mb-1.5 h-4 px-1.5 text-[10px]">
+            PR
+          </Badge>
           <p className="line-clamp-2 text-sm font-semibold text-card-foreground">{item.title}</p>
           {item.price && (
             <p className="mt-1 text-sm font-bold text-foreground tabular-nums">{item.price}</p>

@@ -1,4 +1,5 @@
 import { AffiliateCard } from '@/components/molecules/affiliate-card/affiliate-card';
+import { AffiliateDisclosure } from '@/components/molecules/affiliate-disclosure/affiliate-disclosure';
 import { Separator } from '@/components/atoms/separator';
 import { recommendedItems } from '@/config/ads';
 
@@ -17,7 +18,10 @@ export function AffiliateRecommend({ heading = 'この記事のおすすめ' }: 
 
   return (
     <aside className="not-prose my-8">
-      <h2 className="text-base font-semibold text-foreground">{heading}</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-base font-semibold text-foreground">{heading}</h2>
+        <AffiliateDisclosure />
+      </div>
       <Separator className="my-4" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {recommendedItems.map((item) => (
