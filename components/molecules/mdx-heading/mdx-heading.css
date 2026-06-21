@@ -13,10 +13,7 @@
     @apply text-muted-foreground font-normal select-none;
   }
 
-  .mdx-heading-anchor {
-    @apply opacity-0 transition-opacity text-muted-foreground hover:text-foreground cursor-pointer;
-  }
-
+  /* ホバー/フォーカス時にアンカー(#)を表示。色・トランジションは要素側で ReUI 化済み */
   .mdx-heading:hover .mdx-heading-anchor,
   .mdx-heading:focus-within .mdx-heading-anchor {
     @apply opacity-100;

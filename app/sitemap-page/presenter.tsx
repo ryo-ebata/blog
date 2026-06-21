@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Container } from '@/components/organisms';
 import type { BaseContentMetadata } from '@/lib/content';
 import { Time } from '@/components/atoms/time/time';
+import { Separator } from '@/components/atoms/separator';
 
 interface SitemapPresenterProps {
   posts: BaseContentMetadata[];
@@ -21,13 +22,16 @@ export const SitemapPresenter = ({ posts }: SitemapPresenterProps) => (
       </div>
 
       <section className="space-y-4">
-        <h2 className="font-bold scroll-m-20 text-xl border-b pb-2 text-foreground">ページ</h2>
-        <ul className="space-y-2">
+        <div className="space-y-2">
+          <h2 className="font-semibold scroll-m-20 text-lg text-foreground">ページ</h2>
+          <Separator />
+        </div>
+        <ul className="rounded-xl bg-card text-card-foreground shadow-xs ring-1 ring-foreground/10 overflow-hidden divide-y divide-foreground/10">
           {staticPages.map((page) => (
             <li key={page.href}>
               <Link
                 href={page.href}
-                className="text-primary hover:text-primary/80 transition-colors"
+                className="flex items-center px-4 py-3 text-sm text-primary transition-colors hover:bg-muted hover:text-primary/80"
               >
                 {page.label}
               </Link>
@@ -37,13 +41,19 @@ export const SitemapPresenter = ({ posts }: SitemapPresenterProps) => (
       </section>
 
       <section className="space-y-4">
-        <h2 className="font-bold scroll-m-20 text-xl border-b pb-2 text-foreground">記事</h2>
-        <ul className="space-y-2">
+        <div className="space-y-2">
+          <h2 className="font-semibold scroll-m-20 text-lg text-foreground">記事</h2>
+          <Separator />
+        </div>
+        <ul className="rounded-xl bg-card text-card-foreground shadow-xs ring-1 ring-foreground/10 overflow-hidden divide-y divide-foreground/10">
           {posts.map((post) => (
-            <li key={post.slug} className="flex items-center gap-4">
+            <li
+              key={post.slug}
+              className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-muted"
+            >
               <Link
                 href={`/blog/${post.slug}`}
-                className="text-primary hover:text-primary/80 transition-colors"
+                className="text-sm text-primary transition-colors hover:text-primary/80"
               >
                 {post.title}
               </Link>

@@ -45,12 +45,16 @@ const FallbackCard = ({ url }: { url: string }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="not-prose group flex w-full items-center gap-3 rounded-lg border bg-card p-4 hover:border-primary transition-colors duration-200"
+      className={cn(
+        'not-prose group flex w-full items-center gap-3 overflow-hidden rounded-xl p-4',
+        'bg-card text-card-foreground shadow-xs ring-1 ring-foreground/10',
+        'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20'
+      )}
     >
       <span>🔗</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-foreground truncate">{shortUrl}</p>
-        <p className="text-xs text-muted-foreground truncate">{url}</p>
+        <p className="truncate text-sm text-foreground">{shortUrl}</p>
+        <p className="truncate text-xs text-muted-foreground">{url}</p>
       </div>
     </a>
   );
@@ -114,14 +118,15 @@ const LinkCardContent = ({
     target="_blank"
     rel="noopener noreferrer"
     className={cn(
-      'not-prose group flex w-full flex-col-reverse overflow-hidden rounded-lg border',
-      'bg-card hover:border-primary transition-colors duration-200',
+      'not-prose group flex w-full flex-col-reverse overflow-hidden rounded-xl',
+      'bg-card text-card-foreground shadow-xs ring-1 ring-foreground/10',
+      'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20',
       'md:flex-row',
       className
     )}
   >
     <div className="flex flex-1 flex-col justify-between gap-2 p-4">
-      <p className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+      <p className="line-clamp-2 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
         {title}
       </p>
       {description && <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>}

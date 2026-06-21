@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Check, Link as LinkIcon } from 'lucide-react';
 
+import { Button } from '@/components/atoms/button';
+
 const COPY_FEEDBACK_DURATION_MS = 2000;
 
 interface HeadingAnchorProps {
@@ -27,14 +29,16 @@ export const HeadingAnchor = ({ id }: HeadingAnchorProps): React.ReactElement =>
   };
 
   return (
-    <button
+    <Button
       aria-label={getAriaLabel(copied)}
-      className="mdx-heading-anchor"
+      className="mdx-heading-anchor size-6 text-muted-foreground opacity-0 transition-opacity hover:text-primary"
       onClick={handleClick}
+      size="icon-xs"
       type="button"
+      variant="ghost"
     >
-      {copied && <Check className="h-4 w-4 text-green-500" />}
-      {!copied && <LinkIcon className="h-4 w-4" />}
-    </button>
+      {copied && <Check className="size-4 text-success" />}
+      {!copied && <LinkIcon className="size-4" />}
+    </Button>
   );
 };

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { adsConfig, isAdsenseEnabled } from '@/config/ads';
+import { cn } from '@/lib/utils';
 
 interface AdUnitProps {
   /** AdSense管理画面で発行したスロットID */
@@ -38,13 +39,22 @@ export function AdUnit({ slot, format = 'auto', className }: AdUnitProps) {
   }
 
   return (
-    <ins
-      className={`adsbygoogle ${className ?? ''}`}
-      style={{ display: 'block' }}
-      data-ad-client={adsConfig.adsense.clientId}
-      data-ad-slot={slot}
-      data-ad-format={format}
-      data-full-width-responsive="true"
-    />
+    <div
+      className={cn(
+        'overflow-hidden rounded-lg bg-muted/40 shadow-xs ring-1 ring-foreground/10',
+        className
+      )}
+    >
+      {/* 広告枠であることを示すラベル */}
+      <span className="block px-3 pt-2 text-xs text-muted-foreground">広告</span>
+      <ins
+        className="adsbygoogle block px-3 pb-3"
+        style={{ display: 'block' }}
+        data-ad-client={adsConfig.adsense.clientId}
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
+    </div>
   );
 }

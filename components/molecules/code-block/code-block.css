@@ -9,9 +9,9 @@
     @apply my-4;
   }
 
-  /* タイトル表示 */
+  /* タイトル表示（ファイル名/言語ラベル） */
   .code-block-title {
-    @apply rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 font-mono text-sm text-muted-foreground;
+    @apply rounded-t-lg bg-muted px-4 py-2 font-mono text-sm text-muted-foreground shadow-xs ring-1 ring-foreground/10;
   }
 
   .code-block-title + .code-block-content pre {
@@ -20,7 +20,7 @@
 
   /* pre要素の基本スタイル */
   .code-block-content pre {
-    @apply overflow-x-auto rounded-lg border border-border;
+    @apply overflow-x-auto rounded-lg shadow-xs ring-1 ring-foreground/10;
   }
 
   /* コード行の基本スタイル */

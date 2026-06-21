@@ -3,6 +3,10 @@
 import { Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
+import { Button } from '@/components/atoms/button';
+import { Input } from '@/components/atoms/input';
+import { cn } from '@/lib/utils';
+
 interface SearchInputProps {
   onChange: (value: string) => void | Promise<void>;
   placeholder?: string;
@@ -45,27 +49,29 @@ export const SearchInput = ({
     <div className="relative flex items-center">
       <Search
         data-testid="search-icon"
-        className="absolute left-3 h-4 w-4 text-gray-400"
+        className="pointer-events-none absolute left-3 size-4 text-muted-foreground"
         aria-hidden="true"
       />
-      <input
+      <Input
         type="text"
         value={inputValue}
         onChange={handleChange}
         onCompositionStart={handleCompositionStart(isComposingRef)}
         onCompositionEnd={createHandleCompositionEnd(isComposingRef, onChange)}
         placeholder={placeholder}
-        className="w-full rounded-md border bg-background py-2 pl-10 pr-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        className={cn('pl-9', inputValue && 'pr-9')}
       />
       {inputValue && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-sm"
           onClick={handleClear}
-          className="absolute right-3 text-gray-400 hover:text-gray-200"
+          className="absolute right-1 text-muted-foreground hover:text-foreground"
           aria-label="クリア"
         >
-          <X className="h-4 w-4" />
-        </button>
+          <X className="size-4" />
+        </Button>
       )}
     </div>
   );

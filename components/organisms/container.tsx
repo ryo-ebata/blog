@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 export type ContainerMaxWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 
@@ -19,6 +20,9 @@ const maxWidthClasses: Record<ContainerMaxWidth, string> = {
 
 export const Container = ({ children, maxWidth = '4xl' }: ContainerProps) => (
   <div className="min-h-screen bg-background">
-    <div className={`${maxWidthClasses[maxWidth]} mx-auto py-8 px-4`}>{children}</div>
+    {/* 中央寄せ + 最大幅 + 余白リズム（ReUI: 横は段階的、縦は一定の呼吸） */}
+    <div className={cn('mx-auto px-4 py-8 sm:px-6 lg:px-8', maxWidthClasses[maxWidth])}>
+      {children}
+    </div>
   </div>
 );

@@ -1,4 +1,6 @@
 import { createSuggestEditUrl } from '@/lib/github';
+import { buttonVariants } from '@/components/atoms/button';
+import { cn } from '@/lib/utils';
 import { Github } from 'lucide-react';
 
 interface SuggestEditLinkProps {
@@ -14,9 +16,9 @@ export const SuggestEditLink = ({ slug, title }: SuggestEditLinkProps) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'text-muted-foreground')}
     >
-      <Github className="w-4 h-4" />
+      <Github />
       修正を提案する
     </a>
   );

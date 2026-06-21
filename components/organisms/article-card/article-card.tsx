@@ -111,20 +111,20 @@ export function ArticleCard({
         </div>
 
         <div className="article-card-body">
-          <div className="p-5 relative z-10">
+          <div className="relative z-10 flex flex-col gap-3 p-5">
             <Link href={href} {...linkProps} className="block">
-              <h2 className="font-bold text-base text-foreground leading-snug line-clamp-2">
+              <h2 className="text-base font-semibold leading-snug text-card-foreground line-clamp-2 transition-colors group-hover:text-primary">
                 {title}
               </h2>
             </Link>
 
             {description && (
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-2">
+              <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">
                 {description}
               </p>
             )}
 
-            <div className="mt-3 flex items-center gap-3 flex-wrap">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               {tags && tags.length > 0 && (
                 <div className="relative z-20">
                   <TagList tags={tags} />

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { TagsIcon } from 'lucide-react';
+import { badgeVariants } from '@/components/atoms/badge';
 
 const EMPTY_LENGTH = 0;
 
@@ -12,10 +13,7 @@ const Tag = ({ tag }: { tag: string }) => {
   const tagUrl = `/blog?tags=${encodeURIComponent(tag)}`;
 
   return (
-    <Link
-      href={tagUrl}
-      className="text-xs bg-secondary border px-2 py-1 rounded-md text-secondary-foreground font-medium hover:bg-secondary/80 transition-colors"
-    >
+    <Link href={tagUrl} className={badgeVariants({ variant: 'secondary' })}>
       {tag}
     </Link>
   );
@@ -27,8 +25,8 @@ export const TagList = ({ tags }: TagListProps) => {
   }
 
   return (
-    <div className="flex gap-2 flex-wrap items-center">
-      <TagsIcon className="w-4 h-4 text-muted-foreground" />
+    <div className="flex flex-wrap items-center gap-2">
+      <TagsIcon className="size-4 text-muted-foreground" />
       {tags.map((tagItem) => (
         <Tag key={tagItem} tag={tagItem} />
       ))}

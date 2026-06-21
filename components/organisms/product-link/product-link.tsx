@@ -1,3 +1,5 @@
+import { Badge } from '@/components/atoms/badge';
+import { Separator } from '@/components/atoms/separator';
 import { StoreButtons } from '@/components/molecules/store-buttons/store-buttons';
 import { resolveStoreLinks } from '@/config/ads';
 
@@ -44,15 +46,19 @@ export function ProductLink({ name, asin, rakuten, yahoo, image, desc }: Product
             src={image}
             alt={name ?? ''}
             loading="lazy"
-            className="h-24 w-24 shrink-0 rounded-md object-contain"
+            className="size-24 shrink-0 rounded-lg bg-muted object-contain ring-1 ring-foreground/10"
           />
         )}
         <div className="min-w-0 flex-1">
-          {name && <p className="text-sm font-bold text-foreground">{name}</p>}
-          {desc && <p className="mt-1 text-xs text-muted-foreground">{desc}</p>}
+          <Badge variant="outline" className="mb-1.5">
+            PR
+          </Badge>
+          {name && <p className="text-sm font-semibold text-foreground">{name}</p>}
+          {desc && <p className="mt-1 text-sm text-muted-foreground">{desc}</p>}
         </div>
       </div>
-      <div className="px-4 pb-4">
+      <Separator />
+      <div className="p-4">
         <StoreButtons links={links} />
       </div>
     </div>

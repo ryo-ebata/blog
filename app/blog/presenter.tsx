@@ -2,7 +2,16 @@
 
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 
-import { SearchInput } from '@/components/atoms';
+import { SearchX } from 'lucide-react';
+
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  SearchInput,
+} from '@/components/atoms';
 import { Pagination } from '@/components/molecules';
 import { BubbleTagFilter, Container, PostList } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
@@ -53,9 +62,15 @@ const EmptyResultMessage = ({ hasFilters, isEmpty }: EmptyResultMessageProps) =>
   }
 
   return (
-    <p className="text-center text-muted-foreground py-8">
-      条件に一致する記事が見つかりませんでした
-    </p>
+    <Empty className="border border-dashed border-border">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <SearchX />
+        </EmptyMedia>
+        <EmptyTitle>記事が見つかりませんでした</EmptyTitle>
+        <EmptyDescription>条件に一致する記事が見つかりませんでした</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 };
 

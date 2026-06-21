@@ -17,7 +17,7 @@ interface HomePresenterProps {
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-2xl font-bold text-foreground">{children}</h2>;
+  return <h2 className="text-xl font-semibold tracking-tight text-foreground">{children}</h2>;
 }
 
 function getQiitaTags(tags: QiitaArticle['tags']): string[] {
@@ -67,8 +67,8 @@ interface PostsSectionProps {
 
 function PostsSection({ posts }: PostsSectionProps) {
   return (
-    <div className="space-y-4">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <SectionHeading>最新記事</SectionHeading>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -86,7 +86,7 @@ function PostsSection({ posts }: PostsSectionProps) {
           />
         ))}
       </div>
-      <div className="text-center flex justify-end">
+      <div className="flex justify-end">
         <BackLink href="/blog" label="すべての記事を見る" />
       </div>
     </div>
@@ -100,14 +100,14 @@ interface ArticlesSectionProps {
 
 function ArticlesSection({ articles, shouldPrioritizeFirstArticle }: ArticlesSectionProps) {
   return (
-    <div className="space-y-4">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <SectionHeading>外部記事</SectionHeading>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {articles.map((item, index) => renderArticle(item, index, shouldPrioritizeFirstArticle))}
       </div>
-      <div className="text-end">
+      <div className="flex justify-end">
         <BackLink href="/about" label="その他ソーシャル記事を見る" />
       </div>
     </div>
@@ -116,9 +116,9 @@ function ArticlesSection({ articles, shouldPrioritizeFirstArticle }: ArticlesSec
 
 function PageHeader() {
   return (
-    <div className="mb-12 text-center space-y-4">
-      <h1 className="font-bold scroll-m-20 text-3xl text-foreground">Articles</h1>
-      <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+    <div className="mb-12 text-center space-y-3">
+      <h1 className="scroll-m-20 text-3xl font-bold tracking-tight text-foreground">Articles</h1>
+      <p className="mx-auto max-w-2xl text-base text-muted-foreground">
         情報（Information）ではなく、知識（Knowledge）と意見（Opinion）と気付き（Insight）を書きます。
       </p>
     </div>

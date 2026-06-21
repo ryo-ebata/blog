@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 
 import { Button } from '@/components/atoms/button';
+import { cn } from '@/lib/utils';
 
 const COPY_FEEDBACK_DURATION_MS = 2000;
 
@@ -30,13 +31,16 @@ export const CopyButton = ({ code }: CopyButtonProps) => {
   return (
     <Button
       aria-label={getAriaLabel(copied)}
-      className="absolute right-2 top-2 h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100"
+      className={cn(
+        'absolute right-2 top-2 opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100',
+        copied && 'text-success'
+      )}
       onClick={handleCopy}
-      size="icon"
+      size="icon-sm"
       variant="ghost"
     >
-      {copied && <Check className="h-4 w-4" />}
-      {!copied && <Copy className="h-4 w-4" />}
+      {copied && <Check className="size-4" />}
+      {!copied && <Copy className="size-4" />}
     </Button>
   );
 };

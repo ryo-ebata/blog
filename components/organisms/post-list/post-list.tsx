@@ -5,6 +5,7 @@ import { ArticleCard } from '@/components/organisms/article-card/article-card';
 import { EmptyState } from '@/components/molecules/empty-state/empty-state';
 import { PromoCard } from '@/components/organisms/promo-card/promo-card';
 import type { BaseContentMetadata } from '@/lib/content';
+import { cn } from '@/lib/utils';
 
 /** 何件ごとに広告カードを挟むか */
 const AD_INTERVAL = 6;
@@ -20,7 +21,7 @@ export function PostList({ basePath = '/blog', posts }: PostListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div className={cn('grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6')}>
       {posts.map((post, index) => {
         const showAd = (index + 1) % AD_INTERVAL === 0 && index + 1 < posts.length;
         return (

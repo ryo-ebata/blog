@@ -7,5 +7,5 @@ interface BlogTitleProps {
 const DEFAULT_TITLE = 'ブログ';
 
 export const BlogTitle = ({ title = DEFAULT_TITLE }: BlogTitleProps) => (
-  <h1 className="text-4xl font-bold mb-8 text-foreground">{title}</h1>
+  <h1 className="mb-8 text-4xl font-semibold tracking-tight text-foreground">{title}</h1>
 );

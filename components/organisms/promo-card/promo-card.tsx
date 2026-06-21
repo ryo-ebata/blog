@@ -1,6 +1,7 @@
 import { AdUnit } from '@/components/molecules/ad-unit/ad-unit';
 import { AffiliateCard } from '@/components/molecules/affiliate-card/affiliate-card';
 import { adsConfig, isAdsenseEnabled, recommendedItems } from '@/config/ads';
+import { cn } from '@/lib/utils';
 
 interface PromoCardProps {
   /** 表示する商品をローテーションするためのインデックス */
@@ -15,7 +16,7 @@ interface PromoCardProps {
 export function PromoCard({ seed = 0 }: PromoCardProps) {
   if (isAdsenseEnabled && adsConfig.adsense.slots.listInFeed) {
     return (
-      <div className="article-card flex items-center justify-center p-5">
+      <div className={cn('article-card flex items-center justify-center p-6 text-card-foreground')}>
         <AdUnit slot={adsConfig.adsense.slots.listInFeed} format="fluid" className="w-full" />
       </div>
     );

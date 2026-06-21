@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { Separator } from '@/components/atoms/separator';
 import { Container } from '@/components/organisms';
 import { PromoBlock } from '@/components/organisms/promo-block/promo-block';
 import { JsonLd } from '@/components/jsonld/jsonld';
@@ -14,7 +15,7 @@ interface BlogPostContainerProps {
 }
 
 const SuggestEditSection = ({ slug, title }: { slug: string; title: string }) => (
-  <div className="flex justify-end border-b px-6 py-4">
+  <div className="flex justify-end px-6 py-4">
     <SuggestEditLink slug={slug} title={title} />
   </div>
 );
@@ -39,11 +40,13 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
         <Container maxWidth="3xl">
           <BlogPostPresenter metadata={post.metadata} />
           <SuggestEditSection slug={postSlug} title={postTitle} />
+          <Separator />
           <PromoBlock placement="article-top" />
           <article className="prose prose-neutral dark:prose-invert mx-auto max-w-[42rem]">
             {content}
           </article>
           <PromoBlock placement="article-bottom" />
+          <Separator />
           <SuggestEditSection slug={postSlug} title={postTitle} />
         </Container>
       </>

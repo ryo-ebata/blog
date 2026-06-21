@@ -1,5 +1,7 @@
 import type { StoreLink } from '@/config/ads';
 
+import { Button } from '@/components/atoms/button';
+
 /** アフィリエイトリンクに必須の rel 属性 */
 const AFFILIATE_REL = 'sponsored nofollow noopener noreferrer';
 
@@ -19,15 +21,14 @@ export function StoreButtons({ links }: StoreButtonsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {links.map((link) => (
-        <a
+        <Button
           key={link.store}
-          href={link.href}
-          target="_blank"
-          rel={AFFILIATE_REL}
-          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          variant="secondary"
+          size="sm"
+          render={<a href={link.href} target="_blank" rel={AFFILIATE_REL} />}
         >
           {link.label}で見る
-        </a>
+        </Button>
       ))}
     </div>
   );
