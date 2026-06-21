@@ -59,7 +59,7 @@ export function ProductLink({ name, asin, rakuten, yahoo, image, desc }: Product
       </div>
       <Separator />
       <div className="p-4">
-        <StoreButtons links={links} />
+        <StoreButtons links={links} productName={name} placement="article-product" />
       </div>
     </div>
   );

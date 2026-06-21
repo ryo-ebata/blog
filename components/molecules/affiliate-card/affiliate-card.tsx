@@ -46,7 +46,7 @@ export function AffiliateCard({ item }: { item: AffiliateItem }) {
         </div>
       </div>
       <div className="mt-auto px-4 pb-4">
-        <StoreButtons links={links} />
+        <StoreButtons links={links} productName={item.title} placement="recommend" />
       </div>
     </div>
   );
