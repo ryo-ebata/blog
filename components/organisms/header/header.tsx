@@ -14,7 +14,7 @@ const navigationItems = [
 
 const getLinkClassName = (isActive: boolean): string =>
   cn(
-    'text-sm transition-colors',
+    'whitespace-nowrap text-sm transition-colors',
     isActive ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'
   );
 
@@ -35,7 +35,7 @@ interface NavigationProps {
 }
 
 const Navigation = ({ pathname }: NavigationProps) => (
-  <nav className="flex items-center gap-6">
+  <nav className="flex shrink-0 items-center gap-3 sm:gap-6">
     {navigationItems.map((item) => (
       <NavLink
         key={item.href}
@@ -49,7 +49,10 @@ const Navigation = ({ pathname }: NavigationProps) => (
 );
 
 const SiteLogo = () => (
-  <Link href="/" className="text-xl font-bold text-foreground hover:text-primary transition-colors">
+  <Link
+    href="/"
+    className="shrink-0 whitespace-nowrap text-lg font-bold text-foreground transition-colors hover:text-primary sm:text-xl"
+  >
     {siteConfig.name}
   </Link>
 );
@@ -58,7 +61,7 @@ export const Header = () => {
   const pathname = usePathname();
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur ring-1 ring-foreground/10">
-      <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4">
         <SiteLogo />
         <Navigation pathname={pathname} />
       </div>
