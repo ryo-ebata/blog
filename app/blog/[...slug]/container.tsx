@@ -5,6 +5,7 @@ import { PromoBlock } from '@/components/organisms/promo-block/promo-block';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
 import { ReadingProgress } from '@/components/molecules/reading-progress/reading-progress';
+import { ShareButtons } from '@/components/molecules/share-buttons/share-buttons';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
@@ -70,6 +71,9 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
           <article className="prose prose-neutral dark:prose-invert mx-auto max-w-[42rem]">
             {content}
           </article>
+          <div className="mx-auto mt-6 max-w-[42rem]">
+            <ShareButtons url={postUrl} title={postTitle} />
+          </div>
           <PromoBlock placement="article-bottom" />
           {relatedPosts.length > 0 && (
             <section className="mt-12">
