@@ -27,6 +27,12 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Blog' })).toBeInTheDocument();
   });
 
+  it('現在地リンクに aria-current="page" を付与する', () => {
+    render(<Header />);
+    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'About' })).not.toHaveAttribute('aria-current');
+  });
+
   it('テーマ切り替えボタンを表示する', () => {
     render(<Header />);
     expect(screen.getByText('テーマを切り替え')).toBeInTheDocument();
