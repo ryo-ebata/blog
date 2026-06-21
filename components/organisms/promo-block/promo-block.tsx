@@ -17,7 +17,8 @@ export function PromoBlock({ placement }: PromoBlockProps) {
   if (placement === 'article-top') {
     return (
       <div className="not-prose my-6">
-        <AdUnit slot={adsConfig.adsense.slots.articleTop} />
+        {/* 記事冒頭はファーストビュー寄りのため即時ロード */}
+        <AdUnit slot={adsConfig.adsense.slots.articleTop} lazy={false} />
       </div>
     );
   }
