@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { BaseContentMetadata } from './content';
-import { filterPostsByTitle } from './search';
+import { filterPostsByQuery, filterPostsByTitle } from './search';
 
 /*
  * テスト用定数
@@ -100,5 +100,48 @@ describe('filterPostsByTitle', () => {
     const result = filterPostsByTitle(mockPosts, '日記');
     expect(result).toHaveLength(EXPECTED_SINGLE_RESULT);
     expect(result[FIRST_INDEX].slug).toBe('daily-note');
+  });
+});
+
+describe('filterPostsByQuery', () => {
+  const posts: BaseContentMetadata[] = [
+    {
+      createdAt: '2024-01-01',
+      slug: 'a',
+      title: 'Aの記事',
+      tags: ['Rust'],
+      description: '入門ガイド',
+      searchText: 'ownership と borrow checker の話',
+      updatedAt: '2024-01-01',
+    },
+    {
+      createdAt: '2024-01-02',
+      slug: 'b',
+      title: 'Bの記事',
+      tags: ['Go'],
+      searchText: 'goroutine と channel の話',
+      updatedAt: '2024-01-02',
+    },
+  ];
+
+  it('タイトルで一致する', () => {
+    expect(filterPostsByQuery(posts, 'Aの').map((post) => post.slug)).toEqual(['a']);
+  });
+
+  it('タグで一致する', () => {
+    expect(filterPostsByQuery(posts, 'rust').map((post) => post.slug)).toEqual(['a']);
+  });
+
+  it('説明文で一致する', () => {
+    expect(filterPostsByQuery(posts, '入門').map((post) => post.slug)).toEqual(['a']);
+  });
+
+  it('本文(searchText)で一致する', () => {
+    expect(filterPostsByQuery(posts, 'goroutine').map((post) => post.slug)).toEqual(['b']);
+  });
+
+  it('空クエリは全件、マッチ無しは空配列', () => {
+    expect(filterPostsByQuery(posts, '')).toEqual(posts);
+    expect(filterPostsByQuery(posts, 'python')).toHaveLength(EXPECTED_NO_RESULT);
   });
 });

@@ -28,14 +28,13 @@ const extractTextFromHast = (tree: Root): string => {
   return texts.join('');
 };
 
-export const countHtmlCharacters = (html: string): number => {
+/** HTML から pre/code を除いたプレーンテキストを抽出する(空白正規化済み)。 */
+export const extractPlainText = (html: string): string => {
   if (!html) {
-    return 0;
+    return '';
   }
-
   const tree = unified().use(rehypeParse, { fragment: true }).parse(html);
-  const text = extractTextFromHast(tree);
-  const normalized = text.replace(/\s+/g, ' ').trim();
-
-  return normalized.length;
+  return extractTextFromHast(tree).replace(/\s+/g, ' ').trim();
 };
+
+export const countHtmlCharacters = (html: string): number => extractPlainText(html).length;

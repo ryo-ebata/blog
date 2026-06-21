@@ -12,7 +12,7 @@ describe('SearchInput', () => {
 
     const input = screen.getByRole('textbox');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute('placeholder', 'タイトルで検索...');
+    expect(input).toHaveAttribute('placeholder', '本文・タグも検索...');
   });
 
   it('初期値を表示する', () => {

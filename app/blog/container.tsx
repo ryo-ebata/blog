@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { paginateItems } from '@/lib/pagination';
 import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
-import { filterPostsByTitle } from '@/lib/search';
+import { filterPostsByQuery } from '@/lib/search';
 import { aggregateTags, filterPostsByTags } from '@/lib/tags';
 import { BlogListPresenter } from './presenter';
 
@@ -23,7 +23,7 @@ export const BlogListContainer = async ({
 
     const tagCounts = aggregateTags(allPostsMetadata);
     const filteredByTags = filterPostsByTags(allPostsMetadata, selectedTags);
-    const filteredPosts = filterPostsByTitle(filteredByTags, searchQuery);
+    const filteredPosts = filterPostsByQuery(filteredByTags, searchQuery);
     const { items: posts, totalPages } = paginateItems(filteredPosts, currentPage, POSTS_PER_PAGE);
 
     return (
