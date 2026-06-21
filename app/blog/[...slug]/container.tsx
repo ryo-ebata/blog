@@ -7,9 +7,11 @@ import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
-import { getPostBySlug } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
 import { renderMicroCMSContent } from '@/lib/micro-cms/content-renderer';
 import { extractToc } from '@/lib/micro-cms/extract-toc';
+import { getRelatedPosts } from '@/lib/related';
+import { PostList } from '@/components/organisms/post-list/post-list';
 import { TableOfContents } from '@/components/organisms/table-of-contents/table-of-contents';
 import { BlogPostPresenter } from './presenter';
 
@@ -35,6 +37,7 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
     const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl);
     const content = await renderMicroCMSContent(post.contentHtml);
     const toc = extractToc(post.contentHtml);
+    const relatedPosts = getRelatedPosts(post.metadata, await getAllPostsMetadata(), 3);
 
     const { slug: postSlug, title: postTitle } = post.metadata;
 
@@ -66,6 +69,12 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
             {content}
           </article>
           <PromoBlock placement="article-bottom" />
+          {relatedPosts.length > 0 && (
+            <section className="mt-12">
+              <h2 className="mb-5 text-lg font-semibold text-foreground">関連記事</h2>
+              <PostList posts={relatedPosts} />
+            </section>
+          )}
           <Separator />
           <SuggestEditSection slug={postSlug} title={postTitle} />
         </Container>
