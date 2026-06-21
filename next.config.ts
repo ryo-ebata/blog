@@ -56,6 +56,8 @@ const nextConfig: NextConfig = {
   compress: true,
   /* 画像最適化設定 */
   images: {
+    /* AVIF を優先し、非対応ブラウザには WebP を自動フォールバック */
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         hostname: 'images.microcms-assets.io',
