@@ -29,13 +29,9 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: 🎭 Install Playwright browsers
+      - name: 🎭 Install Playwright Chromium (no apt; GitHub runners ship Chrome deps)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: 🎭 Install Playwright system deps (on cache hit)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps chromium
+        run: pnpm exec playwright install chromium
 
       - name: 🧪 Run unit tests
         run: pnpm run test:unit --run
