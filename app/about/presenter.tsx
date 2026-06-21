@@ -20,31 +20,31 @@ const SectionHeading = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-const SocialLink = ({ href, label }: { href: string; label: string }) => (
-  <Link
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-primary hover:text-primary/80 underline transition-colors duration-200"
-  >
-    {label}
-  </Link>
-);
+/** ソーシャルURLの末尾セグメントから @ハンドルを得る。 */
+const getHandle = (href: string): string => {
+  try {
+    const segment = new URL(href).pathname.split('/').filter(Boolean).pop();
+    return segment ? `@${segment}` : '';
+  } catch {
+    return '';
+  }
+};
 
-const SocialLinkItem = ({
-  icon,
-  href,
-  label,
-}: {
-  icon: ReactNode;
-  href: string;
-  label: string;
-}) => (
-  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-    {icon}
-    <SocialLink href={href} label={label} />
-  </div>
-);
+const SocialChip = ({ icon, href, name }: { icon: ReactNode; href: string; name: string }) => {
+  const handle = getHandle(href);
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted"
+    >
+      {icon}
+      <span className="font-medium">{name}</span>
+      {handle && <span className="text-muted-foreground">{handle}</span>}
+    </Link>
+  );
+};
 
 const AboutHeader = () => (
   <div className="mb-12 text-center space-y-4">
@@ -101,64 +101,18 @@ const QiitaIcon = () => (
   />
 );
 
-const TwitterLink = () => {
-  if (!siteConfig.links.twitter) {
-    return null;
-  }
-  return (
-    <SocialLinkItem
-      icon={<TwitterIcon />}
-      href={siteConfig.links.twitter}
-      label={siteConfig.links.twitter}
-    />
-  );
-};
-
-const GithubLink = () => {
-  if (!siteConfig.links.github) {
-    return null;
-  }
-  return (
-    <SocialLinkItem
-      icon={<GithubIcon />}
-      href={siteConfig.links.github}
-      label={siteConfig.links.github}
-    />
-  );
-};
-
-const ZennLink = () => {
-  if (!siteConfig.links.zenn) {
-    return null;
-  }
-  return (
-    <SocialLinkItem
-      icon={<ZennIcon />}
-      href={siteConfig.links.zenn}
-      label={siteConfig.links.zenn}
-    />
-  );
-};
-
-const QiitaLink = () => {
-  if (!siteConfig.links.qiita) {
-    return null;
-  }
-  return (
-    <SocialLinkItem
-      icon={<QiitaIcon />}
-      href={siteConfig.links.qiita}
-      label={siteConfig.links.qiita}
-    />
-  );
-};
+const socialLinks = [
+  { name: 'X', href: siteConfig.links.twitter, icon: <TwitterIcon /> },
+  { name: 'GitHub', href: siteConfig.links.github, icon: <GithubIcon /> },
+  { name: 'Zenn', href: siteConfig.links.zenn, icon: <ZennIcon /> },
+  { name: 'Qiita', href: siteConfig.links.qiita, icon: <QiitaIcon /> },
+].filter((social) => Boolean(social.href));
 
 const SocialLinksList = () => (
-  <div className="mt-4 space-y-2">
-    <TwitterLink />
-    <GithubLink />
-    <ZennLink />
-    <QiitaLink />
+  <div className="mt-4 flex flex-wrap gap-2">
+    {socialLinks.map((social) => (
+      <SocialChip key={social.name} href={social.href} icon={social.icon} name={social.name} />
+    ))}
   </div>
 );
 
