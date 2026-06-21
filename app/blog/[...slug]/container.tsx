@@ -4,6 +4,7 @@ import { Container } from '@/components/organisms';
 import { PromoBlock } from '@/components/organisms/promo-block/promo-block';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { Breadcrumb } from '@/components/molecules/breadcrumb/breadcrumb';
+import { ReadingProgress } from '@/components/molecules/reading-progress/reading-progress';
 import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
@@ -56,6 +57,7 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
       <>
         <JsonLd data={articleJsonLd} />
         <JsonLd data={breadcrumbJsonLd} />
+        <ReadingProgress />
         <Container maxWidth="3xl">
           <Breadcrumb items={breadcrumbItems} />
           <BlogPostPresenter metadata={post.metadata} />
