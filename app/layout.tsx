@@ -11,6 +11,7 @@ import { type ReactNode, Suspense } from 'react';
 import { ThemeProvider } from '@/contexts/theme-provider';
 import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import { siteConfig } from '@/config/site';
+import { WebVitals } from './_components/web-vitals';
 
 // oxlint-disable-next-line new-cap -- BIZ_UDPGothic is exported from next/font/google
 const bizUDPGothic = BIZ_UDPGothic({
@@ -85,6 +86,7 @@ const createThemeScript = (): string =>
 
 const PageLayout = ({ children }: { children: ReactNode }) => (
   <>
+    <WebVitals />
     <a
       href="#main"
       className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow focus:outline-none focus:ring-2 focus:ring-ring"
