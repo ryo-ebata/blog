@@ -23,6 +23,10 @@ const bizUDPGothic = BIZ_UDPGothic({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  alternates: {
+    canonical: siteConfig.url,
+  },
   description: siteConfig.description,
   openGraph: {
     description: siteConfig.description,
