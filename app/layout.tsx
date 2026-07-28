@@ -1,6 +1,6 @@
 import './globals.css';
 import { Footer, Header } from '@/components/organisms';
-import { BIZ_UDPGothic } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
 import Script from 'next/script';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { adsConfig } from '@/config/ads';
@@ -13,13 +13,13 @@ import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import { siteConfig } from '@/config/site';
 import { WebVitals } from './_components/web-vitals';
 
-// oxlint-disable-next-line new-cap -- BIZ_UDPGothic is exported from next/font/google
-const bizUDPGothic = BIZ_UDPGothic({
+// oxlint-disable-next-line new-cap -- Noto_Sans_JP is exported from next/font/google
+const notoSansJP = Noto_Sans_JP({
   adjustFontFallback: true,
   display: 'swap',
   preload: true,
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-biz-udp-gothic',
+  subsets: ['latin'],
+  variable: '--font-noto-sans-jp',
   weight: ['400', '700'],
 });
 
@@ -156,7 +156,7 @@ const RootLayout = ({
             />
           )}
         </head>
-        <body className={`${bizUDPGothic.variable} antialiased font-sans`}>
+        <body className={`${notoSansJP.variable} antialiased font-sans`}>
           <BodyContent>{children}</BodyContent>
         </body>
       </html>
