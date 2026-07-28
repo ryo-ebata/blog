@@ -10,7 +10,6 @@ import { GiscusComments } from '@/components/organisms/comments/giscus-comments'
 import { AuthorBio } from '@/components/organisms/author-bio/author-bio';
 import { NewsletterForm } from '@/components/molecules/newsletter-form/newsletter-form';
 import { isNewsletterEnabled } from '@/config/newsletter';
-import { SuggestEditLink } from '@/components/molecules/suggest-edit-link/suggest-edit-link';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
 import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
@@ -24,12 +23,6 @@ import { BlogPostPresenter } from './presenter';
 interface BlogPostContainerProps {
   slug: string[];
 }
-
-const SuggestEditSection = ({ slug, title }: { slug: string; title: string }) => (
-  <div className="flex justify-end px-6 py-4">
-    <SuggestEditLink slug={slug} title={title} />
-  </div>
-);
 
 export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
   try {
@@ -45,7 +38,7 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
     const toc = extractToc(post.contentHtml);
     const relatedPosts = getRelatedPosts(post.metadata, await getAllPostsMetadata(), 3);
 
-    const { slug: postSlug, title: postTitle } = post.metadata;
+    const { title: postTitle } = post.metadata;
 
     const breadcrumbItems = [
       { name: 'Home', href: '/' },
@@ -66,7 +59,6 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
         <Container maxWidth="3xl">
           <Breadcrumb items={breadcrumbItems} />
           <BlogPostPresenter metadata={post.metadata} />
-          <SuggestEditSection slug={postSlug} title={postTitle} />
           <Separator />
           <PromoBlock placement="article-top" />
           <div className="mx-auto max-w-[42rem]">
@@ -94,7 +86,6 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
             </div>
           )}
           <Separator />
-          <SuggestEditSection slug={postSlug} title={postTitle} />
           <GiscusComments />
         </Container>
       </>
