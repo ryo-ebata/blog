@@ -13,4 +13,4 @@ export { PostList } from './post-list/post-list';
 export { ProductLink, type ProductLinkProps } from './product-link/product-link';
 export { PromoBlock } from './promo-block/promo-block';
 export { PromoCard } from './promo-card/promo-card';
-export { BubbleTagFilter } from './tag-filter';
+export { TagFilterList } from './tag-filter-list/tag-filter-list';
