@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Header } from './header';
 
 vi.mock('next/navigation', () => ({
@@ -41,5 +41,39 @@ describe('Header', () => {
   it('header要素としてレンダリングする', () => {
     render(<Header />);
     expect(screen.getByRole('banner')).toBeInTheDocument();
+  });
+
+  it('メニューボタンの初期状態は閉じている', () => {
+    render(<Header />);
+    expect(screen.getByRole('button', { name: 'メニューを開く' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    );
+  });
+
+  it('メニューボタンをクリックすると開閉する', () => {
+    render(<Header />);
+    const toggleButton = screen.getByRole('button', { name: 'メニューを開く' });
+
+    fireEvent.click(toggleButton);
+    expect(screen.getByRole('button', { name: 'メニューを閉じる' })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'メニューを閉じる' }));
+    expect(screen.getByRole('button', { name: 'メニューを開く' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    );
+  });
+
+  it('Escapeキーでメニューを閉じる', () => {
+    render(<Header />);
+    fireEvent.click(screen.getByRole('button', { name: 'メニューを開く' }));
+    expect(screen.getByRole('button', { name: 'メニューを閉じる' })).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.getByRole('button', { name: 'メニューを開く' })).toBeInTheDocument();
   });
 });

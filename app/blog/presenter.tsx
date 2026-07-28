@@ -13,7 +13,7 @@ import {
   SearchInput,
 } from '@/components/atoms';
 import { Pagination } from '@/components/molecules';
-import { BubbleTagFilter, Container, PostList } from '@/components/organisms';
+import { Container, PostList, TagFilterList } from '@/components/organisms';
 import { siteConfig } from '@/config/site';
 import type { BaseContentMetadata } from '@/lib/content';
 import type { TagCount } from '@/lib/tags';
@@ -121,7 +121,7 @@ const FilterSection = ({
   totalPages,
 }: FilterSectionProps) => (
   <div className="space-y-6">
-    <BubbleTagFilter onTagToggle={onTagToggle} selectedTags={selectedTags} tags={tagCounts} />
+    <TagFilterList onTagToggle={onTagToggle} selectedTags={selectedTags} tags={tagCounts} />
     <SearchInput onChange={onSearchChange} value={searchQuery} />
     <PostList posts={posts} />
     <EmptyResultMessage hasFilters={hasFilters} isEmpty={isEmpty} />
