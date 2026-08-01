@@ -71,6 +71,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@tabler/icons-react'],
     viewTransition: true,
+    /* TypeScript 7はJS版Compiler APIを同梱しないため、tscのCLIを呼び出す方式に切り替える */
+    useTypeScriptCli: true,
   },
   /* セキュリティヘッダー */
   async headers() {

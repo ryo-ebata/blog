@@ -45,7 +45,9 @@ describe('generateMetadata', () => {
       });
 
       expect(result.twitter).toBeDefined();
-      expect(result.twitter?.card).toBe('summary_large_image');
+      const twitterCard =
+        result.twitter && 'card' in result.twitter ? result.twitter.card : undefined;
+      expect(twitterCard).toBe('summary_large_image');
     });
   });
 

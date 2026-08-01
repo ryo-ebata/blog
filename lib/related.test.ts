@@ -11,6 +11,7 @@ const post = (
   slug,
   title: slug,
   createdAt,
+  updatedAt: createdAt,
   tags,
 });
 
