@@ -332,3 +332,18 @@
     animation: none !important;
   }
 }
+
+/* ==============================================
+   View Transitions: root グループの既定演出を無効化
+   view-transition-name を明示指定した要素(アイキャッチ等)だけが
+   個別グループとしてモーフィングする。名前を指定していない要素は
+   すべて root グループに属し、ページ間でDOM構造・高さが大きく異なる
+   ブログ記事同士だとブラウザ標準のクロスフェード+サイズ補間が
+   目立った動き(画像が上下にスライドして見える等)を生むため、
+   root だけは演出を切って即時切り替えにする。
+   ============================================== */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none !important;
+}

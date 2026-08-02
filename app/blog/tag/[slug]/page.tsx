@@ -13,9 +13,8 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-/* ビルド時に全タグ分を SSG する */
-export const dynamicParams = false;
-
+/* ビルド時に既知のタグ分を SSG する。ビルド後に増えた新規タグは
+   dynamicParams のデフォルト(true)によりオンデマンドで生成しキャッシュする */
 export const generateStaticParams = async () => {
   const posts = await getAllPostsMetadata();
   /* 日本語タグもそのまま slug にする(Next.js が URL エンコードを処理) */

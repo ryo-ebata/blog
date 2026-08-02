@@ -2,6 +2,8 @@ import { revalidatePath } from 'next/cache';
 import type { NextRequest } from 'next/server';
 import { envConfig } from '@/config/env';
 import { logger } from '@/lib/logger';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
+import { aggregateTags } from '@/lib/tags';
 
 const UNAUTHORIZED_STATUS = 401;
 const INTERNAL_ERROR_STATUS = 500;
@@ -18,11 +20,20 @@ export const POST = async (request: NextRequest) => {
     const { slug } = await request.json();
 
     if (slug) {
-      /* 特定の記事を再検証 */
+      /* 特定の記事と、そのタグが付くタグ一覧ページを再検証する。
+         新規タグの場合は dynamicParams のデフォルト挙動でオンデマンド生成される */
       revalidatePath(`/blog/${slug}`);
+      const { metadata } = await getPostBySlug(slug);
+      for (const tag of metadata.tags ?? []) {
+        revalidatePath(`/blog/tag/${tag}`);
+      }
     } else {
-      /* ブログ一覧を再検証 */
+      /* 記事の対応関係が不明なため、ブログ一覧と全タグ一覧ページを再検証する */
       revalidatePath('/blog');
+      const posts = await getAllPostsMetadata();
+      for (const { tag } of aggregateTags(posts)) {
+        revalidatePath(`/blog/tag/${tag}`);
+      }
     }
 
     return Response.json({ now: Date.now(), revalidated: true });

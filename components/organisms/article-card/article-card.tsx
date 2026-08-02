@@ -2,8 +2,13 @@
 
 import { TagList } from '@/components/molecules/tag-list';
 import { Time } from '@/components/atoms/time/time';
+import {
+  markEyecatchViewTransition,
+  useEyecatchViewTransitionSlug,
+} from '@/lib/view-transition-slug';
 import Image from 'next/image';
 import { Link } from 'next-view-transitions';
+import { useCallback, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
 const ICON_SIZE = 48;
@@ -78,6 +83,27 @@ export function ArticleCard({
 }: ArticleCardProps) {
   const linkProps = getExternalLinkProps(isExternal);
   const showDefaultIcon = !eyecatch?.url && !icon;
+  const eyecatchRef = useRef<HTMLDivElement>(null);
+
+  /* 一覧に「戻る」際、直前に見ていた記事のカードだけをモーフィング対象にする。
+     全カードに view-transition-name を付けると、対応する旧要素を持たない
+     他カードのアイキャッチまで個別の出現アニメーション対象になってしまうため、
+     sessionStorage に記録された slug と一致するカードだけ描画時に名前を付ける。 */
+  const morphSlug = useEyecatchViewTransitionSlug();
+  const viewTransitionName = slug && morphSlug === slug ? `eyecatch-${slug}` : undefined;
+
+  /* View Transition は startViewTransition() 呼び出し時点で旧DOMを同期的に
+     キャプチャするため、クリックした瞬間に DOM へ直接反映する。React の
+     再レンダーを待つと(バッチングにより)キャプチャに間に合わない。 */
+  const handleClick = useCallback(() => {
+    if (!slug) {
+      return;
+    }
+    markEyecatchViewTransition(slug);
+    if (eyecatchRef.current) {
+      eyecatchRef.current.style.viewTransitionName = `eyecatch-${slug}`;
+    }
+  }, [slug]);
 
   return (
     <article className="article-card group">
@@ -86,13 +112,15 @@ export function ArticleCard({
         className="absolute inset-0 z-0"
         aria-hidden="true"
         tabIndex={-1}
+        onClick={handleClick}
         {...linkProps}
       />
 
       <div className="relative z-10 flex flex-col">
         <div
+          ref={eyecatchRef}
           className="relative aspect-[16/9] overflow-hidden"
-          style={slug ? ({ viewTransitionName: `eyecatch-${slug}` } as CSSProperties) : undefined}
+          style={viewTransitionName ? ({ viewTransitionName } as CSSProperties) : undefined}
         >
           <CardBackground eyecatch={eyecatch} priority={priority} />
           <div className="absolute inset-0 flex items-center justify-center">
@@ -112,7 +140,7 @@ export function ArticleCard({
 
         <div className="article-card-body">
           <div className="relative z-10 flex flex-col gap-3 p-5">
-            <Link href={href} {...linkProps} className="block">
+            <Link href={href} onClick={handleClick} {...linkProps} className="block">
               <h2 className="text-base font-semibold leading-snug text-card-foreground line-clamp-2 transition-colors group-hover:text-primary">
                 {title}
               </h2>
