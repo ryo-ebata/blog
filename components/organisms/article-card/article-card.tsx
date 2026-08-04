@@ -20,8 +20,9 @@ const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
    限り自然には消えず、次に別記事をクリックしても残り続けてしまう。
    モジュールスコープで直前にマークした要素を追跡し、新しいカードをクリック
    した際に明示的にクリアすることで、常に1枚のカードだけがモーフィング対象
-   になるようにする。 */
-let lastMarkedEyecatchElement: HTMLDivElement | null = null;
+   になるようにする。WeakRefにしているのは、検索・タグ絞り込みでカードが
+   DOMから切り離された後もこの変数が強参照として掴み続け、GCを妨げないため。 */
+let lastMarkedEyecatchElementRef: WeakRef<HTMLDivElement> | null = null;
 
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
@@ -110,13 +111,14 @@ export function ArticleCard({
     }
     markEyecatchViewTransition(slug);
 
+    const lastMarkedEyecatchElement = lastMarkedEyecatchElementRef?.deref();
     if (lastMarkedEyecatchElement && lastMarkedEyecatchElement !== eyecatchRef.current) {
       lastMarkedEyecatchElement.style.viewTransitionName = '';
     }
 
     if (eyecatchRef.current) {
       eyecatchRef.current.style.viewTransitionName = `eyecatch-${slug}`;
-      lastMarkedEyecatchElement = eyecatchRef.current;
+      lastMarkedEyecatchElementRef = new WeakRef(eyecatchRef.current);
     }
   }, [slug]);
 

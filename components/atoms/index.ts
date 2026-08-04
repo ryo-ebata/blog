@@ -9,6 +9,7 @@ export {
   EmptyTitle,
 } from './empty';
 export { SearchInput } from './search-input';
+export { Skeleton } from './skeleton';
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 export { ThemeToggle } from './theme-toggle/theme-toggle';
 export { Time } from './time/time';

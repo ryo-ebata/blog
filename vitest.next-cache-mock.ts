@@ -5,5 +5,3 @@ export const cacheLife = (): void => {};
 export const cacheTag = (): void => {};
 export const revalidatePath = (): void => {};
 export const revalidateTag = (): void => {};
-export const updateTag = (): void => {};
-export const unstable_cache = <T>(fn: T): T => fn;

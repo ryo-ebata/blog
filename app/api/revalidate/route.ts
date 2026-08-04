@@ -21,9 +21,9 @@ export const POST = async (request: NextRequest) => {
 
     /* 'use cache'でキャッシュされたデータ層(getAllPostsMetadata/getPostBySlug)を
        無効化する。revalidatePathはHTML出力のキャッシュを消すのみで、データ
-       キャッシュ自体はrevalidateTagを呼ばない限り古いまま残るため必須。 */
-    revalidateTag('posts', 'max');
-
+       キャッシュ自体はrevalidateTagを呼ばない限り古いまま残るため必須。
+       postsタグは全記事のキャッシュを巻き添えにするため、対象が判明している
+       単一記事の更新ではpost-${slug}タグだけを無効化する。 */
     if (slug) {
       /* 特定の記事と、そのタグが付くタグ一覧ページを再検証する。
          新規タグの場合は dynamicParams のデフォルト挙動でオンデマンド生成される */
@@ -34,7 +34,9 @@ export const POST = async (request: NextRequest) => {
         revalidatePath(`/blog/tag/${tag}`);
       }
     } else {
-      /* 記事の対応関係が不明なため、ブログ一覧と全タグ一覧ページを再検証する */
+      /* 記事の対応関係が不明なため、全記事のキャッシュとブログ一覧・
+         全タグ一覧ページを再検証する */
+      revalidateTag('posts', 'max');
       revalidatePath('/blog');
       const posts = await getAllPostsMetadata();
       for (const { tag } of aggregateTags(posts)) {
