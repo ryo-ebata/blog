@@ -48,6 +48,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  /* Instant Navigations試験導入: 'use cache'による明示的キャッシュ境界とPartial Prerenderingを有効化 */
+  cacheComponents: true,
+  /* Linkのデフォルトprefetchを静的部分のみに限定する（cacheComponents: true必須） */
+  partialPrefetching: true,
   /* コンパイラオプション */
   compiler: {
     removeConsole: getRemoveConsoleOption(),
