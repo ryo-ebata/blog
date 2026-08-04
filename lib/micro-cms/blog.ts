@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from 'next/cache';
 import type { BaseContentMetadata } from '@/lib/content';
 import type { MicroCMSBlog, MicroCMSContentData, MicroCMSListResponse } from './types';
 import { toBaseContentMetadata } from './types';
@@ -33,6 +34,10 @@ const sortByDateDescending = (a: BaseContentMetadata, b: BaseContentMetadata): n
 };
 
 export const getAllPostsMetadata = async (): Promise<BaseContentMetadata[]> => {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('posts');
+
   const blogs = await fetchAllBlogs();
 
   return blogs
@@ -44,7 +49,12 @@ export const getAllPostsMetadata = async (): Promise<BaseContentMetadata[]> => {
 };
 
 export const getPostBySlug = async (slug: string | string[]): Promise<MicroCMSContentData> => {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('posts');
+
   const slugPath = Array.isArray(slug) ? slug.join('/') : slug;
+  cacheTag(`post-${slugPath}`);
 
   const response: MicroCMSListResponse<MicroCMSBlog> = await microCmsClient.getList({
     endpoint: ENDPOINT,

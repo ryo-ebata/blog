@@ -7,12 +7,17 @@ import type { Metadata } from 'next';
 
 import { BlogPostContainer } from './container';
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 interface Props {
   params: Promise<{ slug: string[] }>;
 }
 
-/* ビルド時に全ページ生成（SSG） */
-export const dynamicParams = false;
+/* TODO: cacheComponents下ではdynamicParamsエクスポートは非互換のため一時的に無効化。
+   BlogPostContainer側でgetPostBySlug失敗時にnotFound()を呼ぶため、未知slugへの
+   404という見た目の挙動は維持される想定。Phase 4で新ISR挙動込みで検証する。 */
 
 /*
  * 静的パラメータ生成

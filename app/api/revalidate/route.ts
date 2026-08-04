@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import type { NextRequest } from 'next/server';
 import { envConfig } from '@/config/env';
 import { logger } from '@/lib/logger';
@@ -19,9 +19,15 @@ export const POST = async (request: NextRequest) => {
   try {
     const { slug } = await request.json();
 
+    /* 'use cache'でキャッシュされたデータ層(getAllPostsMetadata/getPostBySlug)を
+       無効化する。revalidatePathはHTML出力のキャッシュを消すのみで、データ
+       キャッシュ自体はrevalidateTagを呼ばない限り古いまま残るため必須。 */
+    revalidateTag('posts', 'max');
+
     if (slug) {
       /* 特定の記事と、そのタグが付くタグ一覧ページを再検証する。
          新規タグの場合は dynamicParams のデフォルト挙動でオンデマンド生成される */
+      revalidateTag(`post-${slug}`, 'max');
       revalidatePath(`/blog/${slug}`);
       const { metadata } = await getPostBySlug(slug);
       for (const tag of metadata.tags ?? []) {

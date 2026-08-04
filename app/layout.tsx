@@ -13,6 +13,10 @@ import { generateOrganizationJsonLd } from '@/lib/jsonld';
 import { siteConfig } from '@/config/site';
 import { WebVitals } from './_components/web-vitals';
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 // oxlint-disable-next-line new-cap -- Noto_Sans_JP is exported from next/font/google
 const notoSansJP = Noto_Sans_JP({
   adjustFontFallback: true,
