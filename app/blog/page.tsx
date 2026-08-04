@@ -1,11 +1,9 @@
+import { Suspense } from 'react';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/config/site';
 
 import { BlogListContainer } from './container';
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+import { BlogListSkeleton } from './blog-list-skeleton';
 
 interface BlogPageProps {
   searchParams: Promise<{ page?: string; search?: string; tags?: string }>;
@@ -44,7 +42,7 @@ const normalizeSearchQuery = (search: string | undefined): string => {
   return '';
 };
 
-const BlogListPage = async ({ searchParams }: BlogPageProps) => {
+const BlogListResolver = async ({ searchParams }: BlogPageProps) => {
   const { page, search, tags } = await searchParams;
   const selectedTags = parseTags(tags);
   const currentPage = parsePageNumber(page);
@@ -58,5 +56,11 @@ const BlogListPage = async ({ searchParams }: BlogPageProps) => {
     />
   );
 };
+
+const BlogListPage = ({ searchParams }: BlogPageProps) => (
+  <Suspense fallback={<BlogListSkeleton />}>
+    <BlogListResolver searchParams={searchParams} />
+  </Suspense>
+);
 
 export default BlogListPage;
