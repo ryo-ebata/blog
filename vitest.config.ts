@@ -19,6 +19,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(dirname),
       'next-view-transitions': path.resolve(dirname, 'vitest.next-view-transitions-mock.ts'),
+      'next/cache': path.resolve(dirname, 'vitest.next-cache-mock.ts'),
       'server-only': path.resolve(dirname, 'vitest.server-only-mock.ts'),
     },
   },

@@ -1,5 +1,6 @@
 import type { BaseContentMetadata } from '@/lib/content';
 import type { MetadataRoute } from 'next';
+import { cacheLife } from 'next/cache';
 import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { aggregateTags } from '@/lib/tags';
 import { siteConfig } from '@/config/site';
@@ -56,6 +57,9 @@ const createTagEntries = (posts: BaseContentMetadata[]): MetadataRoute.Sitemap =
   }));
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
+  'use cache';
+  cacheLife('hours');
+
   const posts = await getAllPostsMetadata();
   const staticPages = createStaticPages();
   const blogPosts = createBlogPostEntries(posts);

@@ -1,4 +1,5 @@
 import type { BaseContentMetadata } from '@/lib/content';
+import { cacheLife } from 'next/cache';
 import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
 import { siteConfig } from '@/config/site';
 
@@ -33,11 +34,14 @@ const escapeXml = (unsafe: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
-export const GET = async () => {
+const buildRssFeed = async (): Promise<string> => {
+  'use cache';
+  cacheLife('hours');
+
   const posts = await getAllPostsMetadata();
   const siteUrl = siteConfig.url;
 
-  const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
+  return `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
  <title>${escapeXml(siteConfig.name)}</title>
@@ -66,6 +70,10 @@ export const GET = async () => {
    .join('\n ')}
 </channel>
 </rss>`;
+};
+
+export const GET = async () => {
+  const rssFeed = await buildRssFeed();
 
   return new Response(rssFeed, {
     headers: {

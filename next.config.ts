@@ -48,6 +48,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  /* Instant Navigations試験導入: 'use cache'による明示的キャッシュ境界とPartial Prerenderingを有効化 */
+  cacheComponents: true,
+  /* Linkのデフォルトprefetchを静的部分のみに限定する（cacheComponents: true必須） */
+  partialPrefetching: true,
   /* コンパイラオプション */
   compiler: {
     removeConsole: getRemoveConsoleOption(),
@@ -70,7 +74,6 @@ const nextConfig: NextConfig = {
   /* 実験的な機能 */
   experimental: {
     optimizePackageImports: ['lucide-react', '@tabler/icons-react'],
-    viewTransition: true,
     /* TypeScript 7はJS版Compiler APIを同梱しないため、tscのCLIを呼び出す方式に切り替える */
     useTypeScriptCli: true,
   },

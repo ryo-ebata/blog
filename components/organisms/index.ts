@@ -3,6 +3,7 @@ export {
   type ArticleCardProps,
   type ArticleCardIconType,
 } from './article-card/article-card';
+export { ArticleCardSkeleton } from './article-card/article-card-skeleton';
 export { AffiliateRecommend } from './affiliate-recommend/affiliate-recommend';
 export { Container } from './container';
 export { ContentLinkCard } from './content-link-card/content-link-card';

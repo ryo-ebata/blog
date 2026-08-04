@@ -1,4 +1,5 @@
 import { type ReactNode, Suspense } from 'react';
+import { cacheLife } from 'next/cache';
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
 import rehypeSlug from 'rehype-slug';
@@ -52,6 +53,9 @@ const components = {
 };
 
 export const renderMicroCMSContent = async (html: string): Promise<ReactNode> => {
+  'use cache';
+  cacheLife('hours');
+
   const processor = unified()
     .use(rehypeParse, { fragment: true })
     .use(rehypeSlug)

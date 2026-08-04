@@ -14,6 +14,16 @@ import type { CSSProperties } from 'react';
 const ICON_SIZE = 48;
 const DEFAULT_EYECATCH_PATH = '/image/default-eyecatch.svg';
 
+/* cacheComponents(Activity)有効化後、一覧ページはクライアント内遷移では
+   アンマウントされずDOMごと保持されるようになった。そのため前回クリックで
+   直接DOMへ書き込んだview-transition-nameは、対象カードが再レンダーされない
+   限り自然には消えず、次に別記事をクリックしても残り続けてしまう。
+   モジュールスコープで直前にマークした要素を追跡し、新しいカードをクリック
+   した際に明示的にクリアすることで、常に1枚のカードだけがモーフィング対象
+   になるようにする。WeakRefにしているのは、検索・タグ絞り込みでカードが
+   DOMから切り離された後もこの変数が強参照として掴み続け、GCを妨げないため。 */
+let lastMarkedEyecatchElementRef: WeakRef<HTMLDivElement> | null = null;
+
 export type ArticleCardIconType =
   | { emoji: string; type: 'emoji' }
   | { alt: string; src: string; type: 'image' };
@@ -100,8 +110,15 @@ export function ArticleCard({
       return;
     }
     markEyecatchViewTransition(slug);
+
+    const lastMarkedEyecatchElement = lastMarkedEyecatchElementRef?.deref();
+    if (lastMarkedEyecatchElement && lastMarkedEyecatchElement !== eyecatchRef.current) {
+      lastMarkedEyecatchElement.style.viewTransitionName = '';
+    }
+
     if (eyecatchRef.current) {
       eyecatchRef.current.style.viewTransitionName = `eyecatch-${slug}`;
+      lastMarkedEyecatchElementRef = new WeakRef(eyecatchRef.current);
     }
   }, [slug]);
 
