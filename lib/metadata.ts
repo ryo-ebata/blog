@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { extractPlainText } from './micro-cms/count-characters';
-import type { BaseContentMetadata } from './content';
 
 const OG_IMAGE_WIDTH = 1200;
 const OG_IMAGE_HEIGHT = 630;
-const META_DESCRIPTION_LENGTH = 120;
 
 interface BaseMetadataParams {
   description: string;
@@ -31,44 +28,17 @@ const isArticleMetadata = (params: MetadataParams): params is ArticleMetadataPar
   params.type === 'article';
 
 /**
- * 相対パスを絶対URLに変換する。すでに絶対URLならそのまま返す。
- */
-const toAbsoluteUrl = (path: string): string =>
-  path.startsWith('http') ? path : `${siteConfig.url}${path}`;
-
-/**
  * OGP画像のURLを生成
  * image未指定時はundefinedを返し、opengraph-image.tsxにフォールバックさせる
  */
-const getOgImageUrl = (image?: string): string | undefined =>
-  image ? toAbsoluteUrl(image) : undefined;
-
-/**
- * 記事のOGP/構造化データ用画像URLを解決する。
- * eyecatchがあればそれを、無ければ記事タイトル焼き込みの動的OG画像を使う。
- */
-export const resolveArticleImageUrl = (
-  metadata: Pick<BaseContentMetadata, 'eyecatch' | 'title'>
-): string =>
-  toAbsoluteUrl(metadata.eyecatch?.url ?? `/og?title=${encodeURIComponent(metadata.title)}`);
-
-/**
- * 記事のOGP/構造化データ用descriptionを解決する。
- * 未入力ならcontentHtmlの本文冒頭から抽出し、それも無ければサイト全体の説明文にフォールバックする。
- * (未入力記事が全てサイト説明文になり検索結果で重複スニペットになるのを防ぐ)
- */
-export const resolveArticleDescription = (
-  metadata: Pick<BaseContentMetadata, 'description'>,
-  contentHtml?: string
-): string => {
-  if (metadata.description) {
-    return metadata.description;
+const getOgImageUrl = (image?: string): string | undefined => {
+  if (image) {
+    if (image.startsWith('http')) {
+      return image;
+    }
+    return `${siteConfig.url}${image}`;
   }
-  const plainText = contentHtml ? extractPlainText(contentHtml) : '';
-  if (plainText) {
-    return plainText.slice(0, META_DESCRIPTION_LENGTH);
-  }
-  return siteConfig.description;
+  return undefined;
 };
 
 /**
