@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { generateMetadata } from './metadata';
+import { siteConfig } from '@/config/site';
+import { generateMetadata, resolveArticleDescription } from './metadata';
 
 describe('generateMetadata', () => {
   describe('websiteタイプ', () => {
@@ -128,5 +129,28 @@ describe('generateMetadata', () => {
         url: expect.stringContaining('/custom-image.jpg'),
       });
     });
+  });
+});
+
+describe('resolveArticleDescription', () => {
+  it('descriptionがあればそれをそのまま使う', () => {
+    const result = resolveArticleDescription({ description: '記事の説明' }, '<p>本文</p>');
+
+    expect(result).toBe('記事の説明');
+  });
+
+  it('description未入力の場合contentHtmlの本文冒頭から抽出する', () => {
+    const result = resolveArticleDescription(
+      { description: undefined },
+      '<p>本文の冒頭テキスト</p><pre><code>除外対象</code></pre>'
+    );
+
+    expect(result).toBe('本文の冒頭テキスト');
+  });
+
+  it('description未入力かつcontentHtmlも無い場合サイト全体の説明文にフォールバックする', () => {
+    const result = resolveArticleDescription({ description: undefined });
+
+    expect(result).toBe(siteConfig.description);
   });
 });

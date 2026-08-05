@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { siteConfig } from '@/config/site';
 import type { BaseContentMetadata } from './content';
 import {
   generateArticleJsonLd,
@@ -43,11 +44,23 @@ describe('generateArticleJsonLd', () => {
     expect(result.image).toBe('https://example.com/image.jpg');
   });
 
-  it('eyecatchがない場合imageを含まない', () => {
+  it('eyecatchがない場合は動的OG画像にフォールバックする', () => {
     const metadata = createMockMetadata();
     const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
 
-    expect(result.image).toBeUndefined();
+    expect(result.image).toBe(
+      `${siteConfig.url}/og?title=${encodeURIComponent(metadata.title)}`
+    );
+  });
+
+  it('mainEntityOfPageを含む', () => {
+    const metadata = createMockMetadata();
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.mainEntityOfPage).toEqual({
+      '@type': 'WebPage',
+      '@id': 'https://example.com/blog/test',
+    });
   });
 
   it('tagsがある場合keywordsを含む', () => {
@@ -70,7 +83,8 @@ describe('generateArticleJsonLd', () => {
 
     expect(result.author).toEqual({
       '@type': 'Person',
-      name: expect.any(String),
+      description: expect.any(String),
+      name: siteConfig.author.name,
       url: expect.any(String),
       sameAs: expect.any(Array),
     });
@@ -79,6 +93,24 @@ describe('generateArticleJsonLd', () => {
       name: expect.any(String),
       url: expect.any(String),
     });
+  });
+
+  it('descriptionが未入力の場合contentHtmlの本文冒頭にフォールバックする', () => {
+    const metadata = createMockMetadata({ description: undefined });
+    const result = generateArticleJsonLd(
+      metadata,
+      'https://example.com/blog/test',
+      '<p>本文の冒頭テキスト</p>'
+    );
+
+    expect(result.description).toBe('本文の冒頭テキスト');
+  });
+
+  it('descriptionもcontentHtmlも無い場合サイト全体の説明文にフォールバックする', () => {
+    const metadata = createMockMetadata({ description: undefined });
+    const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
+
+    expect(result.description).toBe(siteConfig.description);
   });
 });
 

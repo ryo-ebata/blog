@@ -50,6 +50,9 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     title: siteConfig.name,
   },
+  ...(siteConfig.verification.google && {
+    verification: { google: siteConfig.verification.google },
+  }),
 };
 
 /**

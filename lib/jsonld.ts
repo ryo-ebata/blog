@@ -1,5 +1,6 @@
 import type { BaseContentMetadata } from './content';
 import { siteConfig } from '@/config/site';
+import { resolveArticleDescription, resolveArticleImageUrl } from './metadata';
 
 const EMPTY_LENGTH = 0;
 
@@ -8,21 +9,28 @@ const EMPTY_LENGTH = 0;
  */
 export const generateArticleJsonLd = (
   metadata: BaseContentMetadata,
-  url: string
+  url: string,
+  contentHtml?: string
 ): Record<string, unknown> => {
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     author: {
       '@type': 'Person',
-      name: siteConfig.name,
+      description: siteConfig.author.bio,
+      name: siteConfig.author.name,
       url: `${siteConfig.url}/about`,
       sameAs: collectSocialLinks(),
     },
     dateModified: metadata.updatedAt || metadata.createdAt,
     datePublished: metadata.createdAt,
-    description: metadata.description || siteConfig.description,
+    description: resolveArticleDescription(metadata, contentHtml),
     headline: metadata.title,
+    image: resolveArticleImageUrl(metadata),
+    mainEntityOfPage: {
+      '@id': url,
+      '@type': 'WebPage',
+    },
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,
@@ -30,10 +38,6 @@ export const generateArticleJsonLd = (
     },
     url,
   };
-
-  if (metadata.eyecatch) {
-    jsonLd.image = metadata.eyecatch.url;
-  }
 
   /* タグがある場合はkeywordsに追加 */
   if (metadata.tags && metadata.tags.length > EMPTY_LENGTH) {
