@@ -33,7 +33,7 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
     }
 
     const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
-    const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl, post.contentHtml);
+    const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl);
     const content = await renderMicroCMSContent(post.contentHtml);
     const toc = extractToc(post.contentHtml);
     const relatedPosts = getRelatedPosts(post.metadata, await getAllPostsMetadata(), 3);

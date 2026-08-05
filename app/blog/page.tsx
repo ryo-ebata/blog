@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import type { Metadata } from 'next';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/config/site';
 
@@ -13,22 +12,11 @@ interface BlogPageProps {
 const DEFAULT_PAGE = 1;
 const BASE_RADIX = 10;
 
-/*
- * メタデータ生成(SEO対策)
- * search/tagsによる絞り込みは/blog/tag/[slug]等の正規URLと重複するコンテンツになるため
- * noindexにしてクロールバジェットの浪費を防ぐ。ページネーション(page)単体はindex許可のまま。
- */
-export const generateMetadata = async ({ searchParams }: BlogPageProps): Promise<Metadata> => {
-  const { search, tags } = await searchParams;
-  const isFiltered = Boolean(search) || Boolean(tags);
-
-  return generatePageMetadata({
-    description: `${siteConfig.name}のブログ記事一覧です。技術的な学びや日々の気づきを共有しています。`,
-    noindex: isFiltered,
-    title: 'ブログ',
-    url: `${siteConfig.url}/blog`,
-  });
-};
+export const metadata = generatePageMetadata({
+  description: `${siteConfig.name}のブログ記事一覧です。技術的な学びや日々の気づきを共有しています。`,
+  title: 'ブログ',
+  url: `${siteConfig.url}/blog`,
+});
 
 /* タグ文字列をパースしてタグ配列を返す */
 const parseTags = (tags: string | undefined): string[] => {
