@@ -16,14 +16,24 @@ const formatDescription = (description?: string): string => {
   return `Description: ${description}`;
 };
 
+/** 全記事のupdatedAt/createdAtのうち最も新しい日付をYYYY-MM-DD形式で返す(記事が無ければ現在日時) */
+const getLastUpdated = (posts: BaseContentMetadata[]): string => {
+  const latest = posts.reduce((max, post) => {
+    const timestamp = new Date(post.updatedAt || post.createdAt).getTime();
+    return Math.max(max, timestamp);
+  }, 0);
+  return new Date(latest || Date.now()).toISOString().slice(0, 10);
+};
+
 export const GET = async () => {
   const posts = await getAllPostsMetadata();
   const siteUrl = siteConfig.url;
 
   const llmsContent = `# ${siteConfig.name}
 
-## About
-${siteConfig.description}
+> ${siteConfig.description}
+
+${siteConfig.author.bio}
 
 ## URL
 ${siteUrl}
@@ -44,6 +54,9 @@ ${posts
   ${formatDescription(post.description)}`;
   })
   .join('\n')}
+
+## Last Updated
+${getLastUpdated(posts)}
 `;
 
   return new Response(llmsContent, {

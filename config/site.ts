@@ -15,4 +15,8 @@ export const siteConfig = {
   name: 'ebaryo.dev',
   repo: 'ryo-ebata/ebaryo.dev',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://ebaryo.dev',
+  /** Search Console等のサイト所有権確認コード。未設定なら該当メタタグは出力しない。 */
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
 };

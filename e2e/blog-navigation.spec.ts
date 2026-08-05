@@ -9,6 +9,21 @@ const getViewTransitionStyle = (card: Locator) =>
     return styled?.style.viewTransitionName ?? null;
   });
 
+/* 戻る遷移直後、ArticleCardのview-transition-name反映(useSyncExternalStore経由の
+   sessionStorage再評価)がDOM更新に間に合わず一瞬nullを返すことがあるため、
+   期待値に落ち着くまでポーリングして待つ。 */
+const expectEyecatchTransitionName = async (card: Locator) => {
+  await expect(async () => {
+    expect(await getViewTransitionStyle(card)).toContain('eyecatch-');
+  }).toPass();
+};
+
+const expectNoTransitionName = async (card: Locator) => {
+  await expect(async () => {
+    expect(await getViewTransitionStyle(card)).toBeNull();
+  }).toPass();
+};
+
 test.describe('Blog navigation (Cache Components / Instant Navigations)', () => {
   test('戻る遷移で直前に見ていた記事のカードだけがView Transitionのモーフィング対象になる', async ({
     page,
@@ -28,11 +43,8 @@ test.describe('Blog navigation (Cache Components / Instant Navigations)', () => 
     await page.goBack();
     await page.waitForURL('/blog');
 
-    const firstCardStyleAfterFirstVisit = await getViewTransitionStyle(firstCard);
-    const secondCardStyleAfterFirstVisit = await getViewTransitionStyle(secondCard);
-
-    expect(firstCardStyleAfterFirstVisit).toContain('eyecatch-');
-    expect(secondCardStyleAfterFirstVisit).toBeNull();
+    await expectEyecatchTransitionName(firstCard);
+    await expectNoTransitionName(secondCard);
 
     /* 続けて2件目の記事へ遷移して戻る。Activityによるルート状態保持下でも、
        1件目のカードに残っていたモーフィング対象指定が2件目に正しく
@@ -42,10 +54,7 @@ test.describe('Blog navigation (Cache Components / Instant Navigations)', () => 
     await page.goBack();
     await page.waitForURL('/blog');
 
-    const firstCardStyleAfterSecondVisit = await getViewTransitionStyle(firstCard);
-    const secondCardStyleAfterSecondVisit = await getViewTransitionStyle(secondCard);
-
-    expect(secondCardStyleAfterSecondVisit).toContain('eyecatch-');
-    expect(firstCardStyleAfterSecondVisit).toBeNull();
+    await expectEyecatchTransitionName(secondCard);
+    await expectNoTransitionName(firstCard);
   });
 });

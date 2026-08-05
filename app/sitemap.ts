@@ -43,6 +43,7 @@ const createStaticPages = (): MetadataRoute.Sitemap => {
 const createBlogPostEntries = (posts: BaseContentMetadata[]): MetadataRoute.Sitemap =>
   posts.map((post) => ({
     changeFrequency: 'weekly',
+    ...(post.eyecatch && { images: [post.eyecatch.url] }),
     lastModified: new Date(post.updatedAt || post.createdAt),
     priority: PRIORITY_MEDIUM,
     url: `${siteConfig.url}/blog/${post.slug}`,
