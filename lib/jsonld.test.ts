@@ -48,9 +48,7 @@ describe('generateArticleJsonLd', () => {
     const metadata = createMockMetadata();
     const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
 
-    expect(result.image).toBe(
-      `${siteConfig.url}/og?title=${encodeURIComponent(metadata.title)}`
-    );
+    expect(result.image).toBe(`${siteConfig.url}/og?title=${encodeURIComponent(metadata.title)}`);
   });
 
   it('mainEntityOfPageを含む', () => {
