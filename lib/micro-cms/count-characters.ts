@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
 import { visit } from 'unist-util-visit';
@@ -29,17 +28,13 @@ const extractTextFromHast = (tree: Root): string => {
   return texts.join('');
 };
 
-/**
- * HTML から pre/code を除いたプレーンテキストを抽出する(空白正規化済み)。
- * 同一リクエスト内でmetadata生成とJSON-LD生成が同じcontentHtmlを解析するため、
- * cache()でリクエストスコープのメモ化を行い重複パースを避ける。
- */
-export const extractPlainText = cache((html: string): string => {
+/** HTML から pre/code を除いたプレーンテキストを抽出する(空白正規化済み)。 */
+export const extractPlainText = (html: string): string => {
   if (!html) {
     return '';
   }
   const tree = unified().use(rehypeParse, { fragment: true }).parse(html);
   return extractTextFromHast(tree).replace(/\s+/g, ' ').trim();
-});
+};
 
 export const countHtmlCharacters = (html: string): number => extractPlainText(html).length;
