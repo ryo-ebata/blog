@@ -76,4 +76,13 @@ describe('renderMicroCMSContent', () => {
 
     expect(markup).toContain('amazon.co.jp/dp/B000000000');
   });
+
+  it('tableがスマホ表示でも幅を超えないよう横スクロール可能なコンテナで囲まれる', async () => {
+    const html = '<table><tbody><tr><td>セル</td></tr></tbody></table>';
+    const result = await renderMicroCMSContent(html);
+    const markup = renderToStaticMarkup(result);
+
+    expect(markup).toContain('overflow-x-auto');
+    expect(markup).toContain('セル');
+  });
 });
