@@ -5,6 +5,7 @@ import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import { remarkResolveImages } from './remark-resolve-images';
+import { rehypeCodeBlock } from './rehype-code-block';
 
 /**
  * Markdown→hast変換の共通パイプライン。content-rendererとextract-tocで共有することで、
@@ -17,4 +18,5 @@ export const createMarkdownToHastProcessor = (slug: string) =>
     .use(remarkResolveImages, { slug })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
-    .use(rehypeSlug);
+    .use(rehypeSlug)
+    .use(rehypeCodeBlock);

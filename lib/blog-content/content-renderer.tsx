@@ -5,13 +5,13 @@ import type { Root } from 'hast';
 
 import { cn } from '@/lib/utils';
 
+import { CodeBlock } from '@/components/molecules/code-block';
 import { MdxBlockquote } from '@/components/molecules/mdx-blockquote';
 import { MdxH1, MdxH2, MdxH3, MdxH4, MdxH5, MdxH6 } from '@/components/molecules/mdx-heading';
 import { MdxTable } from '@/components/molecules/mdx-table';
 import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
 import { ProductLink } from '@/components/organisms/product-link/product-link';
 
-import { applyShikiHighlight } from './rehype-shiki';
 import { rehypeLinkCard } from './rehype-link-card';
 import { createMarkdownToHastProcessor } from './markdown-pipeline';
 import { applyContentCacheLife } from './cache-policy';
@@ -43,6 +43,7 @@ const ContentLinkCard = ({ url }: { url: string }) => (
 const components = {
   'link-card': ContentLinkCard,
   'product-link': ProductLink,
+  'code-block': CodeBlock,
   blockquote: MdxBlockquote,
   h1: MdxH1,
   h2: MdxH2,
@@ -60,8 +61,7 @@ export interface RenderedMarkdownContent {
 
 /**
  * MarkdownをReact要素とTOCへ1回のパースで変換する。
- * TOCはShikiハイライト前のhast(見出し要素がそのまま残る段階)から抽出するため、
- * 別途Markdownを再パースする必要がない。
+ * 同じhastからTOCも抽出するため、別途Markdownを再パースする必要がない。
  */
 export const renderMarkdownContent = async (
   markdown: string,
@@ -76,9 +76,8 @@ export const renderMarkdownContent = async (
   const hast = (await processor.run(mdast)) as Root;
 
   const toc = extractToc(hast);
-  const highlighted = await applyShikiHighlight(hast);
 
-  const content = toJsxRuntime(highlighted, {
+  const content = toJsxRuntime(hast, {
     Fragment,
     jsx,
     jsxs,

@@ -1,10 +1,59 @@
 import { describe, expect, it, vi } from 'vitest';
-import { renderToStaticMarkup } from 'react-dom/server';
-import type { Root } from 'hast';
+import { renderToStaticMarkup, renderToPipeableStream } from 'react-dom/server';
+import { PassThrough } from 'node:stream';
+import type { ReactNode } from 'react';
 import { renderMarkdownContent } from './content-renderer';
 
-vi.mock('./rehype-shiki', () => ({
-  applyShikiHighlight: vi.fn().mockImplementation((tree: Root) => Promise.resolve(tree)),
+/**
+ * CodeBlockはSuspense境界のないasyncサーバーコンポーネントのため、
+ * 同期APIのrenderToStaticMarkupではサスペンドしてエラーになる。
+ * pipeable streamで非同期解決を待ってからHTML文字列化する。
+ */
+const renderToMarkupAsync = (node: ReactNode): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    const passThrough = new PassThrough();
+    passThrough.on('data', (chunk: Buffer) => chunks.push(chunk));
+    passThrough.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    passThrough.on('error', reject);
+
+    const { pipe } = renderToPipeableStream(node, {
+      onAllReady() {
+        pipe(passThrough);
+      },
+      onError: reject,
+    });
+  });
+
+vi.mock('@/lib/shiki/highlighter', () => ({
+  getHighlighter: vi.fn().mockResolvedValue({
+    codeToHast: vi.fn().mockReturnValue({
+      type: 'root',
+      children: [
+        {
+          type: 'element',
+          tagName: 'pre',
+          properties: { class: 'shiki github-dark github-light' },
+          children: [
+            {
+              type: 'element',
+              tagName: 'code',
+              properties: {},
+              children: [
+                {
+                  type: 'element',
+                  tagName: 'span',
+                  properties: { class: 'line' },
+                  children: [{ type: 'text', value: 'const x = 1;' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }),
+  }),
+  defaultTransformers: [],
 }));
 
 const SLUG = 'test-post';
@@ -92,5 +141,16 @@ describe('renderMarkdownContent', () => {
 
     expect(markup).toContain('overflow-x-auto');
     expect(markup).toContain('セル');
+  });
+
+  it('fenced code blockがCodeBlockコンポーネント(Shikiハイライト・コピーボタン付き)でレンダリングされる', async () => {
+    const markdown = '```typescript\nconst x = 1;\n```\n';
+    const { content } = await renderMarkdownContent(markdown, SLUG);
+    const markup = await renderToMarkupAsync(content);
+
+    expect(markup).toContain('code-block-wrapper');
+    expect(markup).toContain('code-block-content');
+    expect(markup).toContain('const x = 1;');
+    expect(markup).toContain('コードをコピー');
   });
 });
