@@ -134,21 +134,21 @@ describe('generateMetadata', () => {
 
 describe('resolveArticleDescription', () => {
   it('descriptionがあればそれをそのまま使う', () => {
-    const result = resolveArticleDescription({ description: '記事の説明' }, '<p>本文</p>');
+    const result = resolveArticleDescription({ description: '記事の説明' }, '本文');
 
     expect(result).toBe('記事の説明');
   });
 
-  it('description未入力の場合contentHtmlの本文冒頭から抽出する', () => {
+  it('description未入力の場合contentMarkdownの本文冒頭から抽出する', () => {
     const result = resolveArticleDescription(
       { description: undefined },
-      '<p>本文の冒頭テキスト</p><pre><code>除外対象</code></pre>'
+      '本文の冒頭テキスト\n\n```\n除外対象\n```\n'
     );
 
     expect(result).toBe('本文の冒頭テキスト');
   });
 
-  it('description未入力かつcontentHtmlも無い場合サイト全体の説明文にフォールバックする', () => {
+  it('description未入力かつcontentMarkdownも無い場合サイト全体の説明文にフォールバックする', () => {
     const result = resolveArticleDescription({ description: undefined });
 
     expect(result).toBe(siteConfig.description);

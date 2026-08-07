@@ -12,9 +12,8 @@ import { NewsletterForm } from '@/components/molecules/newsletter-form/newslette
 import { isNewsletterEnabled } from '@/config/newsletter';
 import { siteConfig } from '@/config/site';
 import { generateArticleJsonLd, generateBreadcrumbJsonLd } from '@/lib/jsonld';
-import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
-import { renderMicroCMSContent } from '@/lib/micro-cms/content-renderer';
-import { extractToc } from '@/lib/micro-cms/extract-toc';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/blog-content/blog';
+import { renderMarkdownContent } from '@/lib/blog-content/content-renderer';
 import { getRelatedPosts } from '@/lib/related';
 import { PostList } from '@/components/organisms/post-list/post-list';
 import { TableOfContents } from '@/components/organisms/table-of-contents/table-of-contents';
@@ -33,10 +32,12 @@ export const BlogPostContainer = async ({ slug }: BlogPostContainerProps) => {
     }
 
     const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
-    const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl, post.contentHtml);
-    const content = await renderMicroCMSContent(post.contentHtml);
-    const toc = extractToc(post.contentHtml);
-    const relatedPosts = getRelatedPosts(post.metadata, await getAllPostsMetadata(), 3);
+    const articleJsonLd = generateArticleJsonLd(post.metadata, postUrl, post.contentMarkdown);
+    const [{ content, toc }, allPosts] = await Promise.all([
+      renderMarkdownContent(post.contentMarkdown, post.metadata.slug),
+      getAllPostsMetadata(),
+    ]);
+    const relatedPosts = getRelatedPosts(post.metadata, allPosts, 3);
 
     const { title: postTitle } = post.metadata;
 

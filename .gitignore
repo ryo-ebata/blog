@@ -38,6 +38,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# blog-obsidianの画像をsync-blog-assets.mjsで同期した生成物(正はblog-obsidian/public/blogs/*/images/)
+/public/blog-assets
+
+# Obsidian Vault: ローカル設定と下書き置き場はgit管理対象外(公開記事はblog-obsidian/public/blogsのみコミットする)
+/blog-obsidian/.obsidian
+/blog-obsidian/private
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

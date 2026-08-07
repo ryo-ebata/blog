@@ -2,7 +2,7 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import type { NextRequest } from 'next/server';
 import { envConfig } from '@/config/env';
 import { logger } from '@/lib/logger';
-import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/blog-content/blog';
 import { aggregateTags } from '@/lib/tags';
 
 const UNAUTHORIZED_STATUS = 401;

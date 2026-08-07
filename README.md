@@ -10,7 +10,7 @@
 | UI ライブラリ  | [React](https://react.dev) 19                  |
 | 言語           | [TypeScript](https://www.typescriptlang.org) 5 |
 | スタイリング   | [Tailwind CSS](https://tailwindcss.com) 4      |
-| CMS            | [microCMS](https://microcms.io)                |
+| コンテンツ管理 | Obsidian Vault(`blog-obsidian/`)内のMarkdown   |
 
 ## 開発ツール
 

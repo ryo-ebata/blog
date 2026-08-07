@@ -3,8 +3,8 @@ import {
   resolveArticleDescription,
   resolveArticleImageUrl,
 } from '@/lib/metadata';
-import { getAllPostsMetadata, getPostBySlug } from '@/lib/micro-cms/blog';
-import type { MicroCMSContentData } from '@/lib/micro-cms/types';
+import { getAllPostsMetadata, getPostBySlug } from '@/lib/blog-content/blog';
+import type { BlogArticleData } from '@/lib/blog-content/types';
 import { siteConfig } from '@/config/site';
 
 import type { Metadata } from 'next';
@@ -34,9 +34,9 @@ export const generateStaticParams = async () => {
 /*
  * メタデータを生成するヘルパー関数
  */
-const buildMetadata = (post: MicroCMSContentData): Metadata => {
+const buildMetadata = (post: BlogArticleData): Metadata => {
   const postUrl = `${siteConfig.url}/blog/${post.metadata.slug}`;
-  const description = resolveArticleDescription(post.metadata, post.contentHtml);
+  const description = resolveArticleDescription(post.metadata, post.contentMarkdown);
 
   const ogImage = resolveArticleImageUrl(post.metadata);
 

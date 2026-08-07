@@ -1,6 +1,6 @@
 import { Link } from 'next-view-transitions';
 
-import { Button } from '@/components/atoms/button';
+import { buttonVariants } from '@/components/atoms/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/atoms';
 import { Container } from '@/components/organisms';
 
@@ -16,7 +16,9 @@ export default function NotFound() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button render={<Link href="/" />}>ホームに戻る</Button>
+          <Link href="/" className={buttonVariants()}>
+            ホームに戻る
+          </Link>
         </EmptyContent>
       </Empty>
     </Container>

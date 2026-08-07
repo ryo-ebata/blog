@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import type { TocItem } from '@/lib/micro-cms/extract-toc';
+import type { TocItem } from '@/lib/blog-content/extract-toc';
 
 interface TableOfContentsProps {
   items: TocItem[];
