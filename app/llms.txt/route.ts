@@ -1,5 +1,5 @@
 import type { BaseContentMetadata } from '@/lib/content';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { siteConfig } from '@/config/site';
 
 const formatTags = (tags?: string[]): string => {

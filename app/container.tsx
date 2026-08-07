@@ -1,7 +1,7 @@
 import { type QiitaArticle, getQiitaArticles } from '@/lib/external/qiita';
 import { type ZennArticle, getZennArticles } from '@/lib/external/zenn';
 import { HomePresenter } from './presenter';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 
 type ArticleItem =
   | { article: ZennArticle; type: 'zenn' }

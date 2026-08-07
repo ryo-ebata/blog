@@ -1,7 +1,4 @@
 import type { Element, Root } from 'hast';
-import rehypeParse from 'rehype-parse';
-import rehypeSlug from 'rehype-slug';
-import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
 export interface TocItem {
@@ -20,15 +17,13 @@ const getHeadingText = (node: Element): string => {
 };
 
 /**
- * 記事HTMLから h2/h3 見出しの目次（id・テキスト・深さ）を抽出する。
- * content-renderer と同じ rehype-slug を使うため、生成される id は本文側のアンカーと一致する。
+ * 構築済みhastから h2/h3 見出しの目次（id・テキスト・深さ）を抽出する。
+ * content-renderer が同じhast(共通パイプラインのrehype-slug適用済み)から直接呼ぶため、
+ * 生成される id は本文側のアンカーと必ず一致し、Markdownの再パースも発生しない。
  */
-export const extractToc = (html: string): TocItem[] => {
-  const processor = unified().use(rehypeParse, { fragment: true }).use(rehypeSlug);
-  const tree = processor.runSync(processor.parse(html)) as Root;
-
+export const extractToc = (hast: Root): TocItem[] => {
   const items: TocItem[] = [];
-  visit(tree, 'element', (node) => {
+  visit(hast, 'element', (node) => {
     if (node.tagName !== 'h2' && node.tagName !== 'h3') {
       return;
     }

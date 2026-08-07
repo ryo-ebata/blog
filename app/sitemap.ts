@@ -1,8 +1,9 @@
 import type { BaseContentMetadata } from '@/lib/content';
 import type { MetadataRoute } from 'next';
 import { cacheLife } from 'next/cache';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { aggregateTags } from '@/lib/tags';
+import { toAbsoluteUrl } from '@/lib/metadata';
 import { siteConfig } from '@/config/site';
 
 /* 優先度定数 */
@@ -43,7 +44,7 @@ const createStaticPages = (): MetadataRoute.Sitemap => {
 const createBlogPostEntries = (posts: BaseContentMetadata[]): MetadataRoute.Sitemap =>
   posts.map((post) => ({
     changeFrequency: 'weekly',
-    ...(post.eyecatch && { images: [post.eyecatch.url] }),
+    ...(post.eyecatch && { images: [toAbsoluteUrl(post.eyecatch.url)] }),
     lastModified: new Date(post.updatedAt || post.createdAt),
     priority: PRIORITY_MEDIUM,
     url: `${siteConfig.url}/blog/${post.slug}`,

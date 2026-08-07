@@ -1,6 +1,6 @@
 import type { BaseContentMetadata } from '@/lib/content';
 import { cacheLife } from 'next/cache';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { siteConfig } from '@/config/site';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

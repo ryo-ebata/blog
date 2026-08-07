@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { paginateItems } from '@/lib/pagination';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { filterPostsByQuery } from '@/lib/search';
 import { aggregateTags, filterPostsByTags } from '@/lib/tags';
 import { BlogListPresenter } from './presenter';

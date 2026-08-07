@@ -6,7 +6,7 @@ import { Container } from '@/components/organisms';
 import { PostList } from '@/components/organisms/post-list/post-list';
 import { siteConfig } from '@/config/site';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { aggregateTags, filterPostsByTags } from '@/lib/tags';
 
 interface Props {

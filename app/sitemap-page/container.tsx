@@ -1,4 +1,4 @@
-import { getAllPostsMetadata } from '@/lib/micro-cms/blog';
+import { getAllPostsMetadata } from '@/lib/blog-content/blog';
 import { logger } from '@/lib/logger';
 import { SitemapPresenter } from './presenter';
 

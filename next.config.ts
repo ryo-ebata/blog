@@ -62,12 +62,6 @@ const nextConfig: NextConfig = {
   images: {
     /* AVIF を優先し、非対応ブラウザには WebP を自動フォールバック */
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        hostname: 'images.microcms-assets.io',
-        protocol: 'https',
-      },
-    ],
   },
   /* X-Powered-By ヘッダーを無効化 */
   poweredByHeader: false,

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { extractPlainText } from './micro-cms/count-characters';
+import { extractPlainText } from './blog-content/extract-text';
 import type { BaseContentMetadata } from './content';
 
 const OG_IMAGE_WIDTH = 1200;
@@ -33,7 +33,7 @@ const isArticleMetadata = (params: MetadataParams): params is ArticleMetadataPar
 /**
  * 相対パスを絶対URLに変換する。すでに絶対URLならそのまま返す。
  */
-const toAbsoluteUrl = (path: string): string =>
+export const toAbsoluteUrl = (path: string): string =>
   path.startsWith('http') ? path : `${siteConfig.url}${path}`;
 
 /**

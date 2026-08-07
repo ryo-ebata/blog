@@ -93,18 +93,18 @@ describe('generateArticleJsonLd', () => {
     });
   });
 
-  it('descriptionが未入力の場合contentHtmlの本文冒頭にフォールバックする', () => {
+  it('descriptionが未入力の場合contentMarkdownの本文冒頭にフォールバックする', () => {
     const metadata = createMockMetadata({ description: undefined });
     const result = generateArticleJsonLd(
       metadata,
       'https://example.com/blog/test',
-      '<p>本文の冒頭テキスト</p>'
+      '本文の冒頭テキスト'
     );
 
     expect(result.description).toBe('本文の冒頭テキスト');
   });
 
-  it('descriptionもcontentHtmlも無い場合サイト全体の説明文にフォールバックする', () => {
+  it('descriptionもcontentMarkdownも無い場合サイト全体の説明文にフォールバックする', () => {
     const metadata = createMockMetadata({ description: undefined });
     const result = generateArticleJsonLd(metadata, 'https://example.com/blog/test');
 

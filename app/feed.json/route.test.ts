@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/micro-cms/blog', () => ({
+vi.mock('@/lib/blog-content/blog', () => ({
   getAllPostsMetadata: vi.fn(async () => [
     {
       slug: 'a',
