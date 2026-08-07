@@ -84,4 +84,13 @@ describe('renderMarkdownContent', () => {
 
     expect(markup).toContain('amazon.co.jp/dp/B000000000');
   });
+
+  it('tableがスマホ表示でも幅を超えないよう横スクロール可能なコンテナで囲まれる', async () => {
+    const markdown = '| 見出し |\n| --- |\n| セル |\n';
+    const { content } = await renderMarkdownContent(markdown, SLUG);
+    const markup = renderToStaticMarkup(content);
+
+    expect(markup).toContain('overflow-x-auto');
+    expect(markup).toContain('セル');
+  });
 });

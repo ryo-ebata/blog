@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 
 import { MdxBlockquote } from '@/components/molecules/mdx-blockquote';
 import { MdxH1, MdxH2, MdxH3, MdxH4, MdxH5, MdxH6 } from '@/components/molecules/mdx-heading';
+import { MdxTable } from '@/components/molecules/mdx-table';
 import { ContentLinkCard as ContentLinkCardAsync } from '@/components/organisms/content-link-card/content-link-card';
 import { ProductLink } from '@/components/organisms/product-link/product-link';
 
@@ -49,6 +50,7 @@ const components = {
   h4: MdxH4,
   h5: MdxH5,
   h6: MdxH6,
+  table: MdxTable,
 };
 
 export interface RenderedMarkdownContent {
