@@ -8,12 +8,23 @@ const getRemoveConsoleOption = () => {
   return false;
 };
 
+/* Reactの開発モードはスタックトレース再構築等のデバッグ機能でeval()を使うため、
+   開発時のみCSPでunsafe-evalを許可する（本番では常に不要かつ許可しない） */
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  ...(process.env.NODE_ENV === 'development' ? ["'unsafe-eval'"] : []),
+  'https://cdnjs.buymeacoffee.com',
+  'https://cdn.iframe.ly',
+  'https://giscus.app',
+].join(' ');
+
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://cdnjs.buymeacoffee.com https://cdn.iframe.ly https://giscus.app",
+      `script-src ${scriptSrc}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self'",
