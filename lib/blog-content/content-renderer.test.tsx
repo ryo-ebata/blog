@@ -4,6 +4,24 @@ import { PassThrough } from 'node:stream';
 import type { ReactNode } from 'react';
 import { renderMarkdownContent } from './content-renderer';
 
+/* デフォルトは「実ファイルなし」= 既存の画像テストはフォールバック(素のimg)のまま動く。
+   実寸を検証したいテストだけmockReturnValueOnceで個別に上書きする。 */
+const { existsSyncMock, readFileSyncMock, imageSizeMock } = vi.hoisted(() => ({
+  existsSyncMock: vi.fn().mockReturnValue(false),
+  readFileSyncMock: vi.fn(),
+  imageSizeMock: vi.fn(),
+}));
+
+vi.mock('node:fs', () => ({
+  default: { existsSync: existsSyncMock, readFileSync: readFileSyncMock },
+  existsSync: existsSyncMock,
+  readFileSync: readFileSyncMock,
+}));
+
+vi.mock('image-size', () => ({
+  imageSize: imageSizeMock,
+}));
+
 /**
  * CodeBlockはSuspense境界のないasyncサーバーコンポーネントのため、
  * 同期APIのrenderToStaticMarkupではサスペンドしてエラーになる。
@@ -109,6 +127,20 @@ describe('renderMarkdownContent', () => {
     const markup = renderToStaticMarkup(content);
 
     expect(markup).toContain(`/blog-assets/${SLUG}/images/eyecatch.png`);
+  });
+
+  it('実寸が取得できたローカル画像はnext/image(width/height付き)でレンダリングされる', async () => {
+    existsSyncMock.mockReturnValueOnce(true);
+    readFileSyncMock.mockReturnValueOnce(new Uint8Array());
+    imageSizeMock.mockReturnValueOnce({ width: 800, height: 600 });
+
+    const markdown = '![alt text](images/photo.png)';
+    const { content } = await renderMarkdownContent(markdown, SLUG);
+    const markup = renderToStaticMarkup(content);
+
+    expect(markup).toContain('width="800"');
+    expect(markup).toContain('height="600"');
+    expect(markup).toContain('alt="alt text"');
   });
 
   it('product-linkタグが各ストアの検索リンクカードに変換される', async () => {

@@ -32,6 +32,9 @@ importers:
       hast-util-to-jsx-runtime:
         specifier: ^2.3.6
         version: 2.3.6
+      image-size:
+        specifier: ^2.0.2
+        version: 2.0.2
       lucide-react:
         specifier: ^0.555.0
         version: 0.555.0(react@19.2.1)

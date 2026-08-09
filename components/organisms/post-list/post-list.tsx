@@ -13,9 +13,11 @@ const AD_INTERVAL = 6;
 interface PostListProps {
   basePath?: string;
   posts: BaseContentMetadata[];
+  /** 一覧の先頭カード(LCP候補)にpriorityを付けるか。関連記事など画面外に出る一覧では付けない */
+  prioritizeFirst?: boolean;
 }
 
-export function PostList({ basePath = '/blog', posts }: PostListProps) {
+export function PostList({ basePath = '/blog', posts, prioritizeFirst = false }: PostListProps) {
   if (posts.length === 0) {
     return <EmptyState />;
   }
@@ -35,6 +37,7 @@ export function PostList({ basePath = '/blog', posts }: PostListProps) {
               description={post.description}
               eyecatch={post.eyecatch}
               isExternal={false}
+              priority={prioritizeFirst && index === 0}
             />
             {showAd && <PromoCard seed={Math.floor(index / AD_INTERVAL)} />}
           </Fragment>

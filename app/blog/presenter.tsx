@@ -123,7 +123,7 @@ const FilterSection = ({
   <div className="space-y-6">
     <TagFilterList onTagToggle={onTagToggle} selectedTags={selectedTags} tags={tagCounts} />
     <SearchInput onChange={onSearchChange} value={searchQuery} />
-    <PostList posts={posts} />
+    <PostList posts={posts} prioritizeFirst />
     <EmptyResultMessage hasFilters={hasFilters} isEmpty={isEmpty} />
     <Pagination basePath="/blog" currentPage={currentPage} totalPages={totalPages} />
   </div>

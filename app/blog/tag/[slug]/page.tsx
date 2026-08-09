@@ -47,7 +47,7 @@ const TagPage = async ({ params }: Props) => {
           <h1 className="scroll-m-20 text-3xl font-bold text-foreground">{slug}</h1>
           <p className="text-sm text-muted-foreground">{filtered.length} 件の記事</p>
         </div>
-        <PostList posts={filtered} />
+        <PostList posts={filtered} prioritizeFirst />
         <div className="text-end">
           <BackLink href="/blog" label="ブログ一覧に戻る" />
         </div>
