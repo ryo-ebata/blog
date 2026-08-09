@@ -72,7 +72,7 @@ function PostsSection({ posts }: PostsSectionProps) {
         <SectionHeading>最新記事</SectionHeading>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <ArticleCard
             key={post.slug}
             date={post.createdAt}
@@ -81,6 +81,7 @@ function PostsSection({ posts }: PostsSectionProps) {
             href={`/blog/${post.slug}`}
             slug={post.slug}
             isExternal={false}
+            priority={index === 0}
             tags={post.tags}
             title={post.title}
           />

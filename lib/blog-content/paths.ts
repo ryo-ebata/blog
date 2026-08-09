@@ -11,7 +11,7 @@ export const slugToIndexFile = (slug: string): string =>
   path.join(slugToArticleDir(slug), INDEX_FILE_NAME);
 
 /* 絶対URL・ルート相対URL・data URIはそのまま外部/既解決のURLとして扱う */
-const isResolvedUrl = (url: string): boolean =>
+export const isResolvedUrl = (url: string): boolean =>
   url.startsWith('http://') ||
   url.startsWith('https://') ||
   url.startsWith('/') ||

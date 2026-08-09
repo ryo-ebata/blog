@@ -58,6 +58,7 @@ function CardBackground({
         src={eyecatch.url}
         alt=""
         fill
+        sizes="(min-width: 640px) 420px, 100vw"
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         priority={priority}
       />
