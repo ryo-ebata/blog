@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
+    "@next/third-parties": "^16.3.0",
     "@shikijs/transformers": "^3.21.0",
     "@tabler/icons-react": "^3.35.0",
     "class-variance-authority": "^0.7.1",

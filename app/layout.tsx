@@ -1,9 +1,11 @@
 import './globals.css';
 import { Footer, Header } from '@/components/organisms';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Noto_Sans_JP } from 'next/font/google';
 import Script from 'next/script';
 import { JsonLd } from '@/components/jsonld/jsonld';
 import { adsConfig } from '@/config/ads';
+import { analyticsConfig, isGtmEnabled } from '@/config/analytics';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ViewTransitions } from 'next-view-transitions';
@@ -160,6 +162,7 @@ const RootLayout = ({
           )}
         </head>
         <body className={`${notoSansJP.variable} antialiased font-sans`}>
+          {isGtmEnabled && <GoogleTagManager gtmId={analyticsConfig.gtm.containerId} />}
           <BodyContent>{children}</BodyContent>
         </body>
       </html>
