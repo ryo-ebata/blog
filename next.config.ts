@@ -57,6 +57,13 @@ const securityHeaders = [
     key: 'Cross-Origin-Opener-Policy',
     value: 'same-origin',
   },
+  /* Cross-Origin-Embedder-Policyはcredentiallessでもgiscusがコメント欄を描画できなくなる
+     既知の未解決issue(giscus/giscus#1560)があるため見送る。CORPは自サイトのリソースを
+     他所から直接読み込ませないための設定で、外部埋め込みには影響しないため単独で追加する */
+  {
+    key: 'Cross-Origin-Resource-Policy',
+    value: 'same-origin',
+  },
 ];
 
 const nextConfig: NextConfig = {
