@@ -23,6 +23,9 @@ export const getAllPostsMetadata = async (): Promise<BaseContentMetadata[]> => {
   const posts = await Promise.all(
     slugs.map(async (slug) => {
       const { frontmatter, content } = await readArticleFile(slug);
+      if (frontmatter.draft) {
+        return null;
+      }
       const plainText = extractPlainText(content);
       return {
         ...toBaseContentMetadata(slug, frontmatter, plainText.length),
@@ -31,7 +34,7 @@ export const getAllPostsMetadata = async (): Promise<BaseContentMetadata[]> => {
     })
   );
 
-  return posts.sort(sortByDateDescending);
+  return posts.filter((post) => post !== null).sort(sortByDateDescending);
 };
 
 export const getPostBySlug = async (slug: string | string[]): Promise<BlogArticleData> => {
@@ -44,6 +47,9 @@ export const getPostBySlug = async (slug: string | string[]): Promise<BlogArticl
 
   try {
     const { frontmatter, content } = await readArticleFile(slugPath);
+    if (frontmatter.draft) {
+      throw new Error(`Post not found: ${slugPath}`);
+    }
     return {
       contentMarkdown: content,
       metadata: toBaseContentMetadata(slugPath, frontmatter, countMarkdownCharacters(content)),

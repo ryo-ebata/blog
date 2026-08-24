@@ -194,6 +194,39 @@ describe('blog', () => {
       expect(result.map((post) => post.slug)).toEqual(['newer', 'older']);
     });
 
+    it('draft記事を除外する', async () => {
+      setupDirTree({
+        [BLOG_CONTENT_ROOT]: [dir('published'), dir('draft')],
+        [path.join(BLOG_CONTENT_ROOT, 'published')]: [file('index.md')],
+        [path.join(BLOG_CONTENT_ROOT, 'draft')]: [file('index.md')],
+      });
+      setupArticleFiles({
+        [path.join(BLOG_CONTENT_ROOT, 'published', 'index.md')]: buildArticleFile(
+          {
+            title: '公開記事',
+            createdAt: '2025-01-01T00:00:00.000Z',
+            updatedAt: '2025-01-01T00:00:00.000Z',
+            draft: false,
+          },
+          '公開本文'
+        ),
+        [path.join(BLOG_CONTENT_ROOT, 'draft', 'index.md')]: buildArticleFile(
+          {
+            title: '下書き記事',
+            createdAt: '2025-01-02T00:00:00.000Z',
+            updatedAt: '2025-01-02T00:00:00.000Z',
+            draft: true,
+          },
+          '下書き本文'
+        ),
+      });
+
+      const { getAllPostsMetadata } = await import('./blog');
+      const result = await getAllPostsMetadata();
+
+      expect(result.map((post) => post.slug)).toEqual(['published']);
+    });
+
     it('記事が1件も無い場合は空配列を返す', async () => {
       setupDirTree({ [BLOG_CONTENT_ROOT]: [] });
 
@@ -247,6 +280,23 @@ describe('blog', () => {
 
       const { getPostBySlug } = await import('./blog');
       await expect(getPostBySlug('not-found')).rejects.toThrow('Post not found: not-found');
+    });
+
+    it('draft記事は存在しないものとして扱う', async () => {
+      setupArticleFiles({
+        [path.join(BLOG_CONTENT_ROOT, 'draft', 'index.md')]: buildArticleFile(
+          {
+            title: '下書き記事',
+            createdAt: '2025-01-01T00:00:00.000Z',
+            updatedAt: '2025-01-01T00:00:00.000Z',
+            draft: true,
+          },
+          '下書き本文'
+        ),
+      });
+
+      const { getPostBySlug } = await import('./blog');
+      await expect(getPostBySlug('draft')).rejects.toThrow('Post not found: draft');
     });
   });
 });
