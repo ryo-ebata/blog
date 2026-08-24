@@ -1,13 +1,13 @@
 ---
-title: 'TailscaleとntfyでClaude Codeをどこからでも操作できるようにした'
-description: 'Raspberry Pi 5を常時稼働のClaude Code実行環境にし、Tailscale VPNで外出先からSSH接続、ntfyで承認リクエストをiPhoneにプッシュ通知する環境を構築した。ポート開放不要、構築時間は約2時間。'
-createdAt: '2026-02-01T00:00:00.000Z'
-updatedAt: '2026-07-30T00:04:38.941Z'
+title: TailscaleとntfyでClaude Codeをどこからでも操作できるようにした
+description: Raspberry Pi 5を常時稼働のClaude Code実行環境にし、Tailscale VPNで外出先からSSH接続、ntfyで承認リクエストをiPhoneにプッシュ通知する環境を構築した。ポート開放不要、構築時間は約2時間。
+createdAt: 2026-02-01T00:00:00.000Z
+updatedAt: 2026-07-30T00:04:38.941Z
 tags:
-  - 'Claude Code'
-  - 'Raspberry Pi'
-  - 'VPN'
-  - 'iPhone'
+  - ClaudeCode
+  - RaspberryPi
+  - VPN
+  - iPhone
 draft: false
 eyecatch:
   url: images/remote-notice.png

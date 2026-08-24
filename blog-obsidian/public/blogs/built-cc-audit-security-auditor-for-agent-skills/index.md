@@ -1,14 +1,14 @@
 ---
-title: 'AIコーディングエージェントの「野良スキル」を監査するCLIを作った'
-description: 'Claude CodeのSkills/Hooks/Commands/MCPサーバー/mdファイルを静的解析し、データ窃取やプロンプトインジェクションなどのセキュリティリスクを検出するRust製CLIツール「cc-audit」を開発した経緯と、エージェントエコシステムのセキュリティギャップへの問題意識について。'
-createdAt: '2026-02-08T00:00:00.000Z'
-updatedAt: '2026-07-30T00:03:26.266Z'
+title: AIコーディングエージェントの「野良スキル」を監査するCLIを作った
+description: Claude CodeのSkills/Hooks/Commands/MCPサーバー/mdファイルを静的解析し、データ窃取やプロンプトインジェクションなどのセキュリティリスクを検出するRust製CLIツール「cc-audit」を開発した経緯と、エージェントエコシステムのセキュリティギャップへの問題意識について。
+createdAt: 2026-02-08T00:00:00.000Z
+updatedAt: 2026-07-30T00:03:26.266Z
 tags:
-  - 'Security'
-  - 'Claude Code'
-  - 'Rust'
-  - 'OSS'
-  - 'MCP'
+  - Security
+  - ClaudeCode
+  - Rust
+  - OSS
+  - MCP
 draft: false
 eyecatch:
   url: images/cc-audit.png
