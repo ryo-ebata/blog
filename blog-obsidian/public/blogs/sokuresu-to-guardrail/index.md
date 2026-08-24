@@ -1,13 +1,13 @@
 ---
-title: '即レスの意味を、生成AIに教え直された話'
+title: 即レスの意味を、生成AIに教え直された話
 description: '生成AIのガードレール運用で気づいた「即レス」の再定義。承認待ちで止まったClaude Codeと、部下の返信待ちで止まった自分の経験から、即レスの本質を考える。 '
-createdAt: '2026-08-01T01:41:55.271Z'
-updatedAt: '2026-08-01T01:58:35.950Z'
+createdAt: 2026-08-01T01:41:55.271Z
+updatedAt: 2026-08-01T01:58:35.950Z
 tags:
-  - 'Claude Code'
-  - '生成AI'
-  - 'マネジメント'
-  - 'ポエム'
+  - ClaudeCode
+  - 生成AI
+  - マネジメント
+  - ポエム
 draft: false
 eyecatch:
   url: images/Gemini Generated Image (10).png
