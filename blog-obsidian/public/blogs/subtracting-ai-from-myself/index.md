@@ -7,6 +7,10 @@ tags:
   - 'AI'
   - 'ポエム'
 draft: false
+eyecatch:
+  url: images/eyecatch.png
+  width: 1731
+  height: 908
 ---
 
 午前一時を過ぎたころ、私は自分の気持ちをAIに教えてもらった。
